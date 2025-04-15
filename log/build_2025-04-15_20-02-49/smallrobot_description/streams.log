@@ -1,0 +1,45 @@
+[0.023s] Invoking command in '/home/roach/ros2_ws/build/smallrobot_description': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/roach/ros2_ws/src/smallrobot_description -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/roach/ros2_ws/install/smallrobot_description
+[0.053s] -- Found ament_cmake: 1.3.11 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.239s] -- Override CMake install command with custom implementation using symlinks instead of copying resources
+[0.254s] -- Found xacro: 2.0.13 (/opt/ros/humble/share/xacro/cmake)
+[0.255s] -- Found urdf: 2.6.1 (/opt/ros/humble/share/urdf/cmake)
+[0.398s] -- Configuring done
+[0.402s] -- Generating done
+[0.404s] -- Build files have been written to: /home/roach/ros2_ws/build/smallrobot_description
+[0.415s] Invoked command in '/home/roach/ros2_ws/build/smallrobot_description' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/roach/ros2_ws/src/smallrobot_description -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/roach/ros2_ws/install/smallrobot_description
+[0.420s] Invoking command in '/home/roach/ros2_ws/build/smallrobot_description': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/roach/ros2_ws/build/smallrobot_description -- -j8 -l8
+[0.471s] Invoked command in '/home/roach/ros2_ws/build/smallrobot_description' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/roach/ros2_ws/build/smallrobot_description -- -j8 -l8
+[0.475s] Invoking command in '/home/roach/ros2_ws/build/smallrobot_description': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/roach/ros2_ws/build/smallrobot_description
+[0.484s] -- Install configuration: ""
+[0.484s] -- Execute custom install script
+[0.485s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/meshes/link1.STL
+[0.496s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/meshes/link2.STL
+[0.511s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/meshes/link3.STL
+[0.532s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/meshes/link4.STL
+[0.548s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/meshes/link5.STL
+[0.562s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/meshes/link6.STL
+[0.575s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/meshes/link7.STL
+[0.585s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/urdf/smallrobot.urdf
+[0.596s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/urdf/smallrobot.urdf.xacro
+[0.610s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/urdf/smallrobot_gazebo.xacro
+[0.629s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/urdf/smallrobot_macro.xacro
+[0.641s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/urdf/smallrobot_ros2_control.xacro
+[0.650s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/launch/display.launch.py
+[0.663s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/launch/gazebo.launch.py
+[0.674s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/rviz/smallrobot.rviz
+[0.690s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/ament_index/resource_index/package_run_dependencies/smallrobot_description
+[0.702s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/ament_index/resource_index/parent_prefix_path/smallrobot_description
+[0.719s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/environment/ament_prefix_path.sh
+[0.735s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/environment/ament_prefix_path.dsv
+[0.752s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/environment/path.sh
+[0.765s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/environment/path.dsv
+[0.781s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/local_setup.bash
+[0.790s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/local_setup.sh
+[0.802s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/local_setup.zsh
+[0.815s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/local_setup.dsv
+[0.826s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/package.dsv
+[0.837s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/ament_index/resource_index/packages/smallrobot_description
+[0.850s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/cmake/smallrobot_descriptionConfig.cmake
+[0.860s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/cmake/smallrobot_descriptionConfig-version.cmake
+[0.870s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_description/share/smallrobot_description/package.xml
+[0.882s] Invoked command in '/home/roach/ros2_ws/build/smallrobot_description' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/roach/ros2_ws/build/smallrobot_description

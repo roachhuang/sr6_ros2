@@ -1,0 +1,8 @@
+
+
+. install/setup.bash
+in urdf folder
+ros2 run xacro xacro smallrobot.urdf.xacro > smallrobot.urdf
+check_urdf smallrobot.urdf
+cd ~/ros_ws
+ros2 launch moveit_setup_assistant setup_assistant.launch.py

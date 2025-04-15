@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="smallrobot">
+    <gazebo>
+        <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+            <robot_param>robot_description</robot_param>
+            <robot_param_node>robot_state_publisher</robot_param_node>  
+            <!-- <parameters>/home/roach/ros2_ws/install/robotarm_controller/share/robotarm_controller/config/robotarm_controllers.yaml</parameters> -->
+            <parameters>$(find robotarm_controller)/config/robotarm_controllers.yaml</parameters>
+        </plugin>
+    </gazebo>
+    <gazebo reference="link1">
+        <material>Gazebo/Orange</material>
+    </gazebo>
+     <gazebo reference="link2">
+        <material>Gazebo/Orange</material>
+    </gazebo>
+     <gazebo reference="link3">
+        <material>Gazebo/Orange</material>
+    </gazebo>
+     <gazebo reference="link4">
+        <material>Gazebo/Orange</material>
+    </gazebo>
+    <gazebo reference="link5">
+        <material>Gazebo/Orange</material>
+    </gazebo>
+    <gazebo reference="link6">
+        <material>Gazebo/Orange</material>
+    </gazebo>
+</robot>

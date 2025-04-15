@@ -1,0 +1,25 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: smallrobot_description
+    relative_path: urdf/smallrobot.urdf
+  srdf:
+    relative_path: config/smallrobot.srdf
+  package_settings:
+    author_name: roach
+    author_email: giraftw2002@gmail.com
+    generated_timestamp: 1744716105
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity

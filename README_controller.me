@@ -1,0 +1,397 @@
+###################
+Step 1: Setup Workspace
+    mkdir -p ~/ros2_ws/src
+    cd ~/ros2_ws
+    rosdep install --from-paths src --ignore-src -r -y
+    colcon build
+    source install/setup.bash
+
+Step 2: Create Package
+    cd ~/ros2_ws/src
+    ros2 pkg create --build-type ament_cmake one_joint_robot --dependencies rclcpp hardware_interface controller_manager joint_state_broadcaster joint_trajectory_controller robot_state_publisher tf2_ros
+    ros2 pkg create --build-type ament_cmake --dependencies rclcpp hardware_interface controller_interface pluginlib --node-name robot_hw_interface my_robot_hw
+Step 3: Hardware Interface Code
+    #include "rclcpp/rclcpp.hpp"
+    #include "hardware_interface/system_interface.hpp"
+    #include "hardware_interface/types/hardware_interface_return_values.hpp"
+    #include "hardware_interface/hardware_info.hpp"
+    #include "hardware_interface/handle.hpp"
+    #include "pluginlib/class_list_macros.hpp"
+
+    using hardware_interface::return_type;
+
+    class My2DOFHardware : public hardware_interface::SystemInterface {
+    public:
+    std::vector<hardware_interface::StateInterface> export_state_interfaces() override {
+        std::vector<hardware_interface::StateInterface> interfaces;
+        for (size_t i = 0; i < 2; i++) {
+        interfaces.emplace_back("joint" + std::to_string(i + 1), "position", &joint_positions_[i]);
+        interfaces.emplace_back("joint" + std::to_string(i + 1), "velocity", &joint_velocities_[i]);
+        }
+        return interfaces;
+    }
+
+    std::vector<hardware_interface::CommandInterface> export_command_interfaces() override {
+        std::vector<hardware_interface::CommandInterface> interfaces;
+        for (size_t i = 0; i < 2; i++) {
+        interfaces.emplace_back("joint" + std::to_string(i + 1), "position", &joint_commands_[i]);
+        }
+        return interfaces;
+    }
+
+    return_type configure(const hardware_interface::HardwareInfo & info) override {
+        joint_positions_.resize(2, 0.0);
+        joint_velocities_.resize(2, 0.0);
+        joint_commands_.resize(2, 0.0);
+        return return_type::OK;
+    }
+
+    return_type start() override { return return_type::OK; }
+    return_type stop() override { return return_type::OK; }
+
+    return_type read() override {
+        // Simulate update
+        joint_positions_ = joint_commands_;
+        return return_type::OK;
+    }
+
+    return_type write() override {
+        // Here you can send commands to hardware (e.g., via serial)
+        return return_type::OK;
+    }
+
+    private:
+    std::vector<double> joint_positions_, joint_velocities_, joint_commands_;
+    };
+
+    PLUGINLIB_EXPORT_CLASS(My2DOFHardware, hardware_interface::SystemInterface)
+
+Step 4: CMakeLists.txt
+    add_library(My2DOFHardware SHARED src/my_robot_hw.cpp)
+    ament_target_dependencies(My2DOFHardware hardware_interface pluginlib rclcpp)
+    pluginlib_export_plugin_description_file(hardware_interface my_robot_hw.xml)
+
+Step 5: Plugin XML
+    <library path="My2DOFHardware">
+        <class name="My2DOFHardware" type="My2DOFHardware" base_class_type="hardware_interface::SystemInterface">
+            description>Custom 2DOF robot hardware interface</description>
+        </class>
+    </library>
+
+Step 6: URDF with ros2_control
+    <ros2_control name="My2DOFHardware" type="system">
+    <hardware>
+        <plugin>my_robot_hw/My2DOFHardware</plugin>
+    </hardware>
+    <joint name="joint1">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+    </joint>
+    <joint name="joint2">
+        <command_interface name="position"/>
+        <state_interface name="position"/>
+        <state_interface name="velocity"/>
+    </joint>
+    </ros2_control>
+
+Step 7: ake a launch file to load controllers and hardware interface (e.g., launch/control.launch.py).
+    import launch
+    from launch import LaunchDescription
+    from launch.actions import DeclareLaunchArgument, LogInfo, PushRosNamespace
+    from launch.substitutions import LaunchConfiguration
+    from launch_ros.actions import Node
+
+    def generate_launch_description():
+        return LaunchDescription([
+            DeclareLaunchArgument('use_sim_time', default_value='false', description='Use simulation time'),
+            DeclareLaunchArgument('robot_name', default_value='2dof_robot', description='Name of the robot'),
+
+            PushRosNamespace(LaunchConfiguration('robot_name')),
+
+            Node(
+                package='controller_manager',
+                executable='spawner',
+                name='controller_spawner',
+                output='screen',
+                arguments=['joint_state_controller', '--controller-manager', '/controller_manager']
+            ),
+
+            Node(
+                package='controller_manager',
+                executable='spawner',
+                name='controller_spawner',
+                output='screen',
+                arguments=['forward_position_controller', '--controller-manager', '/controller_manager']
+            ),
+
+            Node(
+                package='ros2_control_node',
+                executable='ros2_control_node',
+                name='ros2_control_node',
+                output='screen',
+                parameters=[{
+                    'robot_description': LaunchConfiguration('robot_description'),
+                    'use_sim_time': LaunchConfiguration('use_sim_time')
+                }],
+                remappings=[('/controller_manager', '/controller_manager')]
+            ),
+
+            Node(
+                package='my_robot_hw',
+                executable='my_robot_hw',
+                name='hardware_interface_node',
+                output='screen',
+                parameters=[{'use_sim_time': LaunchConfiguration('use_sim_time')}],
+            ),
+        ])
+    Explanation:
+    Controller Spawner: This loads and spawns controllers (e.g., joint_state_controller and forward_position_controller).
+    Hardware Interface Node: This launches the custom hardware interface node for your robot.
+Step 8: Launch File
+    M
+    cd ~/ros2_ws
+    colcon build
+    source install/setup.bash
+    ros2 launch my_robot_hw control.launch.py
+
+Step 9: Setup URDF and ROS2 Control
+
+We need to ensure that your URDF is properly configured to interface with ros2_control. Here’s an example of how to define your 2-DOF robot in URDF.
+1. Robot URDF: urdf/2dof_robot.urdf.xacro
+    <?xml version="1.0"?>
+<robot name="2dof_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:include filename="$(find my_robot_hw)/urdf/2dof_robot_arm.xacro"/>
+
+    <ros2_control name="My2DOFHardware" type="system">
+        <hardware>
+            <plugin>my_robot_hw/My2DOFHardware</plugin>
+        </hardware>
+        
+        <joint name="joint1">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="joint2">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+    </ros2_control>
+</robot>
+This will allow the robot to communicate with the hardware_interface through ros2_control.
+
+Step 10: Controller Configuration
+
+    Now, configure the controllers in ros2_control to send commands to the hardware interface.
+
+    Create a config/controllers.yaml file for the controllers.
+    1. Controller YAML: config/controllers.yaml
+
+    controller_manager:
+    ros__parameters:
+        update_rate: 100
+
+    joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50
+
+    forward_position_controller:
+    type: position_controllers/JointPositionController
+    joint: joint1  # specify joint name
+    gains:
+        position: 1.0
+        velocity: 0.5
+
+    #joint_state_controller: Used for reading joint states.
+    #forward_position_controller: Moves the joints based on desired positions.
+
+Step 11: Launch Your Robot
+
+    After everything is set up, build your workspace and launch everything.
+
+        Build Your Workspace
+
+    cd ~/ros2_ws
+    colcon build
+    source install/setup.bash
+
+        Launch the Robot
+
+    ros2 launch my_robot_hw control.launch.py
+
+    This should start your robot with the ROS 2 hardware interface and the controllers.
+
+Step 12: Interface with the Robot
+
+    After launching, you can control your robot through ROS topics and controllers:
+
+        Set Joint Positions via ros2 control:
+
+    ros2 topic pub /2dof_robot/joint1_position_controller/command std_msgs/msg/Float64 1.0
+    ros2 topic pub /2dof_robot/joint2_position_controller/command std_msgs/msg/Float64 1.0
+
+        Get Joint States:
+
+    ros2 topic echo /joint_states
+
+Next Steps:
+
+    Adding more controllers: If you want to use other types like velocity control or effort control, just add them to the YAML file and URDF.
+
+    Hardware Communication: Implement communication to actual hardware in the write() method of the hardware interface code (e.g., using rosserial or direct GPIO control).
+
+    Simulation: If you want to simulate in Gazebo, use the same URDF setup, and add a Gazebo plugin.
+
+How to control the robot from ros2:
+    Prerequisites
+
+    Your hardware interface is publishing and accepting joint positions.
+
+    joint_state_controller and position_controllers are running.
+
+    You launched your robot with:
+
+    ros2 launch my_robot_hw control.launch.py
+
+    Option 1: Command Joints via ROS Topics (Simple)
+    🟦 Step 1: Check available controllers
+
+        ros2 control list_controllers
+
+        You should see something like:
+
+        joint_state_controller[active]
+        joint1_position_controller[active]
+        joint2_position_controller[active]
+
+    🟦 Step 2: Send commands to joints
+
+        ros2 topic pub /2dof_robot/joint1_position_controller/command std_msgs/msg/Float64 "data: 1.0"
+        ros2 topic pub /2dof_robot/joint2_position_controller/command std_msgs/msg/Float64 "data: 0.5"
+
+        This moves joint1 to 1.0 rad and joint2 to 0.5 rad.
+
+    Option 2: Write a Python Node to Control the Robot
+
+        Create a ROS 2 node that publishes joint commands.
+        🟪 Example Python Code:
+
+        # send_command.py
+        import rclpy
+        from rclpy.node import Node
+        from std_msgs.msg import Float64
+        import time
+
+        class RobotCommander(Node):
+            def __init__(self):
+                super().__init__('robot_commander')
+                self.joint1_pub = self.create_publisher(Float64, '/2dof_robot/joint1_position_controller/command', 10)
+                self.joint2_pub = self.create_publisher(Float64, '/2dof_robot/joint2_position_controller/command', 10)
+                self.timer = self.create_timer(1.0, self.move_joint)
+
+            def move_joint(self):
+                pos1 = Float64()
+                pos2 = Float64()
+                pos1.data = 1.0
+                pos2.data = 0.8
+                self.joint1_pub.publish(pos1)
+                self.joint2_pub.publish(pos2)
+                self.get_logger().info('Sent joint commands!')
+
+        def main(args=None):
+            rclpy.init(args=args)
+            node = RobotCommander()
+            rclpy.spin(node)
+            node.destroy_node()
+            rclpy.shutdown()
+
+        if __name__ == '__main__':
+            main()
+
+        Run it:
+
+        ros2 run my_robot_hw send_command
+
+        🎮 Option 3: Use RViz2 (Visual Control)
+
+        If you want to visualize and send poses in RViz:
+
+            Add RobotModel to RViz2.
+
+            Make sure the TF tree and joint_state_publisher are active.
+
+            Use interactive markers or sliders (requires joint_state_publisher_gui).
+
+            You can also use a node like MoveIt for path planning (see below).
+
+        🤖 Option 4: Use MoveIt 2 (Advanced Motion Planning)
+
+        For smarter, collision-aware motion planning:
+
+            Install MoveIt 2:
+
+        sudo apt install ros-humble-moveit
+
+        Create a MoveIt config package using:
+
+        ros2 launch moveit_setup_assistant moveit_setup_assistant.launch.py
+
+        Load your URDF and generate:
+
+            SRDF
+
+            Planning groups
+
+            Controllers.yaml
+
+            Launch files
+
+        Launch the MoveIt 2 planning interface and RViz:
+
+        ros2 launch <your_moveit_pkg> demo.launch.py
+
+installation:
+    cd ~/ros2_ws/src
+    git clone https://github.com/ros-controls/ros2_control_demos.git
+Build:
+    cd ~/ros2_ws
+    colcon build --packages-select ros2_control_demo_example_1 --symlink-install
+launch:
+    source ~/ros2_ws/install/setup.bash
+    ros2 launch ros2_control_demo_example_1 rrbot.launch.py
+
+TROUBLESHOOTING:
+    check the lib path in ros2_control_demo_example_1.xml matches the shared lib name (e.g., libros2_control_deo_example_1.so)
+    verify pluginlib registreation: if the h/w interface isn't found, clear the pluginlib cache:
+        rm -rf ~/.ros/pluginlib
+    inspect params: ensure the params in the URDF/Xacro file match those expected by rrbot.cpp
+
+    check_urdf /home/roach/ros2_ws/src/twodof/urdf/twodof.urdf
+    ros2 param get /robot_state_publisher robot_description
+    ros2 control list_controllers
+        joint_state_broadcaster [active]
+        position_trajectory_controller [active]
+    ros2 service list | grep controller_manager
+        list_controllers and load_controllers should be listed.
+    # manually run ros controller
+    ros2 run controller_manager ros2_control_node --ros-args --params-file ~/ros2_ws/src/smallrobot/config/controllers.yaml
+
+TEST:
+    test cmd:    
+        ros2 topic pub /forward_position_controller/commands std_msgs/msg/Float64MultiArray "data: [1.0, -0.5]"
+
+        ros2 topic pub /joint_trajectory_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory "{
+        joint_names: ['joint1', 'joint2'],
+        points: [
+            {
+            positions: [0.0, 0.5],
+            time_from_start: {sec: 2, nanosec: 0}
+            }
+        ]
+        }"
+
+        ros2 topic pub /joint_trajectory_controller/commands std_msgs/msg/Float64MultiArray "{
+  data: [0.0, 0.5]
+}"

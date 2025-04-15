@@ -1,0 +1,1 @@
+/home/roach/ros2_ws/build/smallrobot_description/ament_cmake_core/smallrobot_descriptionConfig.cmake

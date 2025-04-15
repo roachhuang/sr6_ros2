@@ -1,0 +1,55 @@
+[0.009s] Invoking command in '/home/roach/ros2_ws/build/smallrobot_moveit': CMAKE_PREFIX_PATH=/home/roach/ros2_ws/install/smallrobot_description:/home/roach/ros2_ws/install/smallrobot_moveit:/home/roach/ros2_ws/install/smallrobot_firmware:/home/roach/ros2_ws/install/robotarm_controller:/opt/ros/humble /usr/bin/cmake /home/roach/ros2_ws/src/smallrobot_moveit -DCMAKE_INSTALL_PREFIX=/home/roach/ros2_ws/install/smallrobot_moveit
+[0.022s] -- Found ament_cmake: 1.3.11 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.133s] -- Override CMake install command with custom implementation using symlinks instead of copying resources
+[0.208s] -- Configuring done
+[0.211s] -- Generating done
+[0.213s] -- Build files have been written to: /home/roach/ros2_ws/build/smallrobot_moveit
+[0.215s] Invoked command in '/home/roach/ros2_ws/build/smallrobot_moveit' returned '0': CMAKE_PREFIX_PATH=/home/roach/ros2_ws/install/smallrobot_description:/home/roach/ros2_ws/install/smallrobot_moveit:/home/roach/ros2_ws/install/smallrobot_firmware:/home/roach/ros2_ws/install/robotarm_controller:/opt/ros/humble /usr/bin/cmake /home/roach/ros2_ws/src/smallrobot_moveit -DCMAKE_INSTALL_PREFIX=/home/roach/ros2_ws/install/smallrobot_moveit
+[0.217s] Invoking command in '/home/roach/ros2_ws/build/smallrobot_moveit': CMAKE_PREFIX_PATH=/home/roach/ros2_ws/install/smallrobot_description:/home/roach/ros2_ws/install/smallrobot_moveit:/home/roach/ros2_ws/install/smallrobot_firmware:/home/roach/ros2_ws/install/robotarm_controller:/opt/ros/humble /usr/bin/cmake --build /home/roach/ros2_ws/build/smallrobot_moveit -- -j8 -l8
+[0.252s] Invoked command in '/home/roach/ros2_ws/build/smallrobot_moveit' returned '0': CMAKE_PREFIX_PATH=/home/roach/ros2_ws/install/smallrobot_description:/home/roach/ros2_ws/install/smallrobot_moveit:/home/roach/ros2_ws/install/smallrobot_firmware:/home/roach/ros2_ws/install/robotarm_controller:/opt/ros/humble /usr/bin/cmake --build /home/roach/ros2_ws/build/smallrobot_moveit -- -j8 -l8
+[0.254s] Invoking command in '/home/roach/ros2_ws/build/smallrobot_moveit': CMAKE_PREFIX_PATH=/home/roach/ros2_ws/install/smallrobot_description:/home/roach/ros2_ws/install/smallrobot_moveit:/home/roach/ros2_ws/install/smallrobot_firmware:/home/roach/ros2_ws/install/robotarm_controller:/opt/ros/humble /usr/bin/cmake --install /home/roach/ros2_ws/build/smallrobot_moveit
+[0.261s] -- Install configuration: ""
+[0.261s] -- Execute custom install script
+[0.261s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/ament_index/resource_index/package_run_dependencies/smallrobot_moveit
+[0.261s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/ament_index/resource_index/parent_prefix_path/smallrobot_moveit
+[0.262s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/environment/ament_prefix_path.sh
+[0.262s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/environment/ament_prefix_path.dsv
+[0.262s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/environment/path.sh
+[0.262s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/environment/path.dsv
+[0.262s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/local_setup.bash
+[0.262s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/local_setup.sh
+[0.263s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/local_setup.zsh
+[0.263s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/local_setup.dsv
+[0.263s] -- Symlinking: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/package.dsv
+[0.273s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/ament_index/resource_index/packages/smallrobot_moveit
+[0.273s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/cmake/smallrobot_moveitConfig.cmake
+[0.274s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/cmake/smallrobot_moveitConfig-version.cmake
+[0.274s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/package.xml
+[0.274s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/launch/demo.launch.py
+[0.274s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/launch/move_group.launch.py
+[0.274s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/launch/moveit.launch.py
+[0.274s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/launch/moveit_rviz.launch.py
+[0.274s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/launch/rsp.launch.py
+[0.275s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/launch/setup_assistant.launch.py
+[0.275s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/launch/spawn_controllers.launch.py
+[0.275s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/launch/static_virtual_joint_tfs.launch.py
+[0.275s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/launch/demo.launch.py
+[0.275s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/launch/move_group.launch.py
+[0.275s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/launch/moveit.launch.py
+[0.276s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/launch/moveit_rviz.launch.py
+[0.276s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/launch/rsp.launch.py
+[0.276s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/launch/setup_assistant.launch.py
+[0.276s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/launch/spawn_controllers.launch.py
+[0.276s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/launch/static_virtual_joint_tfs.launch.py
+[0.276s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/config/initial_positions.yaml
+[0.277s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/config/joint_limits.yaml
+[0.277s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/config/kinematics.yaml
+[0.277s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/config/moveit.rviz
+[0.277s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/config/moveit_controllers.yaml
+[0.277s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/config/pilz_cartesian_limits.yaml
+[0.277s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/config/ros2_controllers.yaml
+[0.277s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/config/smallrobot.ros2_control.xacro
+[0.277s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/config/smallrobot.srdf
+[0.277s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/config/smallrobot.urdf.xacro
+[0.278s] -- Up-to-date symlink: /home/roach/ros2_ws/install/smallrobot_moveit/share/smallrobot_moveit/.setup_assistant
+[0.280s] Invoked command in '/home/roach/ros2_ws/build/smallrobot_moveit' returned '0': CMAKE_PREFIX_PATH=/home/roach/ros2_ws/install/smallrobot_description:/home/roach/ros2_ws/install/smallrobot_moveit:/home/roach/ros2_ws/install/smallrobot_firmware:/home/roach/ros2_ws/install/robotarm_controller:/opt/ros/humble /usr/bin/cmake --install /home/roach/ros2_ws/build/smallrobot_moveit
