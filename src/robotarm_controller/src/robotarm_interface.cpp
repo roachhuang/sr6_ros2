@@ -46,7 +46,17 @@ CallbackReturn RobotArmInterface::on_init(const hardware_interface::HardwareInfo
 CallbackReturn RobotArmInterface::on_activate(const rclcpp_lifecycle::State &)
 {
   // Connect to real hardware here
+  // std::stringstream ss;
+  // ss << "en" << \n;
   RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Activating hardware...");
+
+  std::string msg = "en\n";
+  try {
+    arduino.Write(msg);
+  } catch (...) {
+    RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to write to serial port:");
+    return CallbackReturn::ERROR;
+  }
   // Initialize robotarm h/w
   return CallbackReturn::SUCCESS;
 }
@@ -55,11 +65,20 @@ CallbackReturn RobotArmInterface::on_deactivate(const rclcpp_lifecycle::State &)
 {
   // Disconnect from hardware
   RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Deactivating hardware...");
+  std::string msg = "dis\n";
+  try {
+    arduino.Write(msg);
+  } catch (...) {
+    RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to write to serial port:");
+    return CallbackReturn::ERROR;
+  }
+
   if (arduino.IsOpen()){
     try {
       arduino.Close();
     } catch(...)  {
       RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to close serial port:");
+      return CallbackReturn::ERROR;
     } 
   }
   return CallbackReturn::SUCCESS;
@@ -94,7 +113,7 @@ std::vector<hardware_interface::CommandInterface> RobotArmInterface::export_comm
   return command_interfaces;
 }
 
-hardware_interface::return_type RobotArmInterface::read(const rclcpp::Time & time, const rclcpp::Duration & period)
+hardware_interface::return_type RobotArmInterface::read([[maybe_unused]] const rclcpp::Time & time, [[maybe_unused]] const rclcpp::Duration & period)
 {
   // Read from hardware (simulated here)
   for (size_t i = 0; i < position_states_.size(); ++i) {
@@ -104,7 +123,7 @@ hardware_interface::return_type RobotArmInterface::read(const rclcpp::Time & tim
   return hardware_interface::return_type::OK;
 }
 
-hardware_interface::return_type RobotArmInterface::write(const rclcpp::Time & time, const rclcpp::Duration & period)
+hardware_interface::return_type RobotArmInterface::write([[maybe_unused]] const rclcpp::Time & time, [[maybe_unused]] const rclcpp::Duration & period)
 {
   if(position_commands_ == prev_position_commands_){
     return hardware_interface::return_type::OK;
