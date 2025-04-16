@@ -1,0 +1,4 @@
+[31mCMake Error at CMakeLists.txt:59 (amend_export_libraries):
+  Unknown CMake command "amend_export_libraries".
+
+[0m

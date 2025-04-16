@@ -1,0 +1,63 @@
+[0.009s] Invoking command in '/home/roach/ros2_ws/build/robotarm_controller': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/roach/ros2_ws/src/robotarm_controller -DCMAKE_INSTALL_PREFIX=/home/roach/ros2_ws/install/robotarm_controller
+[0.073s] -- The C compiler identification is GNU 11.4.0
+[0.134s] -- The CXX compiler identification is GNU 11.4.0
+[0.142s] -- Detecting C compiler ABI info
+[0.202s] -- Detecting C compiler ABI info - done
+[0.209s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.209s] -- Detecting C compile features
+[0.210s] -- Detecting C compile features - done
+[0.213s] -- Detecting CXX compiler ABI info
+[0.284s] -- Detecting CXX compiler ABI info - done
+[0.291s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.291s] -- Detecting CXX compile features
+[0.292s] -- Detecting CXX compile features - done
+[0.294s] -- Found ament_cmake: 1.3.11 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.428s] -- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter 
+[0.505s] -- Found rclcpp: 16.0.12 (/opt/ros/humble/share/rclcpp/cmake)
+[0.544s] -- Found rosidl_generator_c: 3.1.6 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.548s] -- Found rosidl_adapter: 3.1.6 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.555s] -- Found rosidl_generator_cpp: 3.1.6 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.566s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.580s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.624s] -- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+[0.626s] -- Found rmw_fastrtps_cpp: 6.2.7 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+[0.701s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  
+[0.728s] -- Found FastRTPS: /opt/ros/humble/include  
+[0.765s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[0.772s] -- Looking for pthread.h
+[0.839s] -- Looking for pthread.h - found
+[0.840s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[0.903s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+[0.904s] -- Found Threads: TRUE  
+[0.956s] -- Found rclcpp_lifecycle: 16.0.12 (/opt/ros/humble/share/rclcpp_lifecycle/cmake)
+[0.974s] -- Found hardware_interface: 2.49.0 (/opt/ros/humble/share/hardware_interface/cmake)
+[1.100s] -- Found PkgConfig: /usr/bin/pkg-config (found version "0.29.2") 
+[1.100s] -- Checking for module 'libserial'
+[1.113s] --   Found libserial, version 1.0.0
+[1.151s] -- Found ament_lint_auto: 0.12.12 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[1.218s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[1.218s] -- Configured cppcheck include dirs: /home/roach/ros2_ws/src/robotarm_controller/include;/home/roach/ros2_ws/src/robotarm_controller/
+[1.218s] -- Configured cppcheck exclude dirs and/or files: 
+[1.218s] -- Added test 'flake8' to check Python code syntax and style conventions
+[1.219s] -- Added test 'lint_cmake' to check CMake code style
+[1.219s] -- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257
+[1.220s] -- Added test 'uncrustify' to check C / C++ code style
+[1.220s] -- Configured uncrustify additional arguments: 
+[1.221s] -- Added test 'xmllint' to check XML markup files
+[1.222s] -- Configuring done
+[1.252s] -- Generating done
+[1.256s] -- Build files have been written to: /home/roach/ros2_ws/build/robotarm_controller
+[1.265s] Invoked command in '/home/roach/ros2_ws/build/robotarm_controller' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/roach/ros2_ws/src/robotarm_controller -DCMAKE_INSTALL_PREFIX=/home/roach/ros2_ws/install/robotarm_controller
+[1.267s] Invoking command in '/home/roach/ros2_ws/build/robotarm_controller': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/roach/ros2_ws/build/robotarm_controller -- -j8 -l8
+[1.302s] [35m[1mConsolidate compiler generated dependencies of target robotarm_controller[0m
+[1.321s] [ 50%] [32m[1mLinking CXX shared library librobotarm_controller.so[0m
+[1.495s] [100%] Built target robotarm_controller
+[1.506s] Invoked command in '/home/roach/ros2_ws/build/robotarm_controller' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/roach/ros2_ws/build/robotarm_controller -- -j8 -l8
+[1.517s] Invoking command in '/home/roach/ros2_ws/build/robotarm_controller': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/roach/ros2_ws/build/robotarm_controller
+[1.524s] -- Install configuration: ""
+[1.525s] -- Up-to-date: /home/roach/ros2_ws/install/robotarm_controller/share/robotarm_controller/config
+[1.525s] -- Up-to-date: /home/roach/ros2_ws/install/robotarm_controller/share/robotarm_controller/launch
+[1.525s] -- Up-to-date: /home/roach/ros2_ws/install/robotarm_controller/include/include
+[1.525s] -- Up-to-date: /home/roach/ros2_ws/install/robotarm_controller/include/include/robotarm_controller
+[1.525s] -- Installing: /home/roach/ros2_ws/install/robotarm_controller/share/robotarm_controller/package.dsv
+[1.529s] Invoked command in '/home/roach/ros2_ws/build/robotarm_controller' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/roach/ros2_ws/build/robotarm_controller

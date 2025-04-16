@@ -1,0 +1,6 @@
+[0.000000] (-) TimerEvent: {}
+[0.000358] (-) JobUnselected: {'identifier': 'robotarm_controller'}
+[0.000415] (-) JobUnselected: {'identifier': 'smallrobot_description'}
+[0.000447] (-) JobUnselected: {'identifier': 'smallrobot_firmware'}
+[0.000464] (-) JobUnselected: {'identifier': 'smallrobot_moveit'}
+[0.000764] (-) EventReactorShutdown: {}

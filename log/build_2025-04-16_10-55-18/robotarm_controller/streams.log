@@ -1,0 +1,40 @@
+[0.026s] Invoking command in '/home/roach/ros2_ws/build/robotarm_controller': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/roach/ros2_ws/src/robotarm_controller -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/roach/ros2_ws/install/robotarm_controller
+[0.044s] -- Found ament_cmake: 1.3.11 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.239s] -- Override CMake install command with custom implementation using symlinks instead of copying resources
+[0.247s] -- Found rclcpp: 16.0.12 (/opt/ros/humble/share/rclcpp/cmake)
+[0.277s] -- Found rosidl_generator_c: 3.1.6 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.282s] -- Found rosidl_adapter: 3.1.6 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.287s] -- Found rosidl_generator_cpp: 3.1.6 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.296s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.312s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.347s] -- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+[0.348s] -- Found rmw_fastrtps_cpp: 6.2.7 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+[0.457s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[0.509s] -- Found rclcpp_lifecycle: 16.0.12 (/opt/ros/humble/share/rclcpp_lifecycle/cmake)
+[0.531s] -- Found hardware_interface: 2.49.0 (/opt/ros/humble/share/hardware_interface/cmake)
+[0.661s] -- Found ament_lint_auto: 0.12.12 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[0.738s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[0.739s] -- Configured cppcheck include dirs: /home/roach/ros2_ws/src/robotarm_controller/include;/home/roach/ros2_ws/src/robotarm_controller/
+[0.739s] -- Configured cppcheck exclude dirs and/or files: 
+[0.739s] -- Added test 'flake8' to check Python code syntax and style conventions
+[0.740s] -- Added test 'lint_cmake' to check CMake code style
+[0.740s] -- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257
+[0.741s] -- Added test 'uncrustify' to check C / C++ code style
+[0.741s] -- Configured uncrustify additional arguments: 
+[0.741s] -- Added test 'xmllint' to check XML markup files
+[0.744s] -- Configuring done
+[0.748s] [31mCMake Error at CMakeLists.txt:18 (add_library):
+[0.749s]   Cannot find source file:
+[0.749s] 
+[0.749s]     src/robotarm_interface.cpp
+[0.749s] 
+[0.749s]   Tried extensions .c .C .c++ .cc .cpp .cxx .cu .mpp .m .M .mm .ixx .cppm .h
+[0.749s]   .hh .h++ .hm .hpp .hxx .in .txx .f .F .for .f77 .f90 .f95 .f03 .hip .ispc
+[0.749s] 
+[0.749s] [0m
+[0.751s] [31mCMake Error at CMakeLists.txt:18 (add_library):
+[0.751s]   No SOURCES given to target: robotarm_controller
+[0.751s] 
+[0.751s] [0m
+[0.751s] [0mCMake Generate step failed.  Build files cannot be regenerated correctly.[0m
+[0.758s] Invoked command in '/home/roach/ros2_ws/build/robotarm_controller' returned '1': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/roach/ros2_ws/src/robotarm_controller -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/roach/ros2_ws/install/robotarm_controller

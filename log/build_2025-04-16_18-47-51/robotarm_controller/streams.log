@@ -1,0 +1,50 @@
+[0.010s] Invoking command in '/home/roach/ros2_ws/build/robotarm_controller': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/roach/ros2_ws/build/robotarm_controller -- -j8 -l8
+[0.054s] [35m[1mConsolidate compiler generated dependencies of target robotarm_controller[0m
+[0.071s] [ 50%] [32mBuilding CXX object CMakeFiles/robotarm_controller.dir/src/robotarm_interface.cpp.o[0m
+[2.346s] [01m[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:[m[K In member function ‘[01m[Kvirtual hardware_interface::return_type robotarm_controller::RobotArmInterface::read(const rclcpp::Time&, const rclcpp::Duration&)[m[K’:
+[2.346s] [01m[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:97:78:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Ktime[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[2.346s]    97 | hardware_interface::return_type RobotArmInterface::read([01;35m[Kconst rclcpp::Time & time[m[K, const rclcpp::Duration & period)
+[2.346s]       |                                                         [01;35m[K~~~~~~~~~~~~~~~~~~~~~^~~~[m[K
+[2.347s] [01m[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:97:109:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kperiod[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[2.347s]    97 | hardware_interface::return_type RobotArmInterface::read(const rclcpp::Time & time, [01;35m[Kconst rclcpp::Duration & period[m[K)
+[2.347s]       |                                                                                    [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~[m[K
+[2.347s] [01m[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:[m[K In member function ‘[01m[Kvirtual hardware_interface::return_type robotarm_controller::RobotArmInterface::write(const rclcpp::Time&, const rclcpp::Duration&)[m[K’:
+[2.348s] [01m[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:107:79:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Ktime[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[2.348s]   107 | hardware_interface::return_type RobotArmInterface::write([01;35m[Kconst rclcpp::Time & time[m[K, const rclcpp::Duration & period)
+[2.348s]       |                                                          [01;35m[K~~~~~~~~~~~~~~~~~~~~~^~~~[m[K
+[2.348s] [01m[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:107:110:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kperiod[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[2.348s]   107 | hardware_interface::return_type RobotArmInterface::write(const rclcpp::Time & time, [01;35m[Kconst rclcpp::Duration & period[m[K)
+[2.348s]       |                                                                                     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~[m[K
+[3.365s] [100%] [32m[1mLinking CXX shared library librobotarm_controller.so[0m
+[3.537s] [100%] Built target robotarm_controller
+[3.550s] Invoked command in '/home/roach/ros2_ws/build/robotarm_controller' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/roach/ros2_ws/build/robotarm_controller -- -j8 -l8
+[3.559s] Invoking command in '/home/roach/ros2_ws/build/robotarm_controller': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/roach/ros2_ws/build/robotarm_controller
+[3.566s] -- Install configuration: ""
+[3.566s] -- Execute custom install script
+[3.566s] -- Up-to-date symlink: /home/roach/ros2_ws/install/robotarm_controller/share/robotarm_controller//robotarm_interface.xml
+[3.567s] -- Up-to-date symlink: /home/roach/ros2_ws/install/robotarm_controller/share/robotarm_controller/config/robotarm_controllers.yaml
+[3.567s] -- Up-to-date symlink: /home/roach/ros2_ws/install/robotarm_controller/share/robotarm_controller/launch/controller.launch.py
+[3.567s] -- Up-to-date symlink: /home/roach/ros2_ws/install/robotarm_controller/lib/librobotarm_controller.so
+[3.568s] -- Up-to-date symlink: /home/roach/ros2_ws/install/robotarm_controller/include/include/robotarm_controller/robotarm_interface.hpp
+[3.568s] -- Up-to-date symlink: /home/roach/ros2_ws/install/robotarm_controller/share/robotarm_controller/environment/library_path.sh
+[3.568s] -- Up-to-date symlink: /home/roach/ros2_ws/install/robotarm_controller/share/robotarm_controller/environment/library_path.dsv
+[3.568s] -- Up-to-date symlink: /home/roach/ros2_ws/install/robotarm_controller/share/ament_index/resource_index/package_run_dependencies/robotarm_controller
+[3.568s] -- Up-to-date symlink: /home/roach/ros2_ws/install/robotarm_controller/share/ament_index/resource_index/parent_prefix_path/robotarm_controller
+[3.569s] -- Up-to-date symlink: /home/roach/ros2_ws/install/robotarm_controller/share/robotarm_controller/environment/ament_prefix_path.sh
+[3.569s] -- Up-to-date symlink: /home/roach/ros2_ws/install/robotarm_controller/share/robotarm_controller/environment/ament_prefix_path.dsv
+[3.569s] -- Up-to-date symlink: /home/roach/ros2_ws/install/robotarm_controller/share/robotarm_controller/environment/path.sh
+[3.569s] -- Up-to-date symlink: /home/roach/ros2_ws/install/robotarm_controller/share/robotarm_controller/environment/path.dsv
+[3.569s] -- Up-to-date symlink: /home/roach/ros2_ws/install/robotarm_controller/share/robotarm_controller/local_setup.bash
+[3.570s] -- Up-to-date symlink: /home/roach/ros2_ws/install/robotarm_controller/share/robotarm_controller/local_setup.sh
+[3.570s] -- Up-to-date symlink: /home/roach/ros2_ws/install/robotarm_controller/share/robotarm_controller/local_setup.zsh
+[3.570s] -- Up-to-date symlink: /home/roach/ros2_ws/install/robotarm_controller/share/robotarm_controller/local_setup.dsv
+[3.570s] -- Symlinking: /home/roach/ros2_ws/install/robotarm_controller/share/robotarm_controller/package.dsv
+[3.578s] -- Up-to-date symlink: /home/roach/ros2_ws/install/robotarm_controller/share/ament_index/resource_index/packages/robotarm_controller
+[3.578s] -- Up-to-date symlink: /home/roach/ros2_ws/install/robotarm_controller/share/ament_index/resource_index/hardware_interface__pluginlib__plugin/robotarm_controller
+[3.578s] -- Up-to-date symlink: /home/roach/ros2_ws/install/robotarm_controller/share/robotarm_controller/cmake/ament_cmake_export_include_directories-extras.cmake
+[3.579s] -- Up-to-date symlink: /home/roach/ros2_ws/install/robotarm_controller/share/robotarm_controller/cmake/ament_cmake_export_libraries-extras.cmake
+[3.579s] -- Up-to-date symlink: /home/roach/ros2_ws/install/robotarm_controller/share/robotarm_controller/cmake/ament_cmake_export_dependencies-extras.cmake
+[3.579s] -- Up-to-date symlink: /home/roach/ros2_ws/install/robotarm_controller/share/robotarm_controller/cmake/robotarm_controllerConfig.cmake
+[3.579s] -- Up-to-date symlink: /home/roach/ros2_ws/install/robotarm_controller/share/robotarm_controller/cmake/robotarm_controllerConfig-version.cmake
+[3.579s] -- Up-to-date symlink: /home/roach/ros2_ws/install/robotarm_controller/share/robotarm_controller/package.xml
+[3.581s] Invoked command in '/home/roach/ros2_ws/build/robotarm_controller' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/roach/ros2_ws/build/robotarm_controller

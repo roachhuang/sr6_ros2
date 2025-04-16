@@ -1,0 +1,212 @@
+[0.000000] (-) TimerEvent: {}
+[0.000451] (-) JobUnselected: {'identifier': 'smallrobot_description'}
+[0.000680] (-) JobUnselected: {'identifier': 'smallrobot_firmware'}
+[0.000714] (-) JobUnselected: {'identifier': 'smallrobot_moveit'}
+[0.000744] (robotarm_controller) JobQueued: {'identifier': 'robotarm_controller', 'dependencies': OrderedDict()}
+[0.000762] (robotarm_controller) JobStarted: {'identifier': 'robotarm_controller'}
+[0.007295] (robotarm_controller) JobProgress: {'identifier': 'robotarm_controller', 'progress': 'cmake'}
+[0.007785] (robotarm_controller) Command: {'cmd': ['/usr/bin/cmake', '/home/roach/ros2_ws/src/robotarm_controller', '-DCMAKE_INSTALL_PREFIX=/home/roach/ros2_ws/install/robotarm_controller'], 'cwd': '/home/roach/ros2_ws/build/robotarm_controller', 'env': OrderedDict([('GJS_DEBUG_TOPICS', 'JS ERROR;JS LOG'), ('LESSOPEN', '| /usr/bin/lesspipe %s'), ('USER', 'roach'), ('LC_TIME', 'en_GB.UTF-8'), ('XDG_SESSION_TYPE', 'wayland'), ('GIT_ASKPASS', '/usr/share/code/resources/app/extensions/git/dist/askpass.sh'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib'), ('HOME', '/home/roach'), ('CHROME_DESKTOP', 'code.desktop'), ('TERM_PROGRAM_VERSION', '1.99.2'), ('DESKTOP_SESSION', 'ubuntu'), ('GIO_LAUNCHED_DESKTOP_FILE', '/usr/share/applications/code.desktop'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('VSCODE_GIT_ASKPASS_MAIN', '/usr/share/code/resources/app/extensions/git/dist/askpass-main.js'), ('LC_MONETARY', 'en_GB.UTF-8'), ('VSCODE_GIT_ASKPASS_NODE', '/usr/share/code/code'), ('MANAGERPID', '1330'), ('PYDEVD_DISABLE_FILE_VALIDATION', '1'), ('SYSTEMD_EXEC_PID', '1566'), ('BUNDLED_DEBUGPY_PATH', '/home/roach/.vscode/extensions/ms-python.debugpy-2025.6.0-linux-x64/bundled/libs/debugpy'), ('IM_CONFIG_CHECK_ENV', '1'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('GIO_LAUNCHED_DESKTOP_FILE_PID', '6907'), ('IM_CONFIG_PHASE', '1'), ('WAYLAND_DISPLAY', 'wayland-0'), ('COLCON_PREFIX_PATH', '/opt/ros/humble'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'roach'), ('JOURNAL_STREAM', '8:16397'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('USERNAME', 'roach'), ('TERM', 'xterm-256color'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/roach/.vscode/extensions/ms-python.debugpy-2025.6.0-linux-x64/bundled/scripts/noConfigScripts:/home/roach/.config/Code/User/globalStorage/github.copilot-chat/debugCommand'), ('SESSION_MANAGER', 'local/ros2:@/tmp/.ICE-unix/1538,unix/ros2:/tmp/.ICE-unix/1538'), ('INVOCATION_ID', '1f962e83668c40f194af0f73470f9872'), ('PAPERSIZE', 'a4'), ('XDG_MENU_PREFIX', 'gnome-'), ('LC_ADDRESS', 'en_GB.UTF-8'), ('GNOME_SETUP_DISPLAY', ':1'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('GDK_BACKEND', 'x11'), ('DISPLAY', ':0'), ('VSCODE_DEBUGPY_ADAPTER_ENDPOINTS', '/home/roach/.vscode/extensions/ms-python.debugpy-2025.6.0-linux-x64/.noConfigDebugAdapterEndpoints/endpoint-462df79dd260cbcb.txt'), ('LANG', 'en_US.UTF-8'), ('XDG_CURRENT_DESKTOP', 'Unity'), ('LC_TELEPHONE', 'en_GB.UTF-8'), ('XDG_SESSION_DESKTOP', 'ubuntu'), ('XAUTHORITY', '/run/user/1000/.mutter-Xwaylandauth.5DRK42'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('VSCODE_GIT_IPC_HANDLE', '/run/user/1000/vscode-git-18f6863600.sock'), ('TERM_PROGRAM', 'vscode'), ('SSH_AGENT_LAUNCHER', 'gnome-keyring'), ('SSH_AUTH_SOCK', '/run/user/1000/keyring/ssh'), ('AMENT_PREFIX_PATH', '/opt/ros/humble'), ('ORIGINAL_XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('SHELL', '/bin/bash'), ('LC_NAME', 'en_GB.UTF-8'), ('QT_ACCESSIBILITY', '1'), ('GDMSESSION', 'ubuntu'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('LC_MEASUREMENT', 'en_GB.UTF-8'), ('GJS_DEBUG_OUTPUT', 'stderr'), ('LC_IDENTIFICATION', 'en_GB.UTF-8'), ('VSCODE_GIT_ASKPASS_EXTRA_ARGS', ''), ('PWD', '/home/roach/ros2_ws/build/robotarm_controller'), ('LC_ALL', 'en_US.UTF-8'), ('XDG_CONFIG_DIRS', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('XDG_DATA_DIRS', '/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('LC_NUMERIC', 'en_GB.UTF-8'), ('LC_PAPER', 'en_GB.UTF-8'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/opt/ros/humble')]), 'shell': False}
+[0.061347] (robotarm_controller) StdoutLine: {'line': b'-- The C compiler identification is GNU 11.4.0\n'}
+[0.099709] (-) TimerEvent: {}
+[0.118566] (robotarm_controller) StdoutLine: {'line': b'-- The CXX compiler identification is GNU 11.4.0\n'}
+[0.124718] (robotarm_controller) StdoutLine: {'line': b'-- Detecting C compiler ABI info\n'}
+[0.188529] (robotarm_controller) StdoutLine: {'line': b'-- Detecting C compiler ABI info - done\n'}
+[0.195132] (robotarm_controller) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc - skipped\n'}
+[0.195443] (robotarm_controller) StdoutLine: {'line': b'-- Detecting C compile features\n'}
+[0.196008] (robotarm_controller) StdoutLine: {'line': b'-- Detecting C compile features - done\n'}
+[0.199379] (robotarm_controller) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info\n'}
+[0.199790] (-) TimerEvent: {}
+[0.274998] (robotarm_controller) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info - done\n'}
+[0.281791] (robotarm_controller) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++ - skipped\n'}
+[0.282009] (robotarm_controller) StdoutLine: {'line': b'-- Detecting CXX compile features\n'}
+[0.282487] (robotarm_controller) StdoutLine: {'line': b'-- Detecting CXX compile features - done\n'}
+[0.284504] (robotarm_controller) StdoutLine: {'line': b'-- Found ament_cmake: 1.3.11 (/opt/ros/humble/share/ament_cmake/cmake)\n'}
+[0.299902] (-) TimerEvent: {}
+[0.400151] (-) TimerEvent: {}
+[0.417262] (robotarm_controller) StdoutLine: {'line': b'-- Found Python3: /usr/bin/python3 (found version "3.10.12") found components: Interpreter \n'}
+[0.495984] (robotarm_controller) StdoutLine: {'line': b'-- Found rclcpp: 16.0.12 (/opt/ros/humble/share/rclcpp/cmake)\n'}
+[0.500218] (-) TimerEvent: {}
+[0.534099] (robotarm_controller) StdoutLine: {'line': b'-- Found rosidl_generator_c: 3.1.6 (/opt/ros/humble/share/rosidl_generator_c/cmake)\n'}
+[0.538457] (robotarm_controller) StdoutLine: {'line': b'-- Found rosidl_adapter: 3.1.6 (/opt/ros/humble/share/rosidl_adapter/cmake)\n'}
+[0.546305] (robotarm_controller) StdoutLine: {'line': b'-- Found rosidl_generator_cpp: 3.1.6 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)\n'}
+[0.556930] (robotarm_controller) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[0.570924] (robotarm_controller) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[0.600319] (-) TimerEvent: {}
+[0.609788] (robotarm_controller) StdoutLine: {'line': b'-- Found rmw_implementation_cmake: 6.1.2 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)\n'}
+[0.613657] (robotarm_controller) StdoutLine: {'line': b'-- Found rmw_fastrtps_cpp: 6.2.7 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)\n'}
+[0.688481] (robotarm_controller) StdoutLine: {'line': b'-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  \n'}
+[0.700438] (-) TimerEvent: {}
+[0.715125] (robotarm_controller) StdoutLine: {'line': b'-- Found FastRTPS: /opt/ros/humble/include  \n'}
+[0.752382] (robotarm_controller) StdoutLine: {'line': b"-- Using RMW implementation 'rmw_fastrtps_cpp' as default\n"}
+[0.759456] (robotarm_controller) StdoutLine: {'line': b'-- Looking for pthread.h\n'}
+[0.800556] (-) TimerEvent: {}
+[0.824325] (robotarm_controller) StdoutLine: {'line': b'-- Looking for pthread.h - found\n'}
+[0.824789] (robotarm_controller) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD\n'}
+[0.889731] (robotarm_controller) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success\n'}
+[0.890718] (robotarm_controller) StdoutLine: {'line': b'-- Found Threads: TRUE  \n'}
+[0.900649] (-) TimerEvent: {}
+[0.940754] (robotarm_controller) StdoutLine: {'line': b'-- Found rclcpp_lifecycle: 16.0.12 (/opt/ros/humble/share/rclcpp_lifecycle/cmake)\n'}
+[0.959009] (robotarm_controller) StdoutLine: {'line': b'-- Found hardware_interface: 2.49.0 (/opt/ros/humble/share/hardware_interface/cmake)\n'}
+[1.000771] (-) TimerEvent: {}
+[1.083639] (robotarm_controller) StdoutLine: {'line': b'-- Found PkgConfig: /usr/bin/pkg-config (found version "0.29.2") \n'}
+[1.084384] (robotarm_controller) StdoutLine: {'line': b"-- Checking for module 'libserial'\n"}
+[1.094729] (robotarm_controller) StdoutLine: {'line': b'--   Found libserial, version 1.0.0\n'}
+[1.100875] (-) TimerEvent: {}
+[1.132086] (robotarm_controller) StdoutLine: {'line': b'-- Found ament_lint_auto: 0.12.12 (/opt/ros/humble/share/ament_lint_auto/cmake)\n'}
+[1.198947] (robotarm_controller) StdoutLine: {'line': b"-- Added test 'cppcheck' to perform static code analysis on C / C++ code\n"}
+[1.199197] (robotarm_controller) StdoutLine: {'line': b'-- Configured cppcheck include dirs: /home/roach/ros2_ws/src/robotarm_controller/include\n'}
+[1.199269] (robotarm_controller) StdoutLine: {'line': b'-- Configured cppcheck exclude dirs and/or files: \n'}
+[1.199589] (robotarm_controller) StdoutLine: {'line': b"-- Added test 'flake8' to check Python code syntax and style conventions\n"}
+[1.200065] (robotarm_controller) StdoutLine: {'line': b"-- Added test 'lint_cmake' to check CMake code style\n"}
+[1.200463] (robotarm_controller) StdoutLine: {'line': b"-- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257\n"}
+[1.200970] (-) TimerEvent: {}
+[1.201445] (robotarm_controller) StdoutLine: {'line': b"-- Added test 'uncrustify' to check C / C++ code style\n"}
+[1.201530] (robotarm_controller) StdoutLine: {'line': b'-- Configured uncrustify additional arguments: \n'}
+[1.201829] (robotarm_controller) StdoutLine: {'line': b"-- Added test 'xmllint' to check XML markup files\n"}
+[1.202937] (robotarm_controller) StdoutLine: {'line': b'-- Configuring done\n'}
+[1.232622] (robotarm_controller) StdoutLine: {'line': b'-- Generating done\n'}
+[1.237186] (robotarm_controller) StdoutLine: {'line': b'-- Build files have been written to: /home/roach/ros2_ws/build/robotarm_controller\n'}
+[1.247090] (robotarm_controller) CommandEnded: {'returncode': 0}
+[1.249092] (robotarm_controller) JobProgress: {'identifier': 'robotarm_controller', 'progress': 'build'}
+[1.249155] (robotarm_controller) Command: {'cmd': ['/usr/bin/cmake', '--build', '/home/roach/ros2_ws/build/robotarm_controller', '--', '-j8', '-l8'], 'cwd': '/home/roach/ros2_ws/build/robotarm_controller', 'env': OrderedDict([('GJS_DEBUG_TOPICS', 'JS ERROR;JS LOG'), ('LESSOPEN', '| /usr/bin/lesspipe %s'), ('USER', 'roach'), ('LC_TIME', 'en_GB.UTF-8'), ('XDG_SESSION_TYPE', 'wayland'), ('GIT_ASKPASS', '/usr/share/code/resources/app/extensions/git/dist/askpass.sh'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib'), ('HOME', '/home/roach'), ('CHROME_DESKTOP', 'code.desktop'), ('TERM_PROGRAM_VERSION', '1.99.2'), ('DESKTOP_SESSION', 'ubuntu'), ('GIO_LAUNCHED_DESKTOP_FILE', '/usr/share/applications/code.desktop'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('VSCODE_GIT_ASKPASS_MAIN', '/usr/share/code/resources/app/extensions/git/dist/askpass-main.js'), ('LC_MONETARY', 'en_GB.UTF-8'), ('VSCODE_GIT_ASKPASS_NODE', '/usr/share/code/code'), ('MANAGERPID', '1330'), ('PYDEVD_DISABLE_FILE_VALIDATION', '1'), ('SYSTEMD_EXEC_PID', '1566'), ('BUNDLED_DEBUGPY_PATH', '/home/roach/.vscode/extensions/ms-python.debugpy-2025.6.0-linux-x64/bundled/libs/debugpy'), ('IM_CONFIG_CHECK_ENV', '1'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1000/bus'), ('COLORTERM', 'truecolor'), ('GIO_LAUNCHED_DESKTOP_FILE_PID', '6907'), ('IM_CONFIG_PHASE', '1'), ('WAYLAND_DISPLAY', 'wayland-0'), ('COLCON_PREFIX_PATH', '/opt/ros/humble'), ('ROS_DISTRO', 'humble'), ('LOGNAME', 'roach'), ('JOURNAL_STREAM', '8:16397'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('USERNAME', 'roach'), ('TERM', 'xterm-256color'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/roach/.vscode/extensions/ms-python.debugpy-2025.6.0-linux-x64/bundled/scripts/noConfigScripts:/home/roach/.config/Code/User/globalStorage/github.copilot-chat/debugCommand'), ('SESSION_MANAGER', 'local/ros2:@/tmp/.ICE-unix/1538,unix/ros2:/tmp/.ICE-unix/1538'), ('INVOCATION_ID', '1f962e83668c40f194af0f73470f9872'), ('PAPERSIZE', 'a4'), ('XDG_MENU_PREFIX', 'gnome-'), ('LC_ADDRESS', 'en_GB.UTF-8'), ('GNOME_SETUP_DISPLAY', ':1'), ('XDG_RUNTIME_DIR', '/run/user/1000'), ('GDK_BACKEND', 'x11'), ('DISPLAY', ':0'), ('VSCODE_DEBUGPY_ADAPTER_ENDPOINTS', '/home/roach/.vscode/extensions/ms-python.debugpy-2025.6.0-linux-x64/.noConfigDebugAdapterEndpoints/endpoint-462df79dd260cbcb.txt'), ('LANG', 'en_US.UTF-8'), ('XDG_CURRENT_DESKTOP', 'Unity'), ('LC_TELEPHONE', 'en_GB.UTF-8'), ('XDG_SESSION_DESKTOP', 'ubuntu'), ('XAUTHORITY', '/run/user/1000/.mutter-Xwaylandauth.5DRK42'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('VSCODE_GIT_IPC_HANDLE', '/run/user/1000/vscode-git-18f6863600.sock'), ('TERM_PROGRAM', 'vscode'), ('SSH_AGENT_LAUNCHER', 'gnome-keyring'), ('SSH_AUTH_SOCK', '/run/user/1000/keyring/ssh'), ('AMENT_PREFIX_PATH', '/opt/ros/humble'), ('ORIGINAL_XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('SHELL', '/bin/bash'), ('LC_NAME', 'en_GB.UTF-8'), ('QT_ACCESSIBILITY', '1'), ('GDMSESSION', 'ubuntu'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('LC_MEASUREMENT', 'en_GB.UTF-8'), ('GJS_DEBUG_OUTPUT', 'stderr'), ('LC_IDENTIFICATION', 'en_GB.UTF-8'), ('VSCODE_GIT_ASKPASS_EXTRA_ARGS', ''), ('PWD', '/home/roach/ros2_ws/build/robotarm_controller'), ('LC_ALL', 'en_US.UTF-8'), ('XDG_CONFIG_DIRS', '/etc/xdg/xdg-ubuntu:/etc/xdg'), ('XDG_DATA_DIRS', '/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('LC_NUMERIC', 'en_GB.UTF-8'), ('LC_PAPER', 'en_GB.UTF-8'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/opt/ros/humble')]), 'shell': False}
+[1.284664] (robotarm_controller) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target robotarm_controller\x1b[0m\n'}
+[1.301124] (-) TimerEvent: {}
+[1.303029] (robotarm_controller) StdoutLine: {'line': b'[ 50%] \x1b[32mBuilding CXX object CMakeFiles/robotarm_controller.dir/src/robotarm_interface.cpp.o\x1b[0m\n'}
+[1.401202] (-) TimerEvent: {}
+[1.501480] (-) TimerEvent: {}
+[1.586090] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:116:10:\x1b[m\x1b[K \x1b[01;35m\x1b[Kwarning: \x1b[m\x1b[Kcharacter constant too long for its type\n'}
+[1.586248] (robotarm_controller) StderrLine: {'line': b"  116 |   cmd = {\x1b[01;35m\x1b[K'header'\x1b[m\x1b[K: 'j', 'joint_angle': j, 'ack': True}\n"}
+[1.586306] (robotarm_controller) StderrLine: {'line': b'      |          \x1b[01;35m\x1b[K^~~~~~~~\x1b[m\x1b[K\n'}
+[1.586358] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:116:25:\x1b[m\x1b[K \x1b[01;35m\x1b[Kwarning: \x1b[m\x1b[Kcharacter constant too long for its type\n'}
+[1.586408] (robotarm_controller) StderrLine: {'line': b"  116 |   cmd = {'header': 'j', \x1b[01;35m\x1b[K'joint_angle'\x1b[m\x1b[K: j, 'ack': True}\n"}
+[1.586455] (robotarm_controller) StderrLine: {'line': b'      |                         \x1b[01;35m\x1b[K^~~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[1.586502] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:116:43:\x1b[m\x1b[K \x1b[01;35m\x1b[Kwarning: \x1b[m\x1b[Kmulti-character character constant [\x1b[01;35m\x1b[K\x1b]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wmultichar\x07-Wmultichar\x1b]8;;\x07\x1b[m\x1b[K]\n'}
+[1.586552] (robotarm_controller) StderrLine: {'line': b"  116 |   cmd = {'header': 'j', 'joint_angle': j, \x1b[01;35m\x1b[K'ack'\x1b[m\x1b[K: True}\n"}
+[1.586598] (robotarm_controller) StderrLine: {'line': b'      |                                           \x1b[01;35m\x1b[K^~~~~\x1b[m\x1b[K\n'}
+[1.601589] (-) TimerEvent: {}
+[1.701849] (-) TimerEvent: {}
+[1.802132] (-) TimerEvent: {}
+[1.902420] (-) TimerEvent: {}
+[2.002707] (-) TimerEvent: {}
+[2.102982] (-) TimerEvent: {}
+[2.203218] (-) TimerEvent: {}
+[2.303493] (-) TimerEvent: {}
+[2.403759] (-) TimerEvent: {}
+[2.504025] (-) TimerEvent: {}
+[2.604264] (-) TimerEvent: {}
+[2.704541] (-) TimerEvent: {}
+[2.804815] (-) TimerEvent: {}
+[2.905096] (-) TimerEvent: {}
+[3.005381] (-) TimerEvent: {}
+[3.105654] (-) TimerEvent: {}
+[3.205933] (-) TimerEvent: {}
+[3.306190] (-) TimerEvent: {}
+[3.406477] (-) TimerEvent: {}
+[3.479535] (robotarm_controller) StderrLine: {'line': b'In file included from \x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:1\x1b[m\x1b[K:\n'}
+[3.479692] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/include/robotarm_controller/robotarm_interface.hpp:48:6:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[Kexpected \xe2\x80\x98\x1b[01m\x1b[K;\x1b[m\x1b[K\xe2\x80\x99 after class definition\n'}
+[3.479751] (robotarm_controller) StderrLine: {'line': b'   48 |     }\n'}
+[3.479801] (robotarm_controller) StderrLine: {'line': b'      |      \x1b[01;31m\x1b[K^\x1b[m\x1b[K\n'}
+[3.479850] (robotarm_controller) StderrLine: {'line': b'      |      \x1b[32m\x1b[K;\x1b[m\x1b[K\n'}
+[3.480266] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:\x1b[m\x1b[K In destructor \xe2\x80\x98\x1b[01m\x1b[Kvirtual robotarm_controller::RobotArmInterface::~RobotArmInterface()\x1b[m\x1b[K\xe2\x80\x99:\n'}
+[3.480352] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:20:47:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[Kexpected unqualified-id before \xe2\x80\x98\x1b[01m\x1b[K&\x1b[m\x1b[K\xe2\x80\x99 token\n'}
+[3.480408] (robotarm_controller) StderrLine: {'line': b'   20 |     } catch (const LibSerial::SerialPortError \x1b[01;31m\x1b[K&\x1b[m\x1b[Ke) {\n'}
+[3.480461] (robotarm_controller) StderrLine: {'line': b'      |                                               \x1b[01;31m\x1b[K^\x1b[m\x1b[K\n'}
+[3.480509] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:20:46:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[Kexpected \xe2\x80\x98\x1b[01m\x1b[K)\x1b[m\x1b[K\xe2\x80\x99 before \xe2\x80\x98\x1b[01m\x1b[K&\x1b[m\x1b[K\xe2\x80\x99 token\n'}
+[3.480557] (robotarm_controller) StderrLine: {'line': b'   20 |     } catch \x1b[34m\x1b[K(\x1b[m\x1b[Kconst LibSerial::SerialPortError\x1b[01;31m\x1b[K \x1b[m\x1b[K\x1b[32m\x1b[K&\x1b[m\x1b[Ke) {\n'}
+[3.480604] (robotarm_controller) StderrLine: {'line': b'      |             \x1b[34m\x1b[K~\x1b[m\x1b[K                                \x1b[01;31m\x1b[K^\x1b[m\x1b[K\x1b[32m\x1b[K~\x1b[m\x1b[K\n'}
+[3.480650] (robotarm_controller) StderrLine: {'line': b'      |                                              \x1b[32m\x1b[K)\x1b[m\x1b[K\n'}
+[3.480695] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:20:47:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[Kexpected \xe2\x80\x98\x1b[01m\x1b[K{\x1b[m\x1b[K\xe2\x80\x99 before \xe2\x80\x98\x1b[01m\x1b[K&\x1b[m\x1b[K\xe2\x80\x99 token\n'}
+[3.480741] (robotarm_controller) StderrLine: {'line': b'   20 |     } catch (const LibSerial::SerialPortError \x1b[01;31m\x1b[K&\x1b[m\x1b[Ke) {\n'}
+[3.480787] (robotarm_controller) StderrLine: {'line': b'      |                                               \x1b[01;31m\x1b[K^\x1b[m\x1b[K\n'}
+[3.484131] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:20:48:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[Ke\x1b[m\x1b[K\xe2\x80\x99 was not declared in this scope\n'}
+[3.484223] (robotarm_controller) StderrLine: {'line': b'   20 |     } catch (const LibSerial::SerialPortError &\x1b[01;31m\x1b[Ke\x1b[m\x1b[K) {\n'}
+[3.484285] (robotarm_controller) StderrLine: {'line': b'      |                                                \x1b[01;31m\x1b[K^\x1b[m\x1b[K\n'}
+[3.484435] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:\x1b[m\x1b[K In member function \xe2\x80\x98\x1b[01m\x1b[Kvirtual robotarm_controller::CallbackReturn robotarm_controller::RobotArmInterface::on_init(const hardware_interface::HardwareInfo&)\x1b[m\x1b[K\xe2\x80\x99:\n'}
+[3.484594] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:33:44:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[Kpassing \xe2\x80\x98\x1b[01m\x1b[Kconst std::unordered_map<std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> >\x1b[m\x1b[K\xe2\x80\x99 as \xe2\x80\x98\x1b[01m\x1b[Kthis\x1b[m\x1b[K\xe2\x80\x99 argument discards qualifiers [\x1b[01;31m\x1b[K\x1b]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-fpermissive\x07-fpermissive\x1b]8;;\x07\x1b[m\x1b[K]\n'}
+[3.484699] (robotarm_controller) StderrLine: {'line': b'   33 |     port_ = info.hardware_parameters["port"\x1b[01;31m\x1b[K]\x1b[m\x1b[K;\n'}
+[3.484858] (robotarm_controller) StderrLine: {'line': b'      |                                            \x1b[01;31m\x1b[K^\x1b[m\x1b[K\n'}
+[3.484971] (robotarm_controller) StderrLine: {'line': b'In file included from \x1b[01m\x1b[K/usr/include/c++/11/unordered_map:47\x1b[m\x1b[K,\n'}
+[3.485068] (robotarm_controller) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/executors/multi_threaded_executor.hpp:23\x1b[m\x1b[K,\n'}
+[3.485210] (robotarm_controller) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/executors.hpp:21\x1b[m\x1b[K,\n'}
+[3.485298] (robotarm_controller) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/opt/ros/humble/include/rclcpp/rclcpp/rclcpp.hpp:155\x1b[m\x1b[K,\n'}
+[3.485379] (robotarm_controller) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/include/robotarm_controller/robotarm_interface.hpp:5\x1b[m\x1b[K,\n'}
+[3.485460] (robotarm_controller) StderrLine: {'line': b'                 from \x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:1\x1b[m\x1b[K:\n'}
+[3.485546] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/usr/include/c++/11/bits/unordered_map.h:983:7:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[K  in call to \xe2\x80\x98\x1b[01m\x1b[Kstd::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::mapped_type& std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::operator[](std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::key_type&&) [with _Key = std::__cxx11::basic_string<char>; _Tp = std::__cxx11::basic_string<char>; _Hash = std::hash<std::__cxx11::basic_string<char> >; _Pred = std::equal_to<std::__cxx11::basic_string<char> >; _Alloc = std::allocator<std::pair<const std::__cxx11::basic_string<char>, std::__cxx11::basic_string<char> > >; std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::mapped_type = std::__cxx11::basic_string<char>; std::unordered_map<_Key, _Tp, _Hash, _Pred, _Alloc>::key_type = std::__cxx11::basic_string<char>]\x1b[m\x1b[K\xe2\x80\x99\n'}
+[3.485637] (robotarm_controller) StderrLine: {'line': b'  983 |       \x1b[01;36m\x1b[Koperator\x1b[m\x1b[K[](key_type&& __k)\n'}
+[3.485718] (robotarm_controller) StderrLine: {'line': b'      |       \x1b[01;36m\x1b[K^~~~~~~~\x1b[m\x1b[K\n'}
+[3.485799] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:35:36:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[KLibSerial::SerialStreamBuf\x1b[m\x1b[K\xe2\x80\x99 has not been declared\n'}
+[3.485882] (robotarm_controller) StderrLine: {'line': b'   35 |     arduino.SetBaudRate(LibSerial::\x1b[01;31m\x1b[KSerialStreamBuf\x1b[m\x1b[K::BAUD_115200);\n'}
+[3.485963] (robotarm_controller) StderrLine: {'line': b'      |                                    \x1b[01;31m\x1b[K^~~~~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[3.486050] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:36:45:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[Kexpected unqualified-id before \xe2\x80\x98\x1b[01m\x1b[K&\x1b[m\x1b[K\xe2\x80\x99 token\n'}
+[3.486140] (robotarm_controller) StderrLine: {'line': b'   36 |   } catch (const LibSerial::SerialPortError \x1b[01;31m\x1b[K&\x1b[m\x1b[Ke) {\n'}
+[3.486192] (robotarm_controller) StderrLine: {'line': b'      |                                             \x1b[01;31m\x1b[K^\x1b[m\x1b[K\n'}
+[3.486238] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:36:44:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[Kexpected \xe2\x80\x98\x1b[01m\x1b[K)\x1b[m\x1b[K\xe2\x80\x99 before \xe2\x80\x98\x1b[01m\x1b[K&\x1b[m\x1b[K\xe2\x80\x99 token\n'}
+[3.486286] (robotarm_controller) StderrLine: {'line': b'   36 |   } catch \x1b[34m\x1b[K(\x1b[m\x1b[Kconst LibSerial::SerialPortError\x1b[01;31m\x1b[K \x1b[m\x1b[K\x1b[32m\x1b[K&\x1b[m\x1b[Ke) {\n'}
+[3.486333] (robotarm_controller) StderrLine: {'line': b'      |           \x1b[34m\x1b[K~\x1b[m\x1b[K                                \x1b[01;31m\x1b[K^\x1b[m\x1b[K\x1b[32m\x1b[K~\x1b[m\x1b[K\n'}
+[3.486378] (robotarm_controller) StderrLine: {'line': b'      |                                            \x1b[32m\x1b[K)\x1b[m\x1b[K\n'}
+[3.486424] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:36:45:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[Kexpected \xe2\x80\x98\x1b[01m\x1b[K{\x1b[m\x1b[K\xe2\x80\x99 before \xe2\x80\x98\x1b[01m\x1b[K&\x1b[m\x1b[K\xe2\x80\x99 token\n'}
+[3.486470] (robotarm_controller) StderrLine: {'line': b'   36 |   } catch (const LibSerial::SerialPortError \x1b[01;31m\x1b[K&\x1b[m\x1b[Ke) {\n'}
+[3.486516] (robotarm_controller) StderrLine: {'line': b'      |                                             \x1b[01;31m\x1b[K^\x1b[m\x1b[K\n'}
+[3.488098] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:36:46:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[Ke\x1b[m\x1b[K\xe2\x80\x99 was not declared in this scope\n'}
+[3.488160] (robotarm_controller) StderrLine: {'line': b'   36 |   } catch (const LibSerial::SerialPortError &\x1b[01;31m\x1b[Ke\x1b[m\x1b[K) {\n'}
+[3.488208] (robotarm_controller) StderrLine: {'line': b'      |                                              \x1b[01;31m\x1b[K^\x1b[m\x1b[K\n'}
+[3.491634] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:42:3:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[Kposition_commands_\x1b[m\x1b[K\xe2\x80\x99 was not declared in this scope; did you mean \xe2\x80\x98\x1b[01m\x1b[Kpositions_commands_\x1b[m\x1b[K\xe2\x80\x99?\n'}
+[3.491725] (robotarm_controller) StderrLine: {'line': b'   42 |   \x1b[01;31m\x1b[Kposition_commands_\x1b[m\x1b[K.resize(info_.joints.size(), 0);\n'}
+[3.491781] (robotarm_controller) StderrLine: {'line': b'      |   \x1b[01;31m\x1b[K^~~~~~~~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[3.491830] (robotarm_controller) StderrLine: {'line': b'      |   \x1b[32m\x1b[Kpositions_commands_\x1b[m\x1b[K\n'}
+[3.495400] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:44:3:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[Kprev_position_commands__\x1b[m\x1b[K\xe2\x80\x99 was not declared in this scope; did you mean \xe2\x80\x98\x1b[01m\x1b[Kprev_position_commands_\x1b[m\x1b[K\xe2\x80\x99?\n'}
+[3.495494] (robotarm_controller) StderrLine: {'line': b'   44 |   \x1b[01;31m\x1b[Kprev_position_commands__\x1b[m\x1b[K.resize(info_.joints.size(), 0);\n'}
+[3.495550] (robotarm_controller) StderrLine: {'line': b'      |   \x1b[01;31m\x1b[K^~~~~~~~~~~~~~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[3.495599] (robotarm_controller) StderrLine: {'line': b'      |   \x1b[32m\x1b[Kprev_position_commands_\x1b[m\x1b[K\n'}
+[3.496374] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:\x1b[m\x1b[K In member function \xe2\x80\x98\x1b[01m\x1b[Kvirtual robotarm_controller::CallbackReturn robotarm_controller::RobotArmInterface::on_deactivate(const rclcpp_lifecycle::State&)\x1b[m\x1b[K\xe2\x80\x99:\n'}
+[3.496507] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:64:47:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[Kexpected unqualified-id before \xe2\x80\x98\x1b[01m\x1b[K&\x1b[m\x1b[K\xe2\x80\x99 token\n'}
+[3.496564] (robotarm_controller) StderrLine: {'line': b'   64 |     } catch (const LibSerial::SerialPortError \x1b[01;31m\x1b[K&\x1b[m\x1b[Ke) {\n'}
+[3.496614] (robotarm_controller) StderrLine: {'line': b'      |                                               \x1b[01;31m\x1b[K^\x1b[m\x1b[K\n'}
+[3.496662] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:64:46:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[Kexpected \xe2\x80\x98\x1b[01m\x1b[K)\x1b[m\x1b[K\xe2\x80\x99 before \xe2\x80\x98\x1b[01m\x1b[K&\x1b[m\x1b[K\xe2\x80\x99 token\n'}
+[3.496710] (robotarm_controller) StderrLine: {'line': b'   64 |     } catch \x1b[34m\x1b[K(\x1b[m\x1b[Kconst LibSerial::SerialPortError\x1b[01;31m\x1b[K \x1b[m\x1b[K\x1b[32m\x1b[K&\x1b[m\x1b[Ke) {\n'}
+[3.496756] (robotarm_controller) StderrLine: {'line': b'      |             \x1b[34m\x1b[K~\x1b[m\x1b[K                                \x1b[01;31m\x1b[K^\x1b[m\x1b[K\x1b[32m\x1b[K~\x1b[m\x1b[K\n'}
+[3.496801] (robotarm_controller) StderrLine: {'line': b'      |                                              \x1b[32m\x1b[K)\x1b[m\x1b[K\n'}
+[3.496846] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:64:47:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[Kexpected \xe2\x80\x98\x1b[01m\x1b[K{\x1b[m\x1b[K\xe2\x80\x99 before \xe2\x80\x98\x1b[01m\x1b[K&\x1b[m\x1b[K\xe2\x80\x99 token\n'}
+[3.496893] (robotarm_controller) StderrLine: {'line': b'   64 |     } catch (const LibSerial::SerialPortError \x1b[01;31m\x1b[K&\x1b[m\x1b[Ke) {\n'}
+[3.496941] (robotarm_controller) StderrLine: {'line': b'      |                                               \x1b[01;31m\x1b[K^\x1b[m\x1b[K\n'}
+[3.499635] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:64:48:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[Ke\x1b[m\x1b[K\xe2\x80\x99 was not declared in this scope\n'}
+[3.499722] (robotarm_controller) StderrLine: {'line': b'   64 |     } catch (const LibSerial::SerialPortError &\x1b[01;31m\x1b[Ke\x1b[m\x1b[K) {\n'}
+[3.499775] (robotarm_controller) StderrLine: {'line': b'      |                                                \x1b[01;31m\x1b[K^\x1b[m\x1b[K\n'}
+[3.506593] (-) TimerEvent: {}
+[3.508349] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:\x1b[m\x1b[K In member function \xe2\x80\x98\x1b[01m\x1b[Kvirtual std::vector<hardware_interface::CommandInterface> robotarm_controller::RobotArmInterface::export_command_interfaces()\x1b[m\x1b[K\xe2\x80\x99:\n'}
+[3.508460] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:95:8:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[Kposition_commands_\x1b[m\x1b[K\xe2\x80\x99 was not declared in this scope; did you mean \xe2\x80\x98\x1b[01m\x1b[Kpositions_commands_\x1b[m\x1b[K\xe2\x80\x99?\n'}
+[3.508520] (robotarm_controller) StderrLine: {'line': b'   95 |       &\x1b[01;31m\x1b[Kposition_commands_\x1b[m\x1b[K[i]);\n'}
+[3.508597] (robotarm_controller) StderrLine: {'line': b'      |        \x1b[01;31m\x1b[K^~~~~~~~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[3.508682] (robotarm_controller) StderrLine: {'line': b'      |        \x1b[32m\x1b[Kpositions_commands_\x1b[m\x1b[K\n'}
+[3.508839] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:\x1b[m\x1b[K At global scope:\n'}
+[3.508945] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:100:33:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[Kno declaration matches \xe2\x80\x98\x1b[01m\x1b[Khardware_interface::return_type robotarm_controller::RobotArmInterface::read()\x1b[m\x1b[K\xe2\x80\x99\n'}
+[3.509168] (robotarm_controller) StderrLine: {'line': b'  100 | hardware_interface::return_type \x1b[01;31m\x1b[KRobotArmInterface\x1b[m\x1b[K::read()\n'}
+[3.509253] (robotarm_controller) StderrLine: {'line': b'      |                                 \x1b[01;31m\x1b[K^~~~~~~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[3.509335] (robotarm_controller) StderrLine: {'line': b'In file included from \x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:1\x1b[m\x1b[K:\n'}
+[3.509417] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/include/robotarm_controller/robotarm_interface.hpp:31:41:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[Kcandidate is: \xe2\x80\x98\x1b[01m\x1b[Kvirtual hardware_interface::return_type robotarm_controller::RobotArmInterface::read(const rclcpp::Time&, const rclcpp::Duration&)\x1b[m\x1b[K\xe2\x80\x99\n'}
+[3.509500] (robotarm_controller) StderrLine: {'line': b'   31 |         hardware_interface::return_type \x1b[01;36m\x1b[Kread\x1b[m\x1b[K(const rclcpp::Time & time, const rclcpp::Duration & period) override;\n'}
+[3.509582] (robotarm_controller) StderrLine: {'line': b'      |                                         \x1b[01;36m\x1b[K^~~~\x1b[m\x1b[K\n'}
+[3.509666] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/include/robotarm_controller/robotarm_interface.hpp:18:11:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[Kclass robotarm_controller::RobotArmInterface\x1b[m\x1b[K\xe2\x80\x99 defined here\n'}
+[3.509749] (robotarm_controller) StderrLine: {'line': b'   18 |     class \x1b[01;36m\x1b[KRobotArmInterface\x1b[m\x1b[K : public hardware_interface::SystemInterface\n'}
+[3.509830] (robotarm_controller) StderrLine: {'line': b'      |           \x1b[01;36m\x1b[K^~~~~~~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[3.509910] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:110:33:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[Kno declaration matches \xe2\x80\x98\x1b[01m\x1b[Khardware_interface::return_type robotarm_controller::RobotArmInterface::write()\x1b[m\x1b[K\xe2\x80\x99\n'}
+[3.509992] (robotarm_controller) StderrLine: {'line': b'  110 | hardware_interface::return_type \x1b[01;31m\x1b[KRobotArmInterface\x1b[m\x1b[K::write()\n'}
+[3.510083] (robotarm_controller) StderrLine: {'line': b'      |                                 \x1b[01;31m\x1b[K^~~~~~~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[3.510168] (robotarm_controller) StderrLine: {'line': b'In file included from \x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:1\x1b[m\x1b[K:\n'}
+[3.510255] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/include/robotarm_controller/robotarm_interface.hpp:32:41:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[Kcandidate is: \xe2\x80\x98\x1b[01m\x1b[Kvirtual hardware_interface::return_type robotarm_controller::RobotArmInterface::write(const rclcpp::Time&, const rclcpp::Duration&)\x1b[m\x1b[K\xe2\x80\x99\n'}
+[3.510338] (robotarm_controller) StderrLine: {'line': b'   32 |         hardware_interface::return_type \x1b[01;36m\x1b[Kwrite\x1b[m\x1b[K(const rclcpp::Time & time, const rclcpp::Duration & period) override;\n'}
+[3.510419] (robotarm_controller) StderrLine: {'line': b'      |                                         \x1b[01;36m\x1b[K^~~~~\x1b[m\x1b[K\n'}
+[3.510500] (robotarm_controller) StderrLine: {'line': b'\x1b[01m\x1b[K/home/roach/ros2_ws/src/robotarm_controller/include/robotarm_controller/robotarm_interface.hpp:18:11:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[Kclass robotarm_controller::RobotArmInterface\x1b[m\x1b[K\xe2\x80\x99 defined here\n'}
+[3.510585] (robotarm_controller) StderrLine: {'line': b'   18 |     class \x1b[01;36m\x1b[KRobotArmInterface\x1b[m\x1b[K : public hardware_interface::SystemInterface\n'}
+[3.510665] (robotarm_controller) StderrLine: {'line': b'      |           \x1b[01;36m\x1b[K^~~~~~~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[3.606718] (-) TimerEvent: {}
+[3.706992] (-) TimerEvent: {}
+[3.807240] (-) TimerEvent: {}
+[3.907507] (-) TimerEvent: {}
+[4.007784] (-) TimerEvent: {}
+[4.036064] (robotarm_controller) StderrLine: {'line': b'gmake[2]: *** [CMakeFiles/robotarm_controller.dir/build.make:76: CMakeFiles/robotarm_controller.dir/src/robotarm_interface.cpp.o] Error 1\n'}
+[4.036324] (robotarm_controller) StderrLine: {'line': b'gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/robotarm_controller.dir/all] Error 2\n'}
+[4.036524] (robotarm_controller) StderrLine: {'line': b'gmake: *** [Makefile:146: all] Error 2\n'}
+[4.038649] (robotarm_controller) CommandEnded: {'returncode': 2}
+[4.048539] (robotarm_controller) JobEnded: {'identifier': 'robotarm_controller', 'rc': 2}
+[4.059206] (-) EventReactorShutdown: {}

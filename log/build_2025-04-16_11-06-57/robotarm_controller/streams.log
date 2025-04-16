@@ -1,0 +1,11 @@
+[0.023s] Invoking command in '/home/roach/ros2_ws/build/robotarm_controller': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/roach/ros2_ws/build/robotarm_controller -- -j8 -l8
+[0.085s] [ 50%] [32mBuilding CXX object CMakeFiles/robotarm_controller.dir/src/robotarm_interface.cpp.o[0m
+[0.627s] In file included from [01m[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:1[m[K:
+[0.627s] [01m[K/home/roach/ros2_ws/src/robotarm_controller/include/robotarm_controller/robotarm_interface.hpp:12:10:[m[K [01;31m[Kfatal error: [m[KLibSerial/SerialPort.h: No such file or directory
+[0.627s]    12 | #include [01;31m[K<LibSerial/SerialPort.h>[m[K
+[0.627s]       |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~[m[K
+[0.628s] compilation terminated.
+[0.632s] gmake[2]: *** [CMakeFiles/robotarm_controller.dir/build.make:76: CMakeFiles/robotarm_controller.dir/src/robotarm_interface.cpp.o] Error 1
+[0.633s] gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/robotarm_controller.dir/all] Error 2
+[0.633s] gmake: *** [Makefile:146: all] Error 2
+[0.635s] Invoked command in '/home/roach/ros2_ws/build/robotarm_controller' returned '2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/roach/ros2_ws/build/robotarm_controller -- -j8 -l8

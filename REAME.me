@@ -12,6 +12,7 @@ sudo apt install ros-jazzy-hardware-interface
 rosdep install --from-paths src --ignore-src -r -y
 in ros2_ws folder, colcon build --symlink-install
 colcon build --packages-select smallrobot --symlink-install --event-handlers console_cohesion+
+colcon build --packages-select robotarm_controller --cmake-clean-cache
 
 # before running any ROS2 cmds, source ur workspace to ensure the newly built packages is available
 source ~/ros2_ws/install/setup.bash

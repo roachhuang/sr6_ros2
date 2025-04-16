@@ -1,0 +1,25 @@
+[0.010s] Invoking command in '/home/roach/ros2_ws/build/robotarm_controller': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/roach/ros2_ws/build/robotarm_controller -- -j8 -l8
+[0.062s] [35m[1mConsolidate compiler generated dependencies of target robotarm_controller[0m
+[0.079s] [ 50%] [32mBuilding CXX object CMakeFiles/robotarm_controller.dir/src/robotarm_interface.cpp.o[0m
+[2.331s] [01m[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:[m[K In member function ‘[01m[Kvirtual robotarm_controller::CallbackReturn robotarm_controller::RobotArmInterface::on_init(const hardware_interface::HardwareInfo&)[m[K’:
+[2.332s] [01m[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:35:36:[m[K [01;31m[Kerror: [m[K‘[01m[KLibSerial::SerialStreamBuf[m[K’ has not been declared
+[2.332s]    35 |     arduino.SetBaudRate(LibSerial::[01;31m[KSerialStreamBuf[m[K::BAUD_115200);
+[2.332s]       |                                    [01;31m[K^~~~~~~~~~~~~~~[m[K
+[2.340s] [01m[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:[m[K In member function ‘[01m[Kvirtual hardware_interface::return_type robotarm_controller::RobotArmInterface::read(const rclcpp::Time&, const rclcpp::Duration&)[m[K’:
+[2.340s] [01m[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:100:78:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Ktime[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[2.341s]   100 | hardware_interface::return_type RobotArmInterface::read([01;35m[Kconst rclcpp::Time & time[m[K, const rclcpp::Duration & period)
+[2.341s]       |                                                         [01;35m[K~~~~~~~~~~~~~~~~~~~~~^~~~[m[K
+[2.341s] [01m[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:100:109:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kperiod[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[2.341s]   100 | hardware_interface::return_type RobotArmInterface::read(const rclcpp::Time & time, [01;35m[Kconst rclcpp::Duration & period[m[K)
+[2.341s]       |                                                                                    [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~[m[K
+[2.342s] [01m[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:[m[K In member function ‘[01m[Kvirtual hardware_interface::return_type robotarm_controller::RobotArmInterface::write(const rclcpp::Time&, const rclcpp::Duration&)[m[K’:
+[2.342s] [01m[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:110:79:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Ktime[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[2.342s]   110 | hardware_interface::return_type RobotArmInterface::write([01;35m[Kconst rclcpp::Time & time[m[K, const rclcpp::Duration & period)
+[2.342s]       |                                                          [01;35m[K~~~~~~~~~~~~~~~~~~~~~^~~~[m[K
+[2.342s] [01m[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:110:110:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kperiod[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+[2.342s]   110 | hardware_interface::return_type RobotArmInterface::write(const rclcpp::Time & time, [01;35m[Kconst rclcpp::Duration & period[m[K)
+[2.342s]       |                                                                                     [01;35m[K~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~[m[K
+[2.887s] gmake[2]: *** [CMakeFiles/robotarm_controller.dir/build.make:76: CMakeFiles/robotarm_controller.dir/src/robotarm_interface.cpp.o] Error 1
+[2.887s] gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/robotarm_controller.dir/all] Error 2
+[2.887s] gmake: *** [Makefile:146: all] Error 2
+[2.890s] Invoked command in '/home/roach/ros2_ws/build/robotarm_controller' returned '2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/roach/ros2_ws/build/robotarm_controller -- -j8 -l8
