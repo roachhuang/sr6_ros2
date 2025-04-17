@@ -1,4 +1,0 @@
-Invoking command in '/home/roach/ros2_ws/build/smallrobot_firmware': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/roach/ros2_ws/build/smallrobot_firmware -- -j8 -l8
-Invoked command in '/home/roach/ros2_ws/build/smallrobot_firmware' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/roach/ros2_ws/build/smallrobot_firmware -- -j8 -l8
-Invoking command in '/home/roach/ros2_ws/build/smallrobot_firmware': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/roach/ros2_ws/build/smallrobot_firmware
-Invoked command in '/home/roach/ros2_ws/build/smallrobot_firmware' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/roach/ros2_ws/build/smallrobot_firmware

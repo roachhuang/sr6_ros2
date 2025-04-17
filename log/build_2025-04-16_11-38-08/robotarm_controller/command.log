@@ -1,4 +1,0 @@
-Invoking command in '/home/roach/ros2_ws/build/robotarm_controller': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/roach/ros2_ws/src/robotarm_controller -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/roach/ros2_ws/install/robotarm_controller
-Invoked command in '/home/roach/ros2_ws/build/robotarm_controller' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/roach/ros2_ws/src/robotarm_controller -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/roach/ros2_ws/install/robotarm_controller
-Invoking command in '/home/roach/ros2_ws/build/robotarm_controller': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/roach/ros2_ws/build/robotarm_controller -- -j8 -l8
-Invoked command in '/home/roach/ros2_ws/build/robotarm_controller' returned '2': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/roach/ros2_ws/build/robotarm_controller -- -j8 -l8

@@ -1,6 +1,10 @@
 1. prerequisite: ros2 launch smallrobot_description gazebo.launch.py 
 
-ros2 luanch robotarm_control robotarm_control.launch.py
+ros2 launch robotarm_controller controller.launch.py
+
+# to see if ros2_control is loaded.
+ros2 node list 
+
 ros2 control list_controllers
 ros2 control list_hardware_components 
 ros2 param get /arm_controller joints

@@ -1,7 +1,0 @@
-[01m[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:1:10:[m[K [01;31m[Kfatal error: [m[Krobotarm_interface.hpp: No such file or directory
-    1 | #include [01;31m[K"robotarm_interface.hpp"[m[K
-      |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~[m[K
-compilation terminated.
-gmake[2]: *** [CMakeFiles/robotarm_controller.dir/build.make:76: CMakeFiles/robotarm_controller.dir/src/robotarm_interface.cpp.o] Error 1
-gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/robotarm_controller.dir/all] Error 2
-gmake: *** [Makefile:146: all] Error 2

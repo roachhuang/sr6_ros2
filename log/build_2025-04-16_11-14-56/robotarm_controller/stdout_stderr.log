@@ -1,9 +1,0 @@
-[ 50%] [32mBuilding CXX object CMakeFiles/robotarm_controller.dir/src/robotarm_interface.cpp.o[0m
-In file included from [01m[K/home/roach/ros2_ws/src/robotarm_controller/src/robotarm_interface.cpp:1[m[K:
-[01m[K/home/roach/ros2_ws/src/robotarm_controller/include/robotarm_controller/robotarm_interface.hpp:12:10:[m[K [01;31m[Kfatal error: [m[KLibSerial/SerialPort.h: No such file or directory
-   12 | #include [01;31m[K<LibSerial/SerialPort.h>[m[K
-      |          [01;31m[K^~~~~~~~~~~~~~~~~~~~~~~~[m[K
-compilation terminated.
-gmake[2]: *** [CMakeFiles/robotarm_controller.dir/build.make:76: CMakeFiles/robotarm_controller.dir/src/robotarm_interface.cpp.o] Error 1
-gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/robotarm_controller.dir/all] Error 2
-gmake: *** [Makefile:146: all] Error 2
