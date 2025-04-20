@@ -21,14 +21,14 @@ namespace robot_arm_ns
         RobotArmInterface();
         virtual ~RobotArmInterface();
         // ROS 2 Lifecycle Methods
-        virtual hw::CallbackReturn on_init(const hw::HardwareInfo &info) override;
-        virtual hw::CallbackReturn on_configure(const rclcpp_lifecycle::State &) override;
-        virtual hw::CallbackReturn on_activate(const rclcpp_lifecycle::State &) override;
-        virtual hw::CallbackReturn on_deactivate(const rclcpp_lifecycle::State &) override;
+        hw::CallbackReturn on_init(const hw::HardwareInfo &info) override;
+        hw::CallbackReturn on_configure(const rclcpp_lifecycle::State &) override;
+        hw::CallbackReturn on_activate(const rclcpp_lifecycle::State &) override;
+        hw::CallbackReturn on_deactivate(const rclcpp_lifecycle::State &) override;
 
         // Hardware Interface Methods
-        virtual std::vector<hw::StateInterface> export_state_interfaces() override;
-        virtual std::vector<hw::CommandInterface> export_command_interfaces() override;
+        std::vector<hw::StateInterface> export_state_interfaces() override;
+        std::vector<hw::CommandInterface> export_command_interfaces() override;
         hw::return_type read(const rclcpp::Time & time, const rclcpp::Duration & period) override;        
         hw::return_type write(const rclcpp::Time & time, const rclcpp::Duration & period) override;        
 
