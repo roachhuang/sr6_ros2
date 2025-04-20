@@ -16,7 +16,7 @@
          <mechanicalReduction>${reduction_ratio}</mechanicalReduction>
       </actuator>
       <joint name="joint_${number}">
-        <!-- <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface> -->
+        <hardwareInterface>hardware_interface/position</hardwareInterface>
       </joint>
     </transmission>
   </xacro:macro>
