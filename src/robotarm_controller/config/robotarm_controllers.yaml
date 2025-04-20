@@ -1,7 +1,7 @@
-# params setting for controler_manager node
 controller_manager:
   ros__parameters:  # Use ros__parameters consistently
-    update_rate: 100
+    # In ROS2 control, write() is called at every control loop cycle, update_rate.
+    update_rate: 10
 
     arm_controller:
       type: joint_trajectory_controller/JointTrajectoryController

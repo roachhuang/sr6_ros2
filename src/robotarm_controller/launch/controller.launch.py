@@ -39,7 +39,7 @@ def generate_launch_description():
         package="robot_state_publisher",
         executable="robot_state_publisher",
         parameters=[{"robot_description": robot_description}],
-        condition=UnlessCondition(is_sim),  # Only start when not simulating
+        condition=UnlessCondition(is_sim),  # Only start when not simulating coz gazebo launch starts it.
         output="screen",
     )
 
@@ -47,6 +47,7 @@ def generate_launch_description():
     controller_manager_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
+        name='controller_manager',
         parameters=[
             {"robot_description": robot_description, "use_sim_time": is_sim},
             os.path.join(
@@ -55,7 +56,7 @@ def generate_launch_description():
                 "robotarm_controllers.yaml",
             ),
         ],
-        remappings=[("/robot_description", "/robot_description")],  # <- FIX: remove ~
+        # remappings=[("/robot_description", "/robot_description")],  # <- FIX: remove ~
         output="screen",
     )
 

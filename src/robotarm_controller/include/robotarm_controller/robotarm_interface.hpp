@@ -11,7 +11,7 @@
 #include <string>
 #include <libserial/SerialPort.h>
 #include <libserial/SerialStream.h>
-namespace hw = hardware_interface;  // ✨ alias once
+namespace hw = hardware_interface; // ✨ alias once
 
 namespace robot_arm_ns
 {
@@ -20,24 +20,27 @@ namespace robot_arm_ns
     public:
         RobotArmInterface();
         virtual ~RobotArmInterface();
-        // ROS 2 Lifecycle Methods
+        // ROS 2 Lifecycle Methods, override automatically implies it's virtual.
         hw::CallbackReturn on_init(const hw::HardwareInfo &info) override;
-        hw::CallbackReturn on_configure(const rclcpp_lifecycle::State &) override;
+        // hw::CallbackReturn on_configure(const rclcpp_lifecycle::State &) override;
         hw::CallbackReturn on_activate(const rclcpp_lifecycle::State &) override;
         hw::CallbackReturn on_deactivate(const rclcpp_lifecycle::State &) override;
 
         // Hardware Interface Methods
         std::vector<hw::StateInterface> export_state_interfaces() override;
         std::vector<hw::CommandInterface> export_command_interfaces() override;
-        hw::return_type read(const rclcpp::Time & time, const rclcpp::Duration & period) override;        
-        hw::return_type write(const rclcpp::Time & time, const rclcpp::Duration & period) override;        
+        hw::return_type read(const rclcpp::Time &time, const rclcpp::Duration &period) override;
+        hw::return_type write(const rclcpp::Time &time, const rclcpp::Duration &period) override;
 
     private:
-        void parseFeedback(const std::string& msg);
+        void parseFeedback_(const std::string &msg);
 
         // Serial port for communication with the robot arm
-        LibSerial::SerialPort arduino;
+        LibSerial::SerialPort arduino_;
         std::string port_;
+        bool isArduinoBusy_ = false;
+        rclcpp::Time last_command_time_;
+        const rclcpp::Duration command_timeout_{std::chrono::seconds(2)};
 
         // Joint states (position, velocity, effort)
         // std::vector<double> hw_positions_;

@@ -1,4 +1,18 @@
 
+You provide:
+
+    A URDF with ros2_control tags
+
+    A custom or simulated hardware interface (SystemInterface)
+
+    A controller config file (YAML)
+
+Then:
+
+ros2 control load_controller --set-state active arm_controller
+
+This tells the controller_manager from ros2_control to load the arm_controller plugin from ros2_controllers.
+
 installation:
     cd ~/ros2_ws/src
     git clone https://github.com/ros-controls/ros2_control_demos.git

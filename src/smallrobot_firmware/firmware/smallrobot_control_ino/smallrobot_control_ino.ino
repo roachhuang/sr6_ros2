@@ -215,13 +215,7 @@ void loop() {
         float from[6] = { curPos1, curPos2, curPos3, curPos4, curPos5, curPos6 };
         goStrightLine(from, targetAngles, 0.25e-4, 0.75e-10, 0.0, 0.0);
         // Serial.println("ack");
-        curPos1 = targetAngles[0];
-        curPos2 = targetAngles[1];
-        curPos3 = targetAngles[2];
-        curPos4 = targetAngles[3];
-        curPos5 = targetAngles[4];
-        curPos6 = targetAngles[5];
-        velG = 0.25e-4;
+     
       } else if (strcmp(inputBuffer, "eOn") == 0) {
         digitalWrite(END_EFFECTOR_PIN, HIGH);
       } else if (strcmp(inputBuffer, "eOff") == 0) {
