@@ -190,10 +190,10 @@
       </geometry>
     </collision>
   </link>
-  <xacro:default_transmission number='1' reduction_ratio='1.0'/>
+  <xacro:default_transmission number='1' reduction_ratio='4.8'/>
   <xacro:default_transmission number='2' reduction_ratio='4.0'/>
   <xacro:default_transmission number='3' reduction_ratio='5.0'/>
-  <xacro:default_transmission number='4' reduction_ratio='1.0'/>
+  <xacro:default_transmission number='4' reduction_ratio='2.8'/>
   <xacro:default_transmission number='5' reduction_ratio='2.1'/>
   <xacro:default_transmission number='6' reduction_ratio='1.0'/>   
  
