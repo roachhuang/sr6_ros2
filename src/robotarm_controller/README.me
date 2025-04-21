@@ -51,3 +51,37 @@ ros2 action send_goal /arm_controller/follow_joint_trajectory control_msgs/actio
   }
 }
 "
+
+troubleshooting:
+  control manage not loaded
+    Check your CMakeLists.txt → correct plugin export.
+    Check your robotarm_controller_plugins.xml → correct path, type. match with hw interface class
+    Check your robotarm_controllers.yaml → correct controller types, joints, command/state interfaces.
+    Check your URDF/XACRO → correct transmissions and hardwareInterface tags.
+
+    JointTrajectoryController  unconfigured
+
+✅ joint_state_broadcaster is active — good.
+
+✅ arm_controller is loaded — but it's still unconfigured!
+
+🔴 So the spawner crashed because it couldn't configure the arm_controller successfully.
+Remember: the lifecycle of a controller goes:
+
+    unconfigured
+
+    inactive
+
+    active
+
+If it's stuck at unconfigured, it usually means:
+
+    Bad parameters (missing joints, interfaces, etc.)
+
+    Controller type mismatch
+
+    Hardware interfaces not matching
+
+  Your RobotArmInterface is not correctly exporting command_interfaces!
+
+ROS 2 controllers (like JointTrajectoryController) require position commands to be available.

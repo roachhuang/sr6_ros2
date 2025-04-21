@@ -1,85 +1,99 @@
 #include "robotarm_controller/robotarm_interface.hpp"
 #include <rclcpp/rclcpp.hpp>
 #include <limits>
-#include <hardware_interface/types/hardware_interface_return_values.hpp>
-// #include <hardware_interface/types/hardware_interface_type_values.hpp>
+// #include <hardware_interface/types/hardware_interface_return_values.hpp>
+#include <hardware_interface/types/hardware_interface_type_values.hpp>
 
 #include <cmath>
 #include <sstream>
+#include <iomanip>
 
 namespace hw = hardware_interface;
 
 namespace robot_arm_ns
 {
 
-  RobotArmInterface::RobotArmInterface()
-  {
-    // Constructor implementation
-  }
-  RobotArmInterface::~RobotArmInterface()
-  {
-    // Destructor implementation
-    if (arduino_.IsOpen())
-    {
-      try
-      {
-        arduino_.Close();
-      }
-      catch (...)
-      {
-        RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to close serial port: ");
-      }
-    }
-  }
-/*
-  hw::CallbackReturn RobotArmInterface::on_configure(const rclcpp_lifecycle::State &)
-  {
-    try
-    {
-      arduino_.Open(port_);
-      arduino_.SetBaudRate(LibSerial::BaudRate::BAUD_115200);
-      // arduino.SetFlowControl(LibSerial::FlowControl::FLOW_CONTROL_RTS_CTS);
-    }
-    catch (const std::exception &e)
-    {
-      RCLCPP_FATAL(rclcpp::get_logger("ArduinoHardwareInterface"), "Serial open failed: %s", e.what());
-      return hw::CallbackReturn::ERROR;
-    }
-    RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Connected to Arduino on %s, @ baud rate enum %d", port_.c_str(), static_cast<int>(LibSerial::BaudRate::BAUD_115200));
-    return hw::CallbackReturn::SUCCESS;
-  }
-*/
+  // RobotArmInterface::RobotArmInterface()
+  // {
+  //   // Constructor implementation
+  // }
+  // RobotArmInterface::~RobotArmInterface()
+  // {
+  //   // Destructor implementation
+  //   if (arduino_.IsOpen())
+  //   {
+  //     try
+  //     {
+  //       arduino_.Close();
+  //     }
+  //     catch (...)
+  //     {
+  //       RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to close serial port: ");
+  //     }
+  //   }
+  // }
+
   // Initialize the serial port
   hw::CallbackReturn RobotArmInterface::on_init(const hw::HardwareInfo &info)
   {
-    if (hw::SystemInterface::on_init(info) != CallbackReturn::SUCCESS)
+    if (hw::SystemInterface::on_init(info) != hw::CallbackReturn::SUCCESS)
     {
       return hw::CallbackReturn::ERROR;
     }
 
+    RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "init hardware...");
+    // Get joint names from URDF/parameters
+    // joint_names_ = info_.joints;
+
+    joint_names_.reserve(info.joints.size());
+    for (const auto &joint : info.joints)
+    {
+      joint_names_.push_back(joint.name);
+    }
+
+    // Resize vectors
+    position_states_.resize(info_.joints.size(), 0.0);
+    position_commands_.resize(info_.joints.size(), 0.0);
+    prev_position_commands_.resize(info_.joints.size(), 0.0);
+
+    return hardware_interface::CallbackReturn::SUCCESS;
+  };
+
+  hw::CallbackReturn RobotArmInterface::on_configure(const rclcpp_lifecycle::State & /*previous_state*/)
+  {
     try
     {
-      port_ = info.hardware_parameters.at("port");
-      arduino_.Open(port_);
+      // Open Arduino serial port
+      // port_ = info.hardware_parameters.at("port");
+      std::string device = info_.hardware_parameters.at("port");
+      // uint32_t baudrate = std::stoi(info_.hardware_parameters.at("baud_rate"));
+      arduino_.Open(device);
       arduino_.SetBaudRate(LibSerial::BaudRate::BAUD_115200);
-      // arduino.SetFlowControl(LibSerial::FlowControl::FLOW_CONTROL_RTS_CTS);
+      if (!arduino_.IsOpen())
+      {
+        RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to open Arduino serial port");
+        return hardware_interface::CallbackReturn::ERROR;
+      }
     }
     catch (const std::exception &e)
     {
-      RCLCPP_FATAL(rclcpp::get_logger("ArduinoHardwareInterface"), "Serial open failed: %s", e.what());
+      RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Serial config error: %s", e.what());
       return hw::CallbackReturn::ERROR;
     }
-    
-    // Initialize joint states and commands
-    position_commands_.resize(info_.joints.size(), 0.0);
-    position_states_.resize(info_.joints.size(), 0.0);
-    prev_position_commands_.resize(info_.joints.size(), 0.0);
+
+    // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Exporting %zu command interfaces", position_commands_.size());
+    // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Exporting %zu state interfaces", position_states_.size());
+
+    RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Connected to Arduino on %s, @ baud rate enum %d", port_.c_str(), static_cast<int>(LibSerial::BaudRate::BAUD_115200));
     return hw::CallbackReturn::SUCCESS;
-  };
+  }
 
   hw::CallbackReturn RobotArmInterface::on_activate(const rclcpp_lifecycle::State &)
   {
     RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Activating hardware...");
+
+    isArduinoBusy_ = false;
+    last_command_time_ = rclcpp::Clock().now();
 
     std::string msg = "en\n";
     try
@@ -135,12 +149,13 @@ namespace robot_arm_ns
     }
     return hw::CallbackReturn::SUCCESS;
   }
+
   std::vector<hw::StateInterface> RobotArmInterface::export_state_interfaces()
   {
     std::vector<hw::StateInterface> state_interfaces;
-    for (size_t i = 0; i < info_.joints.size(); ++i)
+    for (size_t i = 0; i < joint_names_.size(); ++i)
     {
-      state_interfaces.emplace_back(hw::StateInterface(info_.joints[i].name, "position", &position_states_[i]));
+      state_interfaces.emplace_back(joint_names_[i], hw::HW_IF_POSITION, &position_states_[i]);
     }
     return state_interfaces;
   }
@@ -149,88 +164,22 @@ namespace robot_arm_ns
   std::vector<hw::CommandInterface> RobotArmInterface::export_command_interfaces()
   {
     std::vector<hw::CommandInterface> command_interfaces;
-    for (size_t i = 0; i < info_.joints.size(); ++i)
+    for (size_t i = 0; i < joint_names_.size(); ++i)
     {
-      command_interfaces.emplace_back(hw::CommandInterface(info_.joints[i].name, "position", &position_commands_[i]));
+      command_interfaces.emplace_back(joint_names_[i], hw::HW_IF_POSITION, &position_commands_[i]);
     }
     return command_interfaces;
   }
 
-  hw::return_type RobotArmInterface::read([[maybe_unused]] const rclcpp::Time &time, [[maybe_unused]] const rclcpp::Duration &period)
+  hw::return_type RobotArmInterface::write(const rclcpp::Time &, const rclcpp::Duration &)
   {
-    // Read from hardware (simulated here)
-    position_states_ = position_commands_;  // Simulate perfect tracking
-
-    // hybride flow ctrl
-
-    // === New part: read serial data from Arduino ===
-    /*
-    try
-    {
-      // Fixed-size buffer to avoid string dynamic allocations
-      std::array<char, 256> buffer{}; // 256 bytes more than enough for a line
-
-      while (arduino_.IsDataAvailable())
-      {
-        size_t index = 0;
-        char c;
-
-        // Read character by character
-        while (index < buffer.size() - 1)
-        {
-          arduino_.ReadByte(c, 100); // Timeout 100ms (or whatever you prefer)
-          if (c == '\n')
-          {
-            break;
-          }
-          buffer[index++] = c;
-        }
-        buffer[index] = '\0'; // Null-terminate C-string
-
-        if (index > 0)
-        {
-          parseFeedback_(buffer.data());
-          // RCLCPP_INFO(
-          //     rclcpp::get_logger("RobotArmInterface"),
-          //     "Arduino replied: '%s'", buffer.data());
-        }
-      }
-    }
-    catch (const LibSerial::ReadTimeout &)
-    {
-      // No big deal if timeout while reading byte
-    }
-    catch (const std::exception &e)
-    {
-      RCLCPP_WARN(
-          rclcpp::get_logger("ArduinoHardwareInterface"),
-          "Serial read failed: %s", e.what());
-    }
 
     if (isArduinoBusy_)
     {
-      auto now = rclcpp::Clock().now();
-      if (now - last_command_time_ > command_timeout_)
-      {
-        RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Command timeout! No ACK received from Arduino.");
-        isArduinoBusy_ = false; // Reset to allow retry
-      }
+      return hardware_interface::return_type::OK;
     }
-    */
 
-    // hw_velocities_[i] = 0.1;  // Simulate velocity
-    return hw::return_type::OK;
-  }
-
-  // bool isArduinoBusy = false;
-
-  hw::return_type RobotArmInterface::write([[maybe_unused]] const rclcpp::Time &time, [[maybe_unused]] const rclcpp::Duration &period)
-  {
-    if (isArduinoBusy_)
-    {
-      RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "Arduino is still busy, cannot send new command.");
-      return hw::return_type::OK;
-    }
+    // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "write...");
 
     bool commands_equal = true;
     for (size_t i = 0; i < position_commands_.size(); ++i)
@@ -242,52 +191,106 @@ namespace robot_arm_ns
       }
     }
 
-    if (commands_equal)
+    if (!commands_equal)
     {
-      // RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "cmd no difference.");
-      return hw::return_type::OK;
-    }
-    else
-    {
-      RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Position commands are different from previous commands.");
-      // Write to hardware
       std::stringstream cmd;
       cmd << "g";
       for (size_t i = 0; i < position_commands_.size(); i++)
       {
-        double deg = (position_commands_[i] * 180.0 / M_PI);
         if (i > 0)
-        {
           cmd << ',';
-        }
-        cmd << std::fixed << std::setprecision(2) << deg;
+        cmd << std::fixed << std::setprecision(2) << (position_commands_[i] * 180.0 / M_PI);
       }
       cmd << '\n';
-      std::string msg = cmd.str();
-      RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Serial Write: %s", msg.c_str());
+      RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Serial Write: %s", cmd.str().c_str());
       try
       {
-        arduino_.Write(msg);
+        arduino_.Write(cmd.str());
         // isArduinoBusy_ = true;
         last_command_time_ = rclcpp::Clock().now();
       }
-      catch (...)
+      catch (const std::exception &e)
       {
-        RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to write to serial port:");
-        return hw::return_type::ERROR;
+        RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Serial write error: %s", e.what());
+        return hardware_interface::return_type::ERROR;
       }
     }
+
     prev_position_commands_ = position_commands_;
+    return hardware_interface::return_type::OK;
+  }
+
+  hw::return_type RobotArmInterface::read([[maybe_unused]] const rclcpp::Time &time, [[maybe_unused]] const rclcpp::Duration &period)
+  {
+    // Persistent buffer across read() calls
+    static std::string persistent_buffer;
+    /*
+    try
+    {
+      // Read up to 256 bytes each cycle
+      std::string temp_buffer;
+      temp_buffer.resize(256);
+
+      // Read from Arduino (non-blocking)
+      arduino_.Read(temp_buffer, temp_buffer.size(), 0); // 0ms timeout => non-blocking
+
+      // Trim temp_buffer to actual received data
+      auto first_null = temp_buffer.find('\0');
+      if (first_null != std::string::npos)
+      {
+        temp_buffer.resize(first_null);
+      }
+
+      // Append to persistent_buffer
+      persistent_buffer += temp_buffer;
+
+      // Process all complete lines
+      size_t newline_pos;
+      while ((newline_pos = persistent_buffer.find('\n')) != std::string::npos)
+      {
+        // Extract one full line (excluding '\n')
+        std::string line = persistent_buffer.substr(0, newline_pos);
+        persistent_buffer.erase(0, newline_pos + 1); // +1 to remove '\n'
+
+        // Parse the line
+        if (!line.empty())
+        {
+          parseFeedback_(line);
+        }
+      }
+    }
+    catch (const LibSerial::ReadTimeout &)
+    {
+      // Expected sometimes — no big deal
+    }
+    catch (const std::exception &e)
+    {
+      RCLCPP_WARN(
+          rclcpp::get_logger("RobotArmInterface"),
+          "Serial read failed: %s", e.what());
+    }
+
+
+    // Handle Arduino busy timeout
+    if (isArduinoBusy_)
+    {
+      auto now = rclcpp::Clock().now();
+      if (now - last_command_time_ > command_timeout_)
+      {
+        RCLCPP_ERROR(
+            rclcpp::get_logger("RobotArmInterface"),
+            "Command timeout! No ACK received from Arduino.");
+        isArduinoBusy_ = false; // Allow retry
+      }
+    }
+    */
+    // Simulate perfect tracking (optional if you want pure feedback instead)
+    position_states_ = position_commands_;
     return hw::return_type::OK;
   }
 
   void RobotArmInterface::parseFeedback_(const std::string &msg)
   {
-    if (msg.empty())
-    {
-      return;
-    }
-
     // 6 joints → (1 + 6×7) + '\n' = 44 characters total including the starting 'f'
     if (msg[0] == 'f' && msg.size() == 44)
     {
@@ -300,12 +303,19 @@ namespace robot_arm_ns
       {
         char temp[8] = {0}; // Enough for "+000.00\0"
         std::memcpy(temp, ptr, 7);
-        // double value = std::strtod(temp, nullptr);
-        // position_states_[idx++] = value * (M_PI / 180.0); // Degrees to radians
+        double value = std::strtod(temp, nullptr);
+        position_states_[idx++] = value * (M_PI / 180.0); // Degrees to radians
 
         ptr += 7; // Move to next number
       }
-      // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "curPos: '%s'", msg.c_str());
+
+      // Simulate perfect tracking (optional if you want pure feedback instead)
+      position_states_ = position_commands_;
+
+      // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "curPos: %s", msg.c_str());
+      // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Parsed positions: [%f, %f, %f, %f, %f, %f]",
+      //             position_states_[0], position_states_[1], position_states_[2],
+      //             position_states_[3], position_states_[4], position_states_[5]);
     }
     else if (msg[0] == 'a')
     {
@@ -314,7 +324,8 @@ namespace robot_arm_ns
     }
     else
     {
-      RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "Unknown message: '%s'", msg.c_str());
+
+      RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "len: %d", static_cast<int>(msg.size()));
     }
   }
 
