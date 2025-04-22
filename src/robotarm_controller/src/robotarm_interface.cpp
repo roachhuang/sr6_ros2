@@ -50,9 +50,17 @@ namespace robotarm_controller
 
     // Initialize joint states and commands
     isArduinoBusy_ = false;
+    num_joints_ = info_.joints.size();
     position_commands_.resize(info_.joints.size(), 0.0);
+    // effort_commands_.resize(num_joints_, 0.0);
+    // velocity_commands_.resize(num_joints_, 0.0);
+
     position_states_.resize(info_.joints.size(), 0.0);
+    // effort_states_.resize(num_joints_, 0.0);
+    // velocity_states_.resize(num_joints_, 0.0);
+
     prev_position_commands_.resize(info_.joints.size(), 0.0);
+    RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Initialized with %zu joints, using position interface", info_.joints.size());
 
     return CallbackReturn::SUCCESS;
   };
@@ -149,6 +157,8 @@ namespace robotarm_controller
           hardware_interface::HW_IF_POSITION,
           &position_states_[i]);
 
+      // state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "velocity", &velocity_states_[i]));
+      // state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "effort", &effort_states_[i]));
       // state_interfaces.emplace_back(
       //   info_.joints[i].name,
       //   hardware_interface::HW_IF_VELOCITY,
@@ -166,6 +176,8 @@ namespace robotarm_controller
           info_.joints[i].name,
           hardware_interface::HW_IF_POSITION,
           &position_commands_[i]);
+      // command_interfaces.emplace_back(hardware_interface::CommandInterface(info_.joints[i].name, "velocity", &velocity_commands_[i]));
+      // command_interfaces.emplace_back(hardware_interface::CommandInterface(info_.joints[i].name, "effort", &effort_commands_[i]));
     }
     return command_interfaces;
   }
@@ -177,7 +189,7 @@ namespace robotarm_controller
 
     // Persistent buffer across read() calls
     static std::string persistent_buffer;
-    
+
     try
     {
       // Read up to 256 bytes each cycle
@@ -223,7 +235,6 @@ namespace robotarm_controller
           "Serial read failed: %s", e.what());
     }
 
-
     // Handle Arduino busy timeout
     if (isArduinoBusy_)
     {
@@ -236,7 +247,7 @@ namespace robotarm_controller
         isArduinoBusy_ = false; // Allow retry
       }
     }
-    
+
     // Simulate perfect tracking (optional if you want pure feedback instead)
     // position_states_ = position_commands_;
     return hw::return_type::OK;
@@ -263,12 +274,11 @@ namespace robotarm_controller
       }
 
       // Simulate perfect tracking (optional if you want pure feedback instead)
-      position_states_ = position_commands_;
+      // position_states_ = position_commands_;
 
-      RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "curPos: %s", msg.c_str());
-      RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Parsed positions: [%f, %f, %f, %f, %f, %f]",
-                  position_states_[0], position_states_[1], position_states_[2],
-                  position_states_[3], position_states_[4], position_states_[5]);
+      // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Parsed positions: [%f, %f, %f, %f, %f, %f]",
+      //             position_states_[0], position_states_[1], position_states_[2],
+      //             position_states_[3], position_states_[4], position_states_[5]);
     }
     else if (msg[0] == 'a')
     {
@@ -308,6 +318,41 @@ namespace robotarm_controller
     else
     {
       RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Position commands are different from previous commands.");
+      /* Later (upgrade to optionally use velocity/effort):
+        Gripper controlled by effort (grip with controlled force)
+        Linear actuator for robot base with velocity control
+        You don't touch the arm controller.yaml or URDF, just spawn a new controller for the gripper or base.
+      for (size_t i = 0; i < info_.joints.size(); ++i)
+      {
+        double command_to_send = 0.0;
+
+        if (!std::isnan(position_commands_[i]))
+        {
+          // Prefer position control
+          command_to_send = position_commands_[i];
+          send_position_to_motor(i, command_to_send);
+        }
+        else if (!std::isnan(velocity_commands_[i]))
+        {
+          // If no position, fallback to velocity control
+          command_to_send = velocity_commands_[i];
+          send_velocity_to_motor(i, command_to_send);
+        }
+        else if (!std::isnan(effort_commands_[i]))
+        {
+          // If neither, fallback to effort (torque/force) control
+          command_to_send = effort_commands_[i];
+          send_effort_to_motor(i, command_to_send);
+        }
+        else
+        {
+          RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "No valid command for joint %zu", i);
+        }
+      }
+
+      return hardware_interface::return_type::OK;
+      */
+
       // Write to hardware
       std::stringstream cmd;
       cmd << "g";
@@ -338,7 +383,27 @@ namespace robotarm_controller
     prev_position_commands_ = position_commands_;
     return hw::return_type::OK;
   }
-}
+  /* for future - industries grade.
+  void RobotArmInterface::send_position_to_motor(size_t joint_index, double position)
+  {
+    // TODO: Implement real Teensy communication later
+    // Example: send serial command "P1:123.45\n"  (P = Position, 1 = joint1, 123.45 degrees)
+  }
+
+  void RobotArmInterface::send_velocity_to_motor(size_t joint_index, double velocity)
+  {
+    // TODO: Placeholder
+    // Example: send serial command "V1:10.0\n"  (V = Velocity)
+  }
+
+  void RobotArmInterface::send_effort_to_motor(size_t joint_index, double effort)
+  {
+    // TODO: Placeholder
+    // Example: send serial command "E1:2.5\n"  (E = Effort in Nm)
+  }
+  */
+
+} // namespace
 // RobotarmInterface as a pluing in the pluing lib (base class of the robotarm interface that we have implemented is the hardware_interface::SystemInterface). in other words, Register the RobotArmInterface as a hardware interface.
 #include "pluginlib/class_list_macros.hpp"
 PLUGINLIB_EXPORT_CLASS(robotarm_controller::RobotArmInterface, hardware_interface::SystemInterface)

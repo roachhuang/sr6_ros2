@@ -17,6 +17,8 @@
       </actuator>
       <joint name="joint_${number}">
         <hardwareInterface>hardware_interface/position</hardwareInterface>
+        <!-- <hardwareInterface>hardware_interface/velocity</hardwareInterface>
+        <hardwareInterface>hardware_interface/effort</hardwareInterface> -->
       </joint>
     </transmission>
   </xacro:macro>
