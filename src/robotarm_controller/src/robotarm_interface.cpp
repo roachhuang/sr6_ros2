@@ -265,10 +265,10 @@ namespace robotarm_controller
       // Simulate perfect tracking (optional if you want pure feedback instead)
       position_states_ = position_commands_;
 
-      // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "curPos: %s", msg.c_str());
-      // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Parsed positions: [%f, %f, %f, %f, %f, %f]",
-      //             position_states_[0], position_states_[1], position_states_[2],
-      //             position_states_[3], position_states_[4], position_states_[5]);
+      RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "curPos: %s", msg.c_str());
+      RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Parsed positions: [%f, %f, %f, %f, %f, %f]",
+                  position_states_[0], position_states_[1], position_states_[2],
+                  position_states_[3], position_states_[4], position_states_[5]);
     }
     else if (msg[0] == 'a')
     {
@@ -302,7 +302,7 @@ namespace robotarm_controller
 
     if (commands_equal)
     {
-      RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "cmd no difference.");
+      // RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "cmd no difference.");
       return hardware_interface::return_type::OK;
     }
     else
