@@ -1,1 +1,0 @@
-/home/roach/ros2_ws/build/smallrobot_firmware/ament_cmake_environment_hooks/local_setup.zsh

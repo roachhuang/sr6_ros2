@@ -1,1 +1,0 @@
-/home/roach/ros2_ws/build/smallrobot_firmware/ament_cmake_core/smallrobot_firmwareConfig-version.cmake

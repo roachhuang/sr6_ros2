@@ -13,7 +13,7 @@
     <!-- ros2_control real robot hw interface-->
     <xacro:unless value="$(arg is_sim)">
       <hardware>
-        <plugin>robot_arm_ns/RobotArmInterface</plugin>
+        <plugin>robotarm_controller/RobotArmInterface</plugin>
         <param name='port'>/dev/ttyUSB0</param>
       </hardware>
     </xacro:unless>

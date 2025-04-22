@@ -1,1 +1,0 @@
-/home/roach/ros2_ws/src/robotarm_controller/include/robotarm_controller/robotarm_interface.hpp
