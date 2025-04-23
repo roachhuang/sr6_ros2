@@ -1,31 +1,45 @@
+
+// #include <boost/asio.hpp>
+// using namespace boost::asio;
+
 #include "robotarm_controller/robotarm_interface.hpp"
 
 #include <hardware_interface/types/hardware_interface_type_values.hpp>
 
 #include <cmath>
 #include <sstream>
+#include <string>
+#include <memory>
+#include <mutex>
+
+// #include <boost/asio.hpp>
+// for async_read
+// #include <boost/asio/serial_port.hpp>
+// #include <boost/bind/bind.hpp>
+/*In Boost, everything is inside boost::asio namespace.
+You can't just write asio::xxx unless you: using namespace boost::asio;
+*/
+// using namespace boost::asio;
 
 namespace robotarm_controller
 {
-  RobotArmInterface::RobotArmInterface()
-  {
-    // Constructor implementation
-  }
-  RobotArmInterface::~RobotArmInterface()
-  {
-    // Destructor implementation
-    if (arduino.IsOpen())
-    {
-      try
-      {
-        arduino.Close();
-      }
-      catch (...)
-      {
-        RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to close serial port: ");
-      }
-    }
-  }
+  // RobotArmInterface::RobotArmInterface(){}
+
+  // RobotArmInterface::~RobotArmInterface()
+  // {
+  //   // Destructor implementation
+  //   if (serial_.is_open())
+  //   {
+  //     try
+  //     {
+  //       serial_.close();
+  //     }
+  //     catch (...)
+  //     {
+  //       RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to close serial port: ");
+  //     }
+  //   }
+  // }
 
   // Initialize the serial port
   CallbackReturn RobotArmInterface::on_init(const hardware_interface::HardwareInfo &info)
@@ -73,13 +87,14 @@ namespace robotarm_controller
       // port_ = info.hardware_parameters.at("port");
       std::string device = info_.hardware_parameters.at("port");
       // uint32_t baudrate = std::stoi(info_.hardware_parameters.at("baud_rate"));
-      arduino.Open(device);
-      arduino.SetBaudRate(LibSerial::BaudRate::BAUD_115200);
-      // if (!arduino.IsOpen())
-      // {
-      //   RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to open Arduino serial port");
-      //   return hardware_interface::CallbackReturn::ERROR;
-      // }
+      serial_.open(device);
+      serial_.set_option(boost::asio::serial_port_base::baud_rate(baud_rate_));
+
+      if (!serial_.is_open())
+      {
+        RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to open Arduino serial port");
+        return hardware_interface::CallbackReturn::ERROR;
+      }
     }
     catch (const std::exception &e)
     {
@@ -90,7 +105,7 @@ namespace robotarm_controller
     // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Exporting %zu command interfaces", position_commands_.size());
     // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Exporting %zu state interfaces", position_states_.size());
 
-    RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Connected to Arduino on %s, @ baud rate enum %d", port_.c_str(), static_cast<int>(LibSerial::BaudRate::BAUD_115200));
+    // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Connected to Arduino on %s, @ baud rate enum %d", port_.c_str(), static_cast<int>(LibSerial::BaudRate::BAUD_115200));
     return CallbackReturn::SUCCESS;
   }
 
@@ -102,15 +117,21 @@ namespace robotarm_controller
     RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Activating hardware...");
     isArduinoBusy_ = false;
     last_command_time_ = rclcpp::Clock().now();
-
-    std::string msg = "en\n";
+    if (!serial_.is_open())
+    {
+      RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Serial port not open! Cannot activate.");
+      return CallbackReturn::ERROR;
+    }
+    std::string cmd = "en\n";
     try
     {
-      arduino.Write(msg);
+      boost::asio::write(serial_, boost::asio::buffer(cmd));
     }
-    catch (...)
+    catch (const std::exception &e)
     {
-      RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to write to serial port:");
+      RCLCPP_ERROR(
+          rclcpp::get_logger("RobotArmInterface"),
+          "Failed to write to serial port: %s", e.what());
       return CallbackReturn::ERROR;
     }
     // Initialize robotarm h/w
@@ -121,10 +142,10 @@ namespace robotarm_controller
   {
     // Disconnect from hardware
     RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Deactivating hardware...");
-    std::string msg = "dis\n";
+    std::string cmd = "dis\n";
     try
     {
-      arduino.Write(msg);
+      boost::asio::write(serial_, boost::asio::buffer(cmd));
     }
     catch (...)
     {
@@ -132,11 +153,11 @@ namespace robotarm_controller
       return CallbackReturn::ERROR;
     }
 
-    if (arduino.IsOpen())
+    if (serial_.is_open())
     {
       try
       {
-        arduino.Close();
+        serial_.close();
       }
       catch (...)
       {
@@ -186,54 +207,21 @@ namespace robotarm_controller
   {
     // Read from hardware (simulated here)
     position_states_ = position_commands_; // Simulate perfect tracking
-
-    // Persistent buffer across read() calls
-    static std::string persistent_buffer;
-
-    try
-    {
-      // Read up to 256 bytes each cycle
-      std::string temp_buffer;
-      temp_buffer.resize(256);
-
-      // Read from Arduino (non-blocking)
-      arduino.Read(temp_buffer, temp_buffer.size(), 0); // 0ms timeout => non-blocking
-
-      // Trim temp_buffer to actual received data
-      auto first_null = temp_buffer.find('\0');
-      if (first_null != std::string::npos)
-      {
-        temp_buffer.resize(first_null);
-      }
-
-      // Append to persistent_buffer
-      persistent_buffer += temp_buffer;
-
-      // Process all complete lines
-      size_t newline_pos;
-      while ((newline_pos = persistent_buffer.find('\n')) != std::string::npos)
-      {
-        // Extract one full line (excluding '\n')
-        std::string line = persistent_buffer.substr(0, newline_pos);
-        persistent_buffer.erase(0, newline_pos + 1); // +1 to remove '\n'
-
-        // Parse the line
-        if (!line.empty())
-        {
-          parseFeedback_(line);
-        }
-      }
-    }
-    catch (const LibSerial::ReadTimeout &)
-    {
-      // Expected sometimes — no big deal
-    }
-    catch (const std::exception &e)
-    {
-      RCLCPP_WARN(
-          rclcpp::get_logger("RobotArmInterface"),
-          "Serial read failed: %s", e.what());
-    }
+    boost::asio::streambuf buf;
+    // try
+    // {
+    //   boost::asio::read_until(serial_, buf, '\n');
+    // }
+    // catch (const std::exception &e)
+    // {
+    //   RCLCPP_WARN(
+    //       rclcpp::get_logger("RobotArmInterface"),
+    //       "Serial read failed: %s", e.what());
+    // }
+    // std::istream is(&buf);
+    // std::string data;
+    // std::getline(is, data);
+    // parseFeedback_(data);
 
     // Handle Arduino busy timeout
     if (isArduinoBusy_)
@@ -370,8 +358,7 @@ namespace robotarm_controller
       RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Serial Write: %s", msg.c_str());
       try
       {
-        arduino.Write(msg);
-        isArduinoBusy_ = true;
+        boost::asio::write(serial_, boost::asio::buffer(cmd.str()));
         last_command_time_ = rclcpp::Clock().now();
       }
       catch (...)

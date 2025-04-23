@@ -14,7 +14,7 @@ find_package(pluginlib REQUIRED)
 find_package(PkgConfig REQUIRED)
 # find_package(LibSerial REQUIRED)
 
-pkg_check_modules(SERIAL libserial)
+# pkg_check_modules(SERIAL libserial)
 
 add_library(${PROJECT_NAME} SHARED
   src/robotarm_interface.cpp
@@ -26,10 +26,10 @@ target_include_directories(${PROJECT_NAME} PRIVATE
   "${SERIAL_INCLUDE_DIRS}"
 )
 
-target_link_libraries(${PROJECT_NAME}
-  # "${LibSerial_LIBRARIES}"
-  "${SERIAL_LDFLAGS}"
-)
+# target_link_libraries(${PROJECT_NAME}
+#   # "${LibSerial_LIBRARIES}"
+#   "${SERIAL_LDFLAGS}"
+# )
 
 ament_target_dependencies(${PROJECT_NAME}
   hardware_interface
