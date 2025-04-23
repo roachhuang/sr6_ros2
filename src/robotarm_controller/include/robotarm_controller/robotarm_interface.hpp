@@ -20,10 +20,10 @@
 // #include <libserial/SerialPort.h>
 // #include <libserial/SerialStream.h>
 
-namespace hw = hardware_interface; // ✨ alias once
+namespace hw = hardware_interface; // alias once
 namespace robotarm_controller
 {
-    using CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
+    // using hw::CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::hw::CallbackReturn;
 
     class RobotArmInterface : public hardware_interface::SystemInterface
     {
@@ -32,10 +32,10 @@ namespace robotarm_controller
         // RobotArmInterface();
         // ~RobotArmInterface();
         // ROS 2 Lifecycle Methods
-        CallbackReturn on_init(const hardware_interface::HardwareInfo &info) override;
-        CallbackReturn on_configure(const rclcpp_lifecycle::State &) override;
-        CallbackReturn on_activate(const rclcpp_lifecycle::State &) override;
-        CallbackReturn on_deactivate(const rclcpp_lifecycle::State &) override;
+        hw::CallbackReturn on_init(const hardware_interface::HardwareInfo &info) override;
+        hw::CallbackReturn on_configure(const rclcpp_lifecycle::State &) override;
+        hw::CallbackReturn on_activate(const rclcpp_lifecycle::State &) override;
+        hw::CallbackReturn on_deactivate(const rclcpp_lifecycle::State &) override;
 
         // Hardware Interface Methods
         std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
@@ -56,7 +56,6 @@ namespace robotarm_controller
         boost::asio::serial_port serial_;
         std::string port_;
         int baud_rate_ = 115200;
-
 
         bool isArduinoBusy_;
         rclcpp::Time last_command_time_;

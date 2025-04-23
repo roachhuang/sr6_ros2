@@ -23,44 +23,13 @@ You can't just write asio::xxx unless you: using namespace boost::asio;
 
 namespace robotarm_controller
 {
-  // RobotArmInterface::RobotArmInterface(){}
-
-  // RobotArmInterface::~RobotArmInterface()
-  // {
-  //   // Destructor implementation
-  //   if (serial_.is_open())
-  //   {
-  //     try
-  //     {
-  //       serial_.close();
-  //     }
-  //     catch (...)
-  //     {
-  //       RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to close serial port: ");
-  //     }
-  //   }
-  // }
-
   // Initialize the serial port
-  CallbackReturn RobotArmInterface::on_init(const hardware_interface::HardwareInfo &info)
+  hw::CallbackReturn RobotArmInterface::on_init(const hardware_interface::HardwareInfo &info)
   {
-    if (hardware_interface::SystemInterface::on_init(info) != CallbackReturn::SUCCESS)
+    if (hardware_interface::SystemInterface::on_init(info) != hw::CallbackReturn::SUCCESS)
     {
-      return CallbackReturn::ERROR;
+      return hw::CallbackReturn::ERROR;
     }
-    /*
-    try
-    {
-      port_ = info.hardware_parameters.at("port");
-      arduino.Open(port_);
-      arduino.SetBaudRate(LibSerial::BaudRate::BAUD_115200);
-    }
-    catch (...)
-    {
-      RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to open serial port: ");
-      return CallbackReturn::ERROR;
-    }
-    */
 
     // Initialize joint states and commands
     isArduinoBusy_ = false;
@@ -76,10 +45,10 @@ namespace robotarm_controller
     prev_position_commands_.resize(info_.joints.size(), 0.0);
     RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Initialized with %zu joints, using position interface", info_.joints.size());
 
-    return CallbackReturn::SUCCESS;
+    return hw::CallbackReturn::SUCCESS;
   };
 
-  CallbackReturn RobotArmInterface::on_configure(const rclcpp_lifecycle::State &)
+  hw::CallbackReturn RobotArmInterface::on_configure(const rclcpp_lifecycle::State &)
   {
     try
     {
@@ -93,7 +62,7 @@ namespace robotarm_controller
       if (!serial_.is_open())
       {
         RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to open Arduino serial port");
-        return hardware_interface::CallbackReturn::ERROR;
+        return hw::CallbackReturn::ERROR;
       }
     }
     catch (const std::exception &e)
@@ -102,14 +71,15 @@ namespace robotarm_controller
       return hw::CallbackReturn::ERROR;
     }
 
+    
     // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Exporting %zu command interfaces", position_commands_.size());
     // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Exporting %zu state interfaces", position_states_.size());
 
     // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Connected to Arduino on %s, @ baud rate enum %d", port_.c_str(), static_cast<int>(LibSerial::BaudRate::BAUD_115200));
-    return CallbackReturn::SUCCESS;
+    return hw::CallbackReturn::SUCCESS;
   }
 
-  CallbackReturn RobotArmInterface::on_activate(const rclcpp_lifecycle::State &)
+  hw::CallbackReturn RobotArmInterface::on_activate(const rclcpp_lifecycle::State &)
   {
     // Connect to real hardware here
     // std::stringstream ss;
@@ -120,7 +90,7 @@ namespace robotarm_controller
     if (!serial_.is_open())
     {
       RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Serial port not open! Cannot activate.");
-      return CallbackReturn::ERROR;
+      return hw::CallbackReturn::ERROR;
     }
     std::string cmd = "en\n";
     try
@@ -132,13 +102,13 @@ namespace robotarm_controller
       RCLCPP_ERROR(
           rclcpp::get_logger("RobotArmInterface"),
           "Failed to write to serial port: %s", e.what());
-      return CallbackReturn::ERROR;
+      return hw::CallbackReturn::ERROR;
     }
     // Initialize robotarm h/w
-    return CallbackReturn::SUCCESS;
+    return hw::CallbackReturn::SUCCESS;
   }
 
-  CallbackReturn RobotArmInterface::on_deactivate(const rclcpp_lifecycle::State &)
+  hw::CallbackReturn RobotArmInterface::on_deactivate(const rclcpp_lifecycle::State &)
   {
     // Disconnect from hardware
     RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Deactivating hardware...");
@@ -150,7 +120,7 @@ namespace robotarm_controller
     catch (...)
     {
       RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to write to serial port:");
-      return CallbackReturn::ERROR;
+      return hw::CallbackReturn::ERROR;
     }
 
     if (serial_.is_open())
@@ -162,10 +132,10 @@ namespace robotarm_controller
       catch (...)
       {
         RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to close serial port:");
-        return CallbackReturn::ERROR;
+        return hw::CallbackReturn::ERROR;
       }
     }
-    return CallbackReturn::SUCCESS;
+    return hw::CallbackReturn::SUCCESS;
   }
 
   std::vector<hardware_interface::StateInterface> RobotArmInterface::export_state_interfaces()

@@ -52,6 +52,7 @@ startup:
     . install/setup.bash
     # to read h/w interface log only
     ros2 launch bringup real_robot.launch.py |grep 'RobotArmInterface'
+    need to sudo cat /dev/ttyUSB0 before launch for robotarm to move.
 
 todo: absoulte and relative
 check yaml
