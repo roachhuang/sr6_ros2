@@ -1,0 +1,13 @@
+git checkout master
+git merge bugfix
+# Handle any merge conflicts
+git commit        # If there were conflicts
+git push origin master
+git branch -d bugfix   # Optional: delete local bugfix branch
+git push origin --delete bugfix # Optional: delete remote bugfix branch
+
+MAJOR.MINOR.PATCH
+git tag
+git tag -a v1.0 -m "Release version 1.0"
+git show v1.0.0
+git push --tags

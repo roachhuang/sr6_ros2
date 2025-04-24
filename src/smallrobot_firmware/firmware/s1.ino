@@ -5,6 +5,8 @@
 
 //#define PI 3.1415926535897932384626433832795
 
+// this works with ROS2 h/w interface 
+
 // kk-p20/15
 #define END_EFFECTOR_PIN 16
 //driver for the axis 1
@@ -217,6 +219,7 @@ void loop() {
   serialEvent();  // Always check serial
 
   if (newCommandReady) {
+    Serial.println("a");
     processCommand(inputBuffer);
     newCommandReady = false;
   } else{ 
@@ -256,7 +259,6 @@ void send_cur_positions(const float* positions, int num_joints) {
 }
 
 void processCommand(const char* cmd) {
-  Serial.println("a");
   if (cmd[0] == 'm' || cmd[0] == 'g') {
     parseFloats(cmd + 1, parsedJoints, 6);
 

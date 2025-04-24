@@ -107,6 +107,9 @@ namespace robotarm_controller
     {
       std::string cmd = "en\n";
       boost::asio::write(serial_, boost::asio::buffer(cmd));
+      std::this_thread::sleep_for(std::chrono::seconds(1)); 
+      cmd = "g0.0,0.0,0.0,0.0,0.0,0.0\n";
+      boost::asio::write(serial_, boost::asio::buffer(cmd));
     }
     catch (const std::exception &e)
     {
@@ -187,7 +190,7 @@ namespace robotarm_controller
   hardware_interface::return_type RobotArmInterface::read([[maybe_unused]] const rclcpp::Time &time, [[maybe_unused]] const rclcpp::Duration &period)
   {
     // Read from hardware (simulated here)
-    position_states_ = position_commands_; // Simulate perfect tracking
+    // position_states_ = position_commands_; // Simulate perfect tracking
     boost::asio::streambuf buf;
     try
     {

@@ -1,5 +1,8 @@
 echo $ROS_DISTRO
 
+after git clone a respository
+    rosdep install -y -r -t --rosdistro $(ROS_DISTRO) --from-paths 
+
 in urdf folder, 
     ros2 run xacro xacro smallrobot.urdf.xacro > smallrobot.urdf
     check_urdf smallrobot.urdf
