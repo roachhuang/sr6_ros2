@@ -8,6 +8,9 @@
             <parameters>$(find robotarm_controller)/config/robotarm_controllers.yaml</parameters>
         </plugin>
     </gazebo>
+    <gazebo reference='base_link'>
+        <material>Gazebo/White</material>
+    </gazebo>
     <gazebo reference="link1">
         <material>Gazebo/Orange</material>
     </gazebo>
