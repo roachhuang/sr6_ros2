@@ -5,7 +5,7 @@
             <robot_param>robot_description</robot_param>
             <robot_param_node>robot_state_publisher</robot_param_node>  
             <!-- <parameters>/home/roach/ros2_ws/install/robotarm_controller/share/robotarm_controller/config/robotarm_controllers.yaml</parameters> -->
-            <!-- <parameters>$(find robotarm_controller)/config/robotarm_controllers.yaml</parameters> -->
+            <parameters>$(find robotarm_controller)/config/robotarm_controllers.yaml</parameters>
         </plugin>
     </gazebo>
     <gazebo reference="base_link">
