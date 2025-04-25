@@ -15,7 +15,7 @@
       <actuator name="motor_${number}">
          <mechanicalReduction>${reduction_ratio}</mechanicalReduction>
       </actuator>
-      <joint name="joint_${number}">
+      <joint name="joint${number}">
         <hardwareInterface>hardware_interface/position</hardwareInterface>
         <!-- <hardwareInterface>hardware_interface/velocity</hardwareInterface>
         <hardwareInterface>hardware_interface/effort</hardwareInterface> -->
