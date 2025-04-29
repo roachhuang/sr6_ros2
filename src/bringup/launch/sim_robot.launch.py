@@ -40,7 +40,7 @@ def generate_launch_description():
     #     os.path.join(
     #         get_package_share_directory("smallrobot_remote"),
     #         "launch",
-    #         "remote_interface.launch.py",
+    #         "alex.launch.py",
     #     ),
     #     launch_arguments={"is_sim": "True"}.items(),
     # )

@@ -1,5 +1,8 @@
 echo $ROS_DISTRO
 
+for smallrobot_alex build:
+    cd ~/ros2_ws && colcon build --packages-select smallrobot_alex && source install/setup.bash
+
 after git clone a respository
     rosdep install -y -r -t --rosdistro $(ROS_DISTRO) --from-paths 
 
