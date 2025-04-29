@@ -1,0 +1,20 @@
+ros2 action list -t
+ros2 action info <pkg name>
+ros2 interface show turtlesim/action/RotateAbsolute
+
+# To utilize our custom interface, we simply import it into our nodes and employ it as if it were a standard interface.
+    Python import syntax:
+        from ros2_fndm_interface.msg import Student
+
+. install/setup.bash
+ros2 interface show ros2_fndm_interface/msg/Student
+ros2 interface show ros2_fndm_interface/action/Fibonacci
+
+ros2 pkg create py_actions --build-type ament_python --dependencies rclpy ros2_fndm_interface
+
+
+test:
+    ros2 run py_actions fibonacci_server 
+    ros2 action send_goal <action_name> <action msg type> "{ '<goal msg name>' : <value>}"
+    ros2 action send_goal fibonacci_action ros2_fndm_interface/action/Fibonacci "{ 'order' : 5}" 
+    ros2 run py_actions fibonacci_client --ros-args -p order:=5
