@@ -7,15 +7,16 @@
   <maintainer email="giraftw2002@gmail.com">roach</maintainer>
   <license>TODO: License declaration</license>
 
+  <buildtool_depend>ament_cmake_python</buildtool_depend>
   <buildtool_depend>ament_cmake</buildtool_depend>
-
-  <exec_depend>ros2launch</exec_depend>
-    
+  
   <depend>rclcpp</depend>
   <depend>rclcpp_action</depend>
   <depend>rclcpp_components</depend>
   <depend>ros2_fndm_interface</depend> 
   <depend>moveit_ros_planning_interface</depend>
+  <depend>rclpy</depend>
+  <depend>ros2launch</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

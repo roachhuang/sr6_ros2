@@ -8,14 +8,16 @@ def generate_launch_description():
     task_server = Node(
         package="smallrobot_remote",
         executable="task_server",
-        name="task_server",
+        # name="task_server",
     )
-    alexa_interface = Node(
+    alexa_interface_node = Node(
         package="smallrobot_remote",
-        executable="alex_interface",
+        executable="alex_interface.py",
+        # name="alexa_interface_node",
+        # output="screen",
     )
 
     return LaunchDescription([
         task_server,
-        alexa_interface,
+        alexa_interface_node,
     ])
