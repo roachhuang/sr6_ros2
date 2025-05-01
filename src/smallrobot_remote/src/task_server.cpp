@@ -2,7 +2,7 @@
 #include <memory>
 #include <thread>
 
-#include "ros2_fndm_interface/action/alex.hpp"
+#include "ros2_fndm_interface/action/alexa.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_action/rclcpp_action.hpp"
 #include "rclcpp_components/register_node_macro.hpp"
@@ -11,8 +11,8 @@
 class TaskServer : public rclcpp::Node
 {
 public:
-    using Alex = ros2_fndm_interface::action::Alex;
-    using GoalHandleAlex = rclcpp_action::ServerGoalHandle<Alex>;
+    using Alexa = ros2_fndm_interface::action::Alexa;
+    using GoalHandleAlexa = rclcpp_action::ServerGoalHandle<Alexa>;
 
     //   smallrobot_remote_PUBLIC
     explicit TaskServer(const rclcpp::NodeOptions &options = rclcpp::NodeOptions())
@@ -20,7 +20,7 @@ public:
     {
         using namespace std::placeholders;
 
-        action_server_ = rclcpp_action::create_server<Alex>(
+        action_server_ = rclcpp_action::create_server<Alexa>(
             this,
             "task_server",
             std::bind(&TaskServer::handle_goal, this, _1, _2),
@@ -31,11 +31,11 @@ public:
     }
 
 private:
-    rclcpp_action::Server<Alex>::SharedPtr action_server_;
+    rclcpp_action::Server<Alexa>::SharedPtr action_server_;
 
     rclcpp_action::GoalResponse handle_goal(
         const rclcpp_action::GoalUUID &uuid,
-        std::shared_ptr<const Alex::Goal> goal)
+        std::shared_ptr<const Alexa::Goal> goal)
     {
         RCLCPP_INFO(this->get_logger(), "Received goal request with order %d", goal->task_number);
         (void)uuid;
@@ -43,7 +43,7 @@ private:
     }
 
     rclcpp_action::CancelResponse handle_cancel(
-        const std::shared_ptr<GoalHandleAlex> goal_handle)
+        const std::shared_ptr<GoalHandleAlexa> goal_handle)
     {
         RCLCPP_INFO(this->get_logger(), "Received request to cancel goal");
         (void)goal_handle;
@@ -54,14 +54,14 @@ private:
         return rclcpp_action::CancelResponse::ACCEPT;
     }
 
-    void handle_accepted(const std::shared_ptr<GoalHandleAlex> goal_handle)
+    void handle_accepted(const std::shared_ptr<GoalHandleAlexa> goal_handle)
     {
         using namespace std::placeholders;
         // this needs to return quickly to avoid blocking the executor, so spin up a new thread
         std::thread{std::bind(&TaskServer::execute, this, _1), goal_handle}.detach();
     }
 
-    void execute(const std::shared_ptr<GoalHandleAlex> goal_handle)
+    void execute(const std::shared_ptr<GoalHandleAlexa> goal_handle)
     {
         RCLCPP_INFO(this->get_logger(), "Executing goal");
         auto arm_move_group = moveit::planning_interface::MoveGroupInterface(shared_from_this(), "arm");
@@ -103,7 +103,7 @@ private:
             }
 
             RCLCPP_INFO(this->get_logger(), "Goal successed");
-            auto result = std::make_shared<Alex::Result>();
+            auto result = std::make_shared<Alexa::Result>();
             result->success = true;
             goal_handle->succeed(result);
         }

@@ -13,7 +13,7 @@ find_package(rosidl_default_generators REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME} 
   # "msg/Student.msg"
-  "action/Alex.action"
+  "action/Alexa.action"
   # "action/Fibonacci.action"
   # DEPENDENCIES builtin_interfaces
 )

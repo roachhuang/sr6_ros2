@@ -12,7 +12,7 @@ def generate_launch_description():
     )
     alexa_interface_node = Node(
         package="smallrobot_remote",
-        executable="alex_interface.py",
+        executable="alexa_interface.py",
         # name="alexa_interface_node",
         # output="screen",
     )

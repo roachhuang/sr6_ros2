@@ -46,7 +46,7 @@ install(TARGETS
   DESTINATION lib/${PROJECT_NAME})
 
 install(PROGRAMS
-  ${PROJECT_NAME}/alex_interface.py
+  ${PROJECT_NAME}/alexa_interface.py
   DESTINATION lib/${PROJECT_NAME}
   )
 

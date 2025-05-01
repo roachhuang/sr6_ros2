@@ -18,15 +18,15 @@ from ask_sdk_model.ui import SimpleCard
 import rclpy
 from rclpy.node import Node
 from rclpy.action import ActionClient
-# add import the action message, to intface btw alex.action and ros2
-from ros2_fndm_interface.action import Alex
+# add import the action message, to intface btw alexa.action and ros2
+from ros2_fndm_interface.action import Alexa
 import threading
 
 # This is a simple Alexa skill that interacts with a ROS2 action server.
 # It uses Flask to create a web server and the ask-sdk to handle Alexa requests.
 threading.Thread(target=lambda: rclpy.init(args=None)).start()
 
-action_client = ActionClient(Node('alexa_interface'), Alex, 'task_server')
+action_client = ActionClient(Node('alexa_interface'), Alexa, 'task_server')
 app = Flask(__name__)
 
 class GoHomeIntentHandler(AbstractRequestHandler):
@@ -42,7 +42,7 @@ class GoHomeIntentHandler(AbstractRequestHandler):
             SimpleCard("GoHome", speech_text)).set_should_end_session(
             True)
         
-        goal = Alex.Goal()
+        goal = Alexa.Goal()
         goal.task_number = 1
         action_client.send_goal_async(goal)
         return handler_input.response_builder.response
@@ -76,7 +76,7 @@ class LaunchRequestHandler(AbstractRequestHandler):
             SimpleCard("Hello World", speech_text)).set_should_end_session(
             False)
         
-        goal = Alex.Goal()
+        goal = Alexa.Goal()
         goal.task_number = 0
         action_client.send_goal_async(goal)
         return handler_input.response_builder.response
