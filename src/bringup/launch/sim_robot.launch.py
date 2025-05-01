@@ -36,14 +36,14 @@ def generate_launch_description():
         launch_arguments={"is_sim": "true"}.items(),
     )
 
-    # remote_interface = IncludeLaunchDescription(
-    #     os.path.join(
-    #         get_package_share_directory("smallrobot_remote"),
-    #         "launch",
-    #         "alex.launch.py",
-    #     ),
-    #     launch_arguments={"is_sim": "True"}.items(),
-    # )
+    remote_interface = IncludeLaunchDescription(
+        os.path.join(
+            get_package_share_directory("smallrobot_remote"),
+            "launch",
+            "alexa.launch.py",
+        ),
+        launch_arguments={"is_sim": "True"}.items(),
+    )
 
     return LaunchDescription([
         gazebo,

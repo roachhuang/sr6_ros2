@@ -71,7 +71,7 @@ private:
         switch (goal_handle->get_goal()->task_number)
         {
         case 1:
-            arm_joint_goal = {0.0, -1.57, 0.0, -1.57, 0.0, 0.0};
+            arm_joint_goal = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
             // gripper_joint_goal = {0.0, 0.0};
             break;
         case 2:

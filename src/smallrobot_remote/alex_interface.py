@@ -18,12 +18,15 @@ from ask_sdk_model.ui import SimpleCard
 import rclpy
 from rclpy.node import Node
 from rclpy.action import ActionClient
-# from smallrobot_msgs.action import SmallrobotTask
+# add import the action message, to intface btw alex.action and ros2
+from ros2_fndm_interface.action import Alex
 import threading
 
+# This is a simple Alexa skill that interacts with a ROS2 action server.
+# It uses Flask to create a web server and the ask-sdk to handle Alexa requests.
 threading.Thread(target=lambda: rclpy.init(args=None)).start()
 
-# action_client = ActionClient(Node('alexa_interface'), SmallrobotTask, 'task_server')
+action_client = ActionClient(Node('alexa_interface'), Alex, 'task_server')
 app = Flask(__name__)
 
 class GoHomeIntentHandler(AbstractRequestHandler):
@@ -39,7 +42,7 @@ class GoHomeIntentHandler(AbstractRequestHandler):
             SimpleCard("GoHome", speech_text)).set_should_end_session(
             True)
         
-        goal = SmallrobotTask.Goal()
+        goal = Alex.Goal()
         goal.task_number = 1
         action_client.send_goal_async(goal)
         return handler_input.response_builder.response
@@ -73,7 +76,7 @@ class LaunchRequestHandler(AbstractRequestHandler):
             SimpleCard("Hello World", speech_text)).set_should_end_session(
             False)
         
-        goal = SmallrobotTask.Goal()
+        goal = Alex.Goal()
         goal.task_number = 0
         action_client.send_goal_async(goal)
         return handler_input.response_builder.response
@@ -88,6 +91,22 @@ class CatchAllExceptionHandler(AbstractExceptionHandler):
         speech = "Sorry, I had trouble doing what you asked. Please try again."
         return handler_input.response_builder.speak(speech).ask(speech).response
 
+class CatchAllIntentHandler(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        # Catch all unhandled intents
+        return True
+
+    def handle(self, handler_input):
+        # Provide a response for unhandled intents
+        speech_text = "Sorry, I didn't understand that. Can you try again?"
+        handler_input.response_builder.speak(speech_text).set_should_end_session(False)
+        return handler_input.response_builder.response
+
+# Ensure the ActionClient is ready before sending goals
+if not action_client.wait_for_server(timeout_sec=5.0):
+    print("Action server not available. Exiting.")
+    exit(1)
+
 # then also register it
 
 skill_builder = SkillBuilder()
@@ -96,6 +115,7 @@ skill_builder.add_request_handler(SessionEndedRequestHandler())
 skill_builder.add_exception_handler(CatchAllExceptionHandler())
 skill_builder.add_request_handler(LaunchRequestHandler())
 skill_builder.add_request_handler(GoHomeIntentHandler())
+skill_builder.add_request_handler(CatchAllIntentHandler())
 skill_adapter = SkillAdapter(
     skill=skill_builder.create(), skill_id="amzn1.ask.skill.5ca425f2-b353-40da-9616-c6f013688a23", app=app)
 
