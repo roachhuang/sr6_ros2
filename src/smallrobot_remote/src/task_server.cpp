@@ -74,8 +74,8 @@ private:
             arm_joint_goal = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
             // gripper_joint_goal = {0.0, 0.0};
             break;
-        case 2:
-            arm_joint_goal = {1.57, -1.57, 0.0, -1.57, 0.0, 0.0};
+        case 0:
+            arm_joint_goal = {0.0, -1.37, 1.29, 0.0, -1.57, 0.0};
             // gripper_joint_goal = {1.57, 1.57};
             break;
         default:

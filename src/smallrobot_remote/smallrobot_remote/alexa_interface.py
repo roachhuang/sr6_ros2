@@ -43,10 +43,27 @@ class GoHomeIntentHandler(AbstractRequestHandler):
             True)
         
         goal = Alexa.Goal()
+        goal.task_number = 0
+        action_client.send_goal_async(goal)
+        return handler_input.response_builder.response
+    
+class StandbyIntentHandler(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        return is_intent_name("StandbyIntent")(handler_input)
+
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        speech_text = "Ok. I'm moving to initial position."
+
+        handler_input.response_builder.speak(speech_text).set_card(
+            SimpleCard("Standby", speech_text)).set_should_end_session(
+            True)
+        
+        goal = Alexa.Goal()
         goal.task_number = 1
         action_client.send_goal_async(goal)
         return handler_input.response_builder.response
-
 
 class SessionEndedRequestHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
@@ -70,15 +87,15 @@ class LaunchRequestHandler(AbstractRequestHandler):
         # return handler_input.response_builder.response
     
         # type: (HandlerInput) -> Response
-        speech_text = "Hi roach, how can i help you?"
+        speech_text = "Hi Zer Zhang, how can i help you?"
 
         handler_input.response_builder.speak(speech_text).set_card(
             SimpleCard("Hello World", speech_text)).set_should_end_session(
             False)
         
-        goal = Alexa.Goal()
-        goal.task_number = 0
-        action_client.send_goal_async(goal)
+        # goal = Alexa.Goal()
+        # goal.task_number = 0
+        # action_client.send_goal_async(goal)
         return handler_input.response_builder.response
 
 
@@ -115,6 +132,7 @@ skill_builder.add_request_handler(SessionEndedRequestHandler())
 skill_builder.add_exception_handler(CatchAllExceptionHandler())
 skill_builder.add_request_handler(LaunchRequestHandler())
 skill_builder.add_request_handler(GoHomeIntentHandler())
+skill_builder.add_request_handler(StandbyIntentHandler())
 skill_builder.add_request_handler(CatchAllIntentHandler())
 skill_adapter = SkillAdapter(
     skill=skill_builder.create(), skill_id="amzn1.ask.skill.5ca425f2-b353-40da-9616-c6f013688a23", app=app)
