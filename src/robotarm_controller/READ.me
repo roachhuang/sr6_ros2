@@ -25,3 +25,8 @@ ros2 topic pub /arm_controller/joint_trajectory trajectory_msgs/msg/JointTraject
     }
   ]
 }'
+
+
+YAML configuration file that defines the controllers and their properties for our robotic arm. The controller manager in ROS 2 Control uses this file to load and configure the appropriate controllers during runtime.
+
+The YAML file allows us to specify the joint controllers, their types, and associated parameters.

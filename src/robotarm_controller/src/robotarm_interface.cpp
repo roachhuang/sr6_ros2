@@ -64,11 +64,11 @@ namespace robotarm_controller
       serial_.set_option(boost::asio::serial_port_base::parity(boost::asio::serial_port_base::parity::none));
       serial_.set_option(boost::asio::serial_port_base::stop_bits(boost::asio::serial_port_base::stop_bits::one));
       serial_.set_option(boost::asio::serial_port_base::flow_control(boost::asio::serial_port_base::flow_control::none));
-      
+
       // 🔥 ADD DELAY AFTER OPEN
       RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Waiting for Arduino reboot (2 seconds)...");
-      std::this_thread::sleep_for(std::chrono::seconds(2)); 
-     
+      std::this_thread::sleep_for(std::chrono::seconds(2));
+
       RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Dummy wakeup sent.");
       if (!serial_.is_open())
       {
@@ -102,12 +102,12 @@ namespace robotarm_controller
       RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Serial port not open! Cannot activate.");
       return hw::CallbackReturn::ERROR;
     }
-    
+
     try
     {
       std::string cmd = "en\n";
       boost::asio::write(serial_, boost::asio::buffer(cmd));
-      std::this_thread::sleep_for(std::chrono::seconds(1)); 
+      std::this_thread::sleep_for(std::chrono::seconds(1));
       cmd = "g0.0,0.0,0.0,0.0,0.0,0.0\n";
       boost::asio::write(serial_, boost::asio::buffer(cmd));
     }
@@ -189,8 +189,7 @@ namespace robotarm_controller
 
   hardware_interface::return_type RobotArmInterface::read([[maybe_unused]] const rclcpp::Time &time, [[maybe_unused]] const rclcpp::Duration &period)
   {
-    // Read from hardware (simulated here)
-    // position_states_ = position_commands_; // Simulate perfect tracking
+    /*
     boost::asio::streambuf buf;
     try
     {
@@ -206,6 +205,7 @@ namespace robotarm_controller
     std::string data;
     std::getline(is, data);
     parseFeedback_(data);
+    */
 
     // Handle Arduino busy timeout
     if (isArduinoBusy_)
@@ -221,7 +221,7 @@ namespace robotarm_controller
     }
 
     // Simulate perfect tracking (optional if you want pure feedback instead)
-    // position_states_ = position_commands_;
+    position_states_ = position_commands_;
     return hw::return_type::OK;
   }
 
@@ -324,6 +324,10 @@ namespace robotarm_controller
       return hardware_interface::return_type::OK;
       */
 
+
+      // Compute time since the last write (alternative to `period`)
+      double delta_time = period.seconds();
+      
       // Write to hardware
       std::stringstream cmd;
       cmd << "g";
@@ -335,10 +339,18 @@ namespace robotarm_controller
           cmd << ',';
         }
         cmd << std::fixed << std::setprecision(2) << deg;
+
+        // Example 2: Compute velocity from position commands (if velocity interface is not used)
+        if (delta_time > 0)
+        {
+          double velocity = (position_commands_[i] - previous_position_commands_[i]) / delta_time;
+          // arduino_.setVelocity(joint_names_[i], velocity);
+        }
       }
       cmd << '\n';
       std::string msg = cmd.str();
       RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Serial Write: %s", msg.c_str());
+
       try
       {
         boost::asio::write(serial_, boost::asio::buffer(cmd.str()));

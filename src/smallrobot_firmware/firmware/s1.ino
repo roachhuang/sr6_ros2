@@ -228,7 +228,7 @@ void loop() {
     send_cur_positions(curPos, 6);
   }
   // Optional: small delay to avoid overloading
-  // delay(2);
+  delay(10);
 
   // Your stepping logic...
   // if (stepping == false && lastSteppingState == true) {
