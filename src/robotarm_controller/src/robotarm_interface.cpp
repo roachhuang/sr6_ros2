@@ -1,4 +1,3 @@
-
 // #include <boost/asio.hpp>
 // using namespace boost::asio;
 
@@ -189,7 +188,7 @@ namespace robotarm_controller
 
   hardware_interface::return_type RobotArmInterface::read([[maybe_unused]] const rclcpp::Time &time, [[maybe_unused]] const rclcpp::Duration &period)
   {
-    /*
+
     boost::asio::streambuf buf;
     try
     {
@@ -205,7 +204,6 @@ namespace robotarm_controller
     std::string data;
     std::getline(is, data);
     parseFeedback_(data);
-    */
 
     // Handle Arduino busy timeout
     if (isArduinoBusy_)
@@ -221,46 +219,97 @@ namespace robotarm_controller
     }
 
     // Simulate perfect tracking (optional if you want pure feedback instead)
-    position_states_ = position_commands_;
+    // position_states_ = position_commands_;
     return hw::return_type::OK;
   }
 
   void RobotArmInterface::parseFeedback_(const std::string &msg)
   {
-    // 6 joints → (1 + 6×7) + '\n' = 44 characters total including the starting 'f'
-    if (msg[0] == 'f' && msg.size() == 44)
+    // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "parseFeedback_ called with: %s", msg.c_str());
+    if (msg.empty())
+      return;
+
+    if (msg[0] == 'f')
     {
-      // f+030.12+045.88+090.00+000.00+000.00+000.00\n
-      // === Handle joint feedback ===
-      const char *ptr = msg.c_str() + 1; // Skip 'f'
-      size_t idx = 0;
-
-      while (idx < position_states_.size())
+      // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "'f' message received: %s", msg.c_str());
+      size_t star_pos = msg.find('*');
+      if (star_pos == std::string::npos)
       {
-        char temp[8] = {0}; // Enough for "+000.00\0"
-        std::memcpy(temp, ptr, 7);
-        double value = std::strtod(temp, nullptr);
-        position_states_[idx++] = value * (M_PI / 180.0); // Degrees to radians
-
-        ptr += 7; // Move to next number
+        RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "No checksum found in feedback: %s", msg.c_str());
+        return;
       }
 
-      // Simulate perfect tracking (optional if you want pure feedback instead)
-      // position_states_ = position_commands_;
+      std::string data = msg.substr(0, star_pos);
+      std::string checksum_str = msg.substr(star_pos + 1);
 
-      RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Parsed positions: [%f, %f, %f, %f, %f, %f]",
-                  position_states_[0], position_states_[1], position_states_[2],
-                  position_states_[3], position_states_[4], position_states_[5]);
+      uint8_t calc_checksum = 0;
+      for (char c : data)
+      {
+        calc_checksum += static_cast<uint8_t>(c);
+      }
+      calc_checksum = calc_checksum % 256;
+
+      int recv_checksum = -1;
+      try
+      {
+        recv_checksum = std::stoi(checksum_str);
+      }
+      catch (...)
+      {
+        RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "Invalid checksum in feedback: %s", msg.c_str());
+        return;
+      }
+
+      // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Data: %s, Calc checksum: %d, Recv checksum: %d", data.c_str(), calc_checksum, recv_checksum);
+
+      if (calc_checksum != recv_checksum)
+      {
+        RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "Checksum mismatch! Calculated: %d, Received: %d, Data: %s", calc_checksum, recv_checksum, data.c_str());
+        return;
+      }
+
+      std::vector<double> positions;
+      std::string numbers = data.substr(1); // skip 'f'
+      std::stringstream ss(numbers);
+      std::string item;
+      while (std::getline(ss, item, ','))
+      {
+        try
+        {
+          // from arduino, the data is in radians, no need to convert to radians.
+          positions.push_back(std::stod(item));
+        }
+        catch (...)
+        {
+          RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "Failed to parse position: %s", item.c_str());
+          return;
+        }
+      }
+      // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Parsed %zu positions, expected %zu", positions.size(), position_states_.size());
+      if (positions.size() == position_states_.size())
+      {
+        position_states_ = positions;
+        // Create a copy for degree conversion
+        // std::vector<double> positions_deg = positions;
+        // for (auto &pos : positions_deg)
+        // {
+        //   pos *= (180.0 / M_PI); // Convert to degrees
+        // }
+
+        // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Parsed positions (deg): [%f, %f, %f, %f, %f, %f]",
+        //             positions_deg[0], positions_deg[1], positions_deg[2],
+        //             positions_deg[3], positions_deg[4], positions_deg[5]);
+      }
+      else
+      {
+        RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "Incorrect number of joints in feedback: %s", data.c_str());
+      }
     }
     else if (msg[0] == 'a')
     {
       isArduinoBusy_ = false;
       RCLCPP_DEBUG(rclcpp::get_logger("RobotArmInterface"), "Arduino ACK received");
     }
-    // {
-    // else
-    //   RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "len: %d", static_cast<int>(msg.size()));
-    // }
   }
 
   hardware_interface::return_type RobotArmInterface::write([[maybe_unused]] const rclcpp::Time &time, [[maybe_unused]] const rclcpp::Duration &period)
@@ -288,7 +337,8 @@ namespace robotarm_controller
     }
     else
     {
-      RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Position commands are different from previous commands.");
+      // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Position commands are different from previous commands.");
+
       /* Later (upgrade to optionally use velocity/effort):
         Gripper controlled by effort (grip with controlled force)
         Linear actuator for robot base with velocity control
@@ -324,10 +374,9 @@ namespace robotarm_controller
       return hardware_interface::return_type::OK;
       */
 
-
       // Compute time since the last write (alternative to `period`)
-      double delta_time = period.seconds();
-      
+      // double delta_time = period.seconds();
+
       // Write to hardware
       std::stringstream cmd;
       cmd << "g";
@@ -341,15 +390,14 @@ namespace robotarm_controller
         cmd << std::fixed << std::setprecision(2) << deg;
 
         // Example 2: Compute velocity from position commands (if velocity interface is not used)
-        if (delta_time > 0)
-        {
-          double velocity = (position_commands_[i] - previous_position_commands_[i]) / delta_time;
-          // arduino_.setVelocity(joint_names_[i], velocity);
-        }
+        // if (delta_time > 0)
+        // {
+        //   double velocity = (position_commands_[i] - prev_position_commands_[i]) / delta_time;
+        // }
       }
       cmd << '\n';
       std::string msg = cmd.str();
-      RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Serial Write: %s", msg.c_str());
+      // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Serial Write: %s", msg.c_str());
 
       try
       {
