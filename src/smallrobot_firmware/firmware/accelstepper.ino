@@ -1,141 +1,127 @@
 #include <AccelStepper.h>
-#include <cmath>
 #include "define.h"
 
 // Stepper motor objects
 AccelStepper steppers[6] = {
-    AccelStepper(AccelStepper::DRIVER, PUL_PINS[0], DIR_PINS[0]),
-    AccelStepper(AccelStepper::DRIVER, PUL_PINS[1], DIR_PINS[1]),
-    AccelStepper(AccelStepper::DRIVER, PUL_PINS[2], DIR_PINS[2]),
-    AccelStepper(AccelStepper::DRIVER, PUL_PINS[3], DIR_PINS[3]),
-    AccelStepper(AccelStepper::DRIVER, PUL_PINS[4], DIR_PINS[4]),
-    AccelStepper(AccelStepper::DRIVER, PUL_PINS[5], DIR_PINS[5])};
+  AccelStepper(AccelStepper::DRIVER, PUL_PINS[0], DIR_PINS[0]),
+  AccelStepper(AccelStepper::DRIVER, PUL_PINS[1], DIR_PINS[1]),
+  AccelStepper(AccelStepper::DRIVER, PUL_PINS[2], DIR_PINS[2]),
+  AccelStepper(AccelStepper::DRIVER, PUL_PINS[3], DIR_PINS[3]),
+  AccelStepper(AccelStepper::DRIVER, PUL_PINS[4], DIR_PINS[4]),
+  AccelStepper(AccelStepper::DRIVER, PUL_PINS[5], DIR_PINS[5])
+};
 
 // Current positions in degrees
-float currentPositions[6] = {0.0, -78.51, 73.90, 0.0, -90.0, 0.0};
+float currentPositions[6] = { 0.0, -78.51, 73.90, 0.0, -90.0, 0.0 };
 
 char inputBuffer[MAX_INPUT_SIZE];
 int inputIndex = 0;
 bool newCommandReady = false;
 
-void setup()
-{
+void setup() {
   Serial.begin(115200);
-  while (!Serial)
-  {
-    ; // wait for serial port to connect needed for native USB.
+  while (!Serial) {
+    ;  // wait for serial port to connect needed for native USB.
   }
   pinMode(ledPin, OUTPUT);
-  digitalWrite(ledPin, HIGH);
+  digitalWrite(ledPin, LOW);
 
   // this is essential for the stepper drivers to work
-  pinMode(EN_PINS[0], OUTPUT); // EN321
-  pinMode(EN_PINS[1], OUTPUT); // EN4
-  pinMode(EN_PINS[2], OUTPUT); // EN5
-  pinMode(EN_PINS[3], OUTPUT); // EN6
+  pinMode(EN_PINS[0], OUTPUT);  // EN321
+  pinMode(EN_PINS[1], OUTPUT);  // EN4
+  pinMode(EN_PINS[2], OUTPUT);  // EN5
+  pinMode(EN_PINS[3], OUTPUT);  // EN6
+
+  // Set pin modes for limit switches (INPUT_PULLUP for active-low switches)
+  pinMode(Z_MIN_PIN, INPUT_PULLUP);
+  pinMode(Z_MAX_PIN, INPUT_PULLUP);
+  steppers[2].setPinsInverted(true, false, false);  // Invert direction pin for joint3
+
+  enableMotors(true);
+  delay(1000);
 
   // Configure steppers
-  for (int i = 0; i < 6; i++)
-  {
-    steppers[i].setMaxSpeed(2000);     // steps/sec (adjust based on your requirements)
-    steppers[i].setAcceleration(1000); // steps/sec²
+  for (int i = 0; i < 6; i++) {
+    steppers[i].setMaxSpeed(1000);     // steps/sec (adjust based on your requirements)
+    steppers[i].setAcceleration(500);  // steps/sec²
   }
-  steppers[2].setPinsInverted(true, false, false); // Invert direction pin for joint3
+
+  homeJoint(Z_MAX_PIN, 1);  // Home joint 2 using limit switch
+
   // Set initial positions
-  for (int i = 0; i < 6; i++)
-  {
+  for (int i = 0; i < 6; i++) {
     steppers[i].setCurrentPosition(degreesToSteps(currentPositions[i], i));
   }
-  disableMotors();
+  // disableMotors();
 }
 
-void loop()
-{
+void loop() {
   // Handle serial communication
   serialEvent();
-  if (newCommandReady)
-  {
+  if (newCommandReady) {
     processCommand(inputBuffer);
     newCommandReady = false;
   }
   // Periodically send current positions (10hz)
   static unsigned long lastSend = 0;
-  if (millis() - lastSend >= 100)
-  { // 10Hz update
+  if (millis() - lastSend >= 200) {  // 10Hz update
     sendCurrentPositions();
     lastSend = millis();
+
+    digitalWrite(ledPin, digitalRead(Z_MAX_PIN));
   }
   // Non-blocking motor control
-  for (int i = 0; i < 6; i++)
-  {
+  for (int i = 0; i < 6; i++) {
     steppers[i].run();
   }
 }
 
 // Convert degrees to steps for a specific joint
-long degreesToSteps(float degrees, int joint)
-{
+long degreesToSteps(float degrees, int joint) {
   return round(degrees / DEG_PER_STEP[joint]);
 }
 
 // Convert steps to degrees for a specific joint
-float stepsToRadians(long steps, int joint)
-{
-  return steps * DEG_PER_STEP[joint] * M_PI / 180.0;
+float stepsToRadians(long steps, int joint) {
+  return steps * DEG_PER_STEP[joint] * PI / 180.0;
 }
 
-void enableMotors()
-{
-  digitalWrite(EN_PINS[0], LOW); // EN321
-  digitalWrite(EN_PINS[1], LOW); // EN4
-  digitalWrite(EN_PINS[2], LOW); // EN5
-  digitalWrite(EN_PINS[3], LOW); // EN6
+void enableMotors(bool enable) {
+  uint8_t val = enable == true ? LOW : HIGH;
+  digitalWrite(EN_PINS[0], val);  // EN321
+  digitalWrite(EN_PINS[1], val);  // EN4
+  digitalWrite(EN_PINS[2], val);  // EN5
+  digitalWrite(EN_PINS[3], val);  // EN6
 }
 
-void disableMotors()
-{
-  digitalWrite(EN_PINS[0], HIGH); // EN321
-  digitalWrite(EN_PINS[1], HIGH); // EN4
-  digitalWrite(EN_PINS[2], HIGH); // EN5
-  digitalWrite(EN_PINS[3], HIGH); // EN6
-}
-
-void moveToPosition(float targetPositions[6])
-{
+// non-blocking and simultaneous movement
+void moveToPosition(float targetPositions[6]) {
   //   enableMotors();
-  for (int i = 0; i < 6; i++)
-  {
+  for (int i = 0; i < 6; i++) {
     long targetSteps = degreesToSteps(targetPositions[i], i);
     steppers[i].moveTo(targetSteps);
   }
 }
 
-void serialEvent()
-{
-  while (Serial.available())
-  {
+void serialEvent() {
+  while (Serial.available()) {
     char c = Serial.read();
 
-    if (c == '\n')
-    {
+    if (c == '\n') {
       inputBuffer[inputIndex] = '\0';
       inputIndex = 0;
       newCommandReady = true;
       return;
-    }
-    else if (inputIndex < MAX_INPUT_SIZE - 1)
-    {
+    } else if (inputIndex < MAX_INPUT_SIZE - 1) {
       inputBuffer[inputIndex++] = c;
     }
   }
 }
 
-void sendCurrentPositions()
-{
+void sendCurrentPositions() {
   // Build the data string first
   String data = "f";
-  for (int i = 0; i < 6; i++)
-  {
+  for (int i = 0; i < 6; i++) {
     currentPositions[i] = stepsToRadians(steppers[i].currentPosition(), i);
     data += String(currentPositions[i], 2);
     if (i < 5)
@@ -144,8 +130,7 @@ void sendCurrentPositions()
 
   // Calculate checksum (simple sum of bytes modulo 256)
   uint8_t checksum = 0;
-  for (size_t i = 0; i < data.length(); ++i)
-  {
+  for (size_t i = 0; i < data.length(); ++i) {
     checksum += data[i];
   }
   checksum = checksum % 256;
@@ -156,34 +141,36 @@ void sendCurrentPositions()
   Serial.println(checksum);
 }
 
+// void sendCurrentPositions() {
+//   Serial.print("f");
+//   for (int i = 0; i < 6; i++) {
+//     currentPositions[i] = stepsToRadians(steppers[i].currentPosition(), i);
+//     Serial.print(currentPositions[i], 2);
+//     if (i < 5)
+//       Serial.print(",");
+//   }
+//   Serial.println();
+// }
+
 // This function parses a string of comma-separated floats
-void parseFloats(const char *str, float *out, int maxCount)
-{
+void parseFloats(const char *str, float *out, int maxCount) {
   int idx = 0;
   bool negative = false;
   float value = 0.0f;
   float scale = 1.0f;
   bool decimal = false;
 
-  while (*str && idx < maxCount)
-  {
+  while (*str && idx < maxCount) {
     char c = *str++;
-    if (c == '-')
-    {
+    if (c == '-') {
       negative = true;
-    }
-    else if (c >= '0' && c <= '9')
-    {
+    } else if (c >= '0' && c <= '9') {
       value = value * 10.0f + (c - '0');
       if (decimal)
         scale *= 10.0f;
-    }
-    else if (c == '.')
-    {
+    } else if (c == '.') {
       decimal = true;
-    }
-    else if (c == ',')
-    {
+    } else if (c == ',') {
       out[idx++] = (negative ? -1 : 1) * (value / scale);
       value = 0.0f;
       scale = 1.0f;
@@ -191,22 +178,18 @@ void parseFloats(const char *str, float *out, int maxCount)
       decimal = false;
     }
   }
-  if (idx < maxCount)
-  {
+  if (idx < maxCount) {
     out[idx++] = (negative ? -1 : 1) * (value / scale);
   }
-  while (idx < maxCount)
-  {
+  while (idx < maxCount) {
     out[idx++] = 0.0f;
   }
 }
 
 // Keep your existing serialEvent() and parsing functions
 // Add command processing in processCommand():
-void processCommand(const char *cmd)
-{
-  if (cmd[0] == 'g')
-  {
+void processCommand(const char *cmd) {
+  if (cmd[0] == 'g') {
     float targets[6];
     parseFloats(cmd + 1, targets, 6);
     Serial.println("a");
@@ -214,20 +197,50 @@ void processCommand(const char *cmd)
     moveToPosition(targets);
   }
 
-  else if (strcmp(cmd, "eOn") == 0)
-  {
+  else if (strcmp(cmd, "eOn") == 0) {
     digitalWrite(END_EFFECTOR_PIN, HIGH);
-  }
-  else if (strcmp(cmd, "eOff") == 0)
-  {
+  } else if (strcmp(cmd, "eOff") == 0) {
     digitalWrite(END_EFFECTOR_PIN, LOW);
+  } else if (strcmp(cmd, "en") == 0) {
+    enableMotors(true);
+  } else if (strcmp(cmd, "dis") == 0) {
+    enableMotors(false);
   }
-  else if (strcmp(cmd, "en") == 0)
-  {
-    enableMotors();
+}
+
+int getBackoffDirection(uint8_t joint_num) {
+  if (joint_num == 1)  // joint 2
+    return 1;          // Back off in +ve direction (ccw)
+  if (joint_num == 2)
+    return -1;
+  return 1;  // Default
+}
+
+void homeJoint(uint8_t limitPin, uint8_t joint_num) {
+  int dir = getBackoffDirection(joint_num);
+  int homeSpeed = 800;
+  AccelStepper &stepper = steppers[joint_num];
+
+  // Step 1: If switch already triggered, back off first
+  if (digitalRead(limitPin) == HIGH) {
+    // Serial.println("Limit already triggered. Backing off...");
+    stepper.setSpeed(homeSpeed * dir);  // Move away from switch
+    unsigned long start = millis();
+    while (millis() - start < 1500) {
+      stepper.runSpeed();
+    }
+    delay(100);
   }
-  else if (strcmp(cmd, "dis") == 0)
-  {
-    disableMotors();
+
+  // Step 2: Now move toward switch
+  stepper.setSpeed(-homeSpeed / 8 * dir);  // Now move toward switch
+  unsigned long start = millis();
+  while (digitalRead(limitPin) == LOW && millis() - start < 20000) {
+    stepper.runSpeed();
+  }
+
+  stepper.stop();                        // Decelerate and stop
+  while (stepper.distanceToGo() != 0) {  // Wait for motor to fully stop
+    stepper.run();
   }
 }
