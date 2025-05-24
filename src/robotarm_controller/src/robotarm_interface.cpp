@@ -305,7 +305,7 @@ namespace robotarm_controller
         RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "Incorrect number of joints in feedback: %s", data.c_str());
       }
     }
-    else if (msg[0] == 'a')
+    else if (msg == "ack")
     {
       isArduinoBusy_ = false;
       RCLCPP_DEBUG(rclcpp::get_logger("RobotArmInterface"), "Arduino ACK received");

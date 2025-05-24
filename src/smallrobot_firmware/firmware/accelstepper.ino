@@ -46,7 +46,7 @@ void setup() {
     steppers[i].setAcceleration(500);  // steps/sec²
   }
 
-  homeJoint(Z_MAX_PIN, 1);  // Home joint 2 using limit switch
+  //homeJoint(Z_MAX_PIN, 1);  // Home joint 2 using limit switch
 
   // Set initial positions
   for (int i = 0; i < 6; i++) {
@@ -62,17 +62,18 @@ void loop() {
     processCommand(inputBuffer);
     newCommandReady = false;
   }
-  // Periodically send current positions (10hz)
-  static unsigned long lastSend = 0;
-  if (millis() - lastSend >= 200) {  // 10Hz update
-    sendCurrentPositions();
-    lastSend = millis();
 
-    digitalWrite(ledPin, digitalRead(Z_MAX_PIN));
-  }
-  // Non-blocking motor control
+  // Non-blocking motor control. don't move it into processcommand!
   for (int i = 0; i < 6; i++) {
     steppers[i].run();
+  }
+
+  // Periodically send current positions (10hz). must be consistent with publish_rate in robot_arm_controller.yaml.
+  static unsigned long lastSend = 0;
+  if (millis() - lastSend >= 200) {  // 5Hz update
+    sendCurrentPositions();
+    lastSend = millis();
+    // digitalWrite(ledPin, digitalRead(Z_MAX_PIN));
   }
 }
 
@@ -95,12 +96,21 @@ void enableMotors(bool enable) {
 }
 
 // non-blocking and simultaneous movement
-void moveToPosition(float targetPositions[6]) {
-  //   enableMotors();
+bool moveToPosition(float targetPositions[6]) {
+  // out of range
+  if (targetPositions[1] + targetPositions[2] > 262)
+    return false;
+
+  for (int i = 0; i < 6; i++) {
+    if (targetPositions[i] < lower_limit[i] || targetPositions[i] > upper_limit[i])
+      return false;
+  }
+
   for (int i = 0; i < 6; i++) {
     long targetSteps = degreesToSteps(targetPositions[i], i);
     steppers[i].moveTo(targetSteps);
   }
+  return true;
 }
 
 void serialEvent() {
@@ -192,7 +202,7 @@ void processCommand(const char *cmd) {
   if (cmd[0] == 'g') {
     float targets[6];
     parseFloats(cmd + 1, targets, 6);
-    Serial.println("a");
+    Serial.println("ack");
     // targets are in degrees
     moveToPosition(targets);
   }

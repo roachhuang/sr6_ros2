@@ -31,4 +31,7 @@ const int MAX_INPUT_SIZE = 100;
 #define Z_MIN_PIN 18
 #define Z_MAX_PIN 19  // J2 limit switch
 
+const int lower_limit ={-114, -81, -180, -180, -139, -180}
+const int upper_limit= {114,  77,   70,   180,  139,  180}
+
 #endif  // DEFINE_H_
