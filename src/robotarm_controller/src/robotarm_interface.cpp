@@ -1,17 +1,21 @@
 // #include <boost/asio.hpp>
 // using namespace boost::asio;
+/*
+### The rule:
+- **Header (`.hpp`)**: Include headers required for types, constants, or functions used in the class declaration (member variables, base classes, function signatures, etc.).
+- **Source (`.cpp`)**: Include headers only needed for the implementation (function bodies, local variables, etc.).
 
+**Summary:**  
+Include these headers in your `.hpp` file because your class declaration depends on types and features from them. This ensures any file including your header can see the full type definitions and use your class without compilation errors.
+*/
 #include "robotarm_controller/robotarm_interface.hpp"
 
-#include <hardware_interface/types/hardware_interface_type_values.hpp>
-
-#include <cmath>
 #include <sstream>
-#include <string>
-#include <memory>
 #include <mutex>
 #include <chrono>
 #include <thread>
+#include <algorithm>
+#include <hardware_interface/types/hardware_interface_type_values.hpp>
 
 // #include <boost/asio.hpp>
 // for async_read
@@ -314,104 +318,45 @@ namespace robotarm_controller
 
   hardware_interface::return_type RobotArmInterface::write([[maybe_unused]] const rclcpp::Time &time, [[maybe_unused]] const rclcpp::Duration &period)
   {
-    if (isArduinoBusy_)
-    {
-      RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "Arduino is still busy, cannot send new command.");
-      return hardware_interface::return_type::OK;
+    if (isArduinoBusy_) {
+        RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "Arduino is still busy, cannot send new command.");
+        return hardware_interface::return_type::OK;
     }
 
-    bool commands_equal = true;
-    for (size_t i = 0; i < position_commands_.size(); ++i)
-    {
-      if (std::abs(position_commands_[i] - prev_position_commands_[i]) > 1e-6)
-      {
-        commands_equal = false;
-        break;
-      }
+    // Clamp position commands to joint limits (in radians)
+    for (size_t i = 0; i < position_commands_.size(); ++i) {
+        double lower = lower_limit[i] * M_PI / 180.0;
+        double upper = upper_limit[i] * M_PI / 180.0;
+        position_commands_[i] = std::clamp(position_commands_[i], lower, upper);
     }
 
+    // Only send if commands changed
+    bool commands_equal = std::equal(
+        position_commands_.begin(), position_commands_.end(),
+        prev_position_commands_.begin(),
+        [](double a, double b) { return std::abs(a - b) < 1e-6; });
     if (commands_equal)
-    {
-      // RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "cmd no difference.");
-      return hardware_interface::return_type::OK;
-    }
-    else
-    {
-      // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Position commands are different from previous commands.");
+        return hardware_interface::return_type::OK;
 
-      /* Later (upgrade to optionally use velocity/effort):
-        Gripper controlled by effort (grip with controlled force)
-        Linear actuator for robot base with velocity control
-        You don't touch the arm controller.yaml or URDF, just spawn a new controller for the gripper or base.
-      for (size_t i = 0; i < info_.joints.size(); ++i)
-      {
-        double command_to_send = 0.0;
-
-        if (!std::isnan(position_commands_[i]))
-        {
-          // Prefer position control
-          command_to_send = position_commands_[i];
-          send_position_to_motor(i, command_to_send);
-        }
-        else if (!std::isnan(velocity_commands_[i]))
-        {
-          // If no position, fallback to velocity control
-          command_to_send = velocity_commands_[i];
-          send_velocity_to_motor(i, command_to_send);
-        }
-        else if (!std::isnan(effort_commands_[i]))
-        {
-          // If neither, fallback to effort (torque/force) control
-          command_to_send = effort_commands_[i];
-          send_effort_to_motor(i, command_to_send);
-        }
-        else
-        {
-          RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "No valid command for joint %zu", i);
-        }
-      }
-
-      return hardware_interface::return_type::OK;
-      */
-
-      // Compute time since the last write (alternative to `period`)
-      // double delta_time = period.seconds();
-
-      // Write to hardware
-      std::stringstream cmd;
-      cmd << "g";
-      for (size_t i = 0; i < position_commands_.size(); i++)
-      {
-        double deg = (position_commands_[i] * 180.0 / M_PI);
-        if (i > 0)
-        {
-          cmd << ',';
-        }
+    // Format and send command
+    std::stringstream cmd;
+    cmd << "g";
+    for (size_t i = 0; i < position_commands_.size(); i++) {
+        double deg = position_commands_[i] * 180.0 / M_PI;
+        if (i > 0) cmd << ',';
         cmd << std::fixed << std::setprecision(2) << deg;
-
-        // Example 2: Compute velocity from position commands (if velocity interface is not used)
-        // if (delta_time > 0)
-        // {
-        //   double velocity = (position_commands_[i] - prev_position_commands_[i]) / delta_time;
-        // }
-      }
-      cmd << '\n';
-      std::string msg = cmd.str();
-      // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Serial Write: %s", msg.c_str());
-
-      try
-      {
-        boost::asio::write(serial_, boost::asio::buffer(cmd.str()));
-        last_command_time_ = rclcpp::Clock().now();
-      }
-      catch (...)
-      {
-        RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to write to serial port:");
-        return hw::return_type::ERROR;
-      }
     }
-    prev_position_commands_ = position_commands_;
-    return hw::return_type::OK;
+    cmd << '\n';
+    try {
+        boost::asio::write(serial_, boost::asio::buffer(cmd.str()));
+        // to be used in read function.
+        last_command_time_ = rclcpp::Clock().now();
+        prev_position_commands_ = position_commands_;
+    } catch (...) {
+        RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to write to serial port:");
+        return hardware_interface::return_type::ERROR;
+    }
+    return hardware_interface::return_type::OK;
   }
   /* for future - industries grade.
   void RobotArmInterface::send_position_to_motor(size_t joint_index, double position)

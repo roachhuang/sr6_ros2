@@ -1,6 +1,10 @@
-
 #ifndef ROBOTARM_INTERFACE_H
 #define ROBOTARM_INTERFACE_H
+
+#include <cmath>
+#include <string>
+#include <memory>
+#include <boost/asio.hpp>
 
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp_lifecycle/lifecycle_node.hpp>
@@ -8,17 +12,7 @@
 #include <hardware_interface/system_interface.hpp>
 // #include <pluginlib/class_list_macros.hpp>
 
-
 #include <vector>
-#include <string>
-
-#include <boost/asio.hpp>
-// using namespace boost::asio;
-
-// #include <boost/bind/bind.hpp>
-
-// #include <libserial/SerialPort.h>
-// #include <libserial/SerialStream.h>
 
 namespace hw = hardware_interface; // alias once
 namespace robotarm_controller
@@ -62,18 +56,18 @@ namespace robotarm_controller
         rclcpp::Duration command_timeout_{rclcpp::Duration::from_seconds(2.0)};
         std::size_t num_joints_;
         // Joint states (position, velocity, effort)
-        // std::vector<double> hw_positions_;
-        // std::vector<double> hw_velocities_;
-        // std::vector<double> hw_efforts_;
+       
         // std::vector<std::string> joint_names_;
         std::vector<double> position_commands_;
         // std::vector<double> velocity_commands_;
         std::vector<double> effort_commands_;
 
         std::vector<double> position_states_;
-        // std::vector<double> velocity_states_;
+        // std::vector<double> velocity_states_;        
         // std::vector<double> effort_states_;
-        
+
+        const double lower_limit[6] ={-114.0, -81.0, -180.0, -180.0, -139.0, -180.0};
+        const double upper_limit[6]= {114.0,  77.0,   70.0,   180.0,  139.0,  180};
         std::vector<double> prev_position_commands_;
     };
 }
