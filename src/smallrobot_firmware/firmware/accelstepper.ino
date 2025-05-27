@@ -45,8 +45,16 @@ void setup() {
     steppers[i].setMaxSpeed(1000);     // steps/sec (adjust based on your requirements)
     steppers[i].setAcceleration(500);  // steps/sec²
   }
-
-  //homeJoint(Z_MAX_PIN, 1);  // Home joint 2 using limit switch
+  
+  
+  homeJoint(Z_MAX_PIN, 1);  // Home joint 2 using limit switch  
+  delay(1000);
+  // Configure steppers
+  for (int i = 0; i < 6; i++) {
+    steppers[i].setMaxSpeed(1000);     // steps/sec (adjust based on your requirements)
+    steppers[i].setAcceleration(500);  // steps/sec²
+  }
+  
 
   // Set initial positions
   for (int i = 0; i < 6; i++) {
@@ -96,21 +104,29 @@ void enableMotors(bool enable) {
 }
 
 // non-blocking and simultaneous movement
-bool moveToPosition(float targetPositions[6]) {
-  // out of range
-  if (targetPositions[1] + targetPositions[2] > 262)
-    return false;
-
+void moveToPosition(float targetPositions[6]) {
+  // Clamp each target to joint limits
+  float clampedTargets[6];
   for (int i = 0; i < 6; i++) {
-    if (targetPositions[i] < lower_limit[i] || targetPositions[i] > upper_limit[i])
-      return false;
+    if (targetPositions[i] < lower_limit[i])
+      clampedTargets[i] = lower_limit[i];
+    else if (targetPositions[i] > upper_limit[i])
+      clampedTargets[i] = upper_limit[i];
+    else
+      clampedTargets[i] = targetPositions[i];
+  }
+
+  // Check compound joint constraint (joint 2 + joint 3)
+  float sum23 = clampedTargets[1] + clampedTargets[2];
+  if (sum23 > 262.0) {
+    // Reduce joint 3 to fit the constraint
+    clampedTargets[2] -= (sum23 - 262.0);
   }
 
   for (int i = 0; i < 6; i++) {
-    long targetSteps = degreesToSteps(targetPositions[i], i);
+    long targetSteps = degreesToSteps(clampedTargets[i], i);
     steppers[i].moveTo(targetSteps);
-  }
-  return true;
+  } 
 }
 
 void serialEvent() {
@@ -215,6 +231,9 @@ void processCommand(const char *cmd) {
     enableMotors(true);
   } else if (strcmp(cmd, "dis") == 0) {
     enableMotors(false);
+  } else if(strcmp(cmd, "home") == 0){
+    homeJoint(Z_MAX_PIN, 1);
+    Serial.println("ack");
   }
 }
 
@@ -230,11 +249,14 @@ void homeJoint(uint8_t limitPin, uint8_t joint_num) {
   int dir = getBackoffDirection(joint_num);
   int homeSpeed = 800;
   AccelStepper &stepper = steppers[joint_num];
+  // stepper.setMaxSpeed(1000);
+  // stepper.setAcceleration(400);  // steps/sec²
 
   // Step 1: If switch already triggered, back off first
   if (digitalRead(limitPin) == HIGH) {
     // Serial.println("Limit already triggered. Backing off...");
-    stepper.setSpeed(homeSpeed * dir);  // Move away from switch
+    stepper.setSpeed(homeSpeed * dir);  // Move away from switch    
+    // stepper.setAcceleration(600);  // steps/sec²
     unsigned long start = millis();
     while (millis() - start < 1500) {
       stepper.runSpeed();
@@ -243,7 +265,7 @@ void homeJoint(uint8_t limitPin, uint8_t joint_num) {
   }
 
   // Step 2: Now move toward switch
-  stepper.setSpeed(-homeSpeed / 8 * dir);  // Now move toward switch
+  stepper.setSpeed(-homeSpeed / 4 * dir);  // Now move toward switch
   unsigned long start = millis();
   while (digitalRead(limitPin) == LOW && millis() - start < 20000) {
     stepper.runSpeed();
