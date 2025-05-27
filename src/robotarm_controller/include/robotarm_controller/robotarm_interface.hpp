@@ -59,11 +59,11 @@ namespace robotarm_controller
        
         // std::vector<std::string> joint_names_;
         std::vector<double> position_commands_;
-        // std::vector<double> velocity_commands_;
-        std::vector<double> effort_commands_;
+        std::vector<double> velocity_commands_;
+        //std::vector<double> effort_commands_;
 
         std::vector<double> position_states_;
-        // std::vector<double> velocity_states_;        
+        std::vector<double> velocity_states_;        
         // std::vector<double> effort_states_;
 
         const double lower_limit[6] ={-114.0, -81.0, -180.0, -180.0, -139.0, -180.0};

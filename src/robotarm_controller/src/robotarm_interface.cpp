@@ -5,7 +5,7 @@
 - **Header (`.hpp`)**: Include headers required for types, constants, or functions used in the class declaration (member variables, base classes, function signatures, etc.).
 - **Source (`.cpp`)**: Include headers only needed for the implementation (function bodies, local variables, etc.).
 
-**Summary:**  
+**Summary:**
 Include these headers in your `.hpp` file because your class declaration depends on types and features from them. This ensures any file including your header can see the full type definitions and use your class without compilation errors.
 */
 #include "robotarm_controller/robotarm_interface.hpp"
@@ -39,15 +39,15 @@ namespace robotarm_controller
     // Initialize joint states and commands
     isArduinoBusy_ = false;
     num_joints_ = info_.joints.size();
-    position_commands_.resize(info_.joints.size(), 0.0);
+    position_commands_.resize(num_joints_, 0.0);
     // effort_commands_.resize(num_joints_, 0.0);
-    // velocity_commands_.resize(num_joints_, 0.0);
+    velocity_commands_.resize(num_joints_, 0.0);
 
-    position_states_.resize(info_.joints.size(), 0.0);
+    position_states_.resize(num_joints_, 0.0);
     // effort_states_.resize(num_joints_, 0.0);
-    // velocity_states_.resize(num_joints_, 0.0);
+    velocity_states_.resize(num_joints_, 0.0);
 
-    prev_position_commands_.resize(info_.joints.size(), 0.0);
+    prev_position_commands_.resize(num_joints_, 0.0);
     RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Initialized with %zu joints, using position interface", info_.joints.size());
 
     return hw::CallbackReturn::SUCCESS;
@@ -152,25 +152,22 @@ namespace robotarm_controller
         return hw::CallbackReturn::ERROR;
       }
     }
+    // release_interfaces();
     return hw::CallbackReturn::SUCCESS;
   }
 
   std::vector<hardware_interface::StateInterface> RobotArmInterface::export_state_interfaces()
   {
     std::vector<hardware_interface::StateInterface> state_interfaces;
-    for (size_t i = 0; i < info_.joints.size(); ++i)
+    for (size_t i = 0; i < num_joints_; ++i)
     {
       state_interfaces.emplace_back(
           info_.joints[i].name,
           hardware_interface::HW_IF_POSITION,
           &position_states_[i]);
 
-      // state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "velocity", &velocity_states_[i]));
-      // state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "effort", &effort_states_[i]));
-      // state_interfaces.emplace_back(
-      //   info_.joints[i].name,
-      //   hardware_interface::HW_IF_VELOCITY,
-      //   &hw_velocities_[i]);
+      state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "velocity", &velocity_states_[i]));
+      // state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "effort", &effort_states_[i]));      
     }
     return state_interfaces;
   }
@@ -178,13 +175,13 @@ namespace robotarm_controller
   std::vector<hardware_interface::CommandInterface> RobotArmInterface::export_command_interfaces()
   {
     std::vector<hardware_interface::CommandInterface> command_interfaces;
-    for (size_t i = 0; i < info_.joints.size(); ++i)
+    for (size_t i = 0; i < num_joints_; ++i)
     {
       command_interfaces.emplace_back(
           info_.joints[i].name,
           hardware_interface::HW_IF_POSITION,
           &position_commands_[i]);
-      // command_interfaces.emplace_back(hardware_interface::CommandInterface(info_.joints[i].name, "velocity", &velocity_commands_[i]));
+      command_interfaces.emplace_back(hardware_interface::CommandInterface(info_.joints[i].name, "velocity", &velocity_commands_[i]));
       // command_interfaces.emplace_back(hardware_interface::CommandInterface(info_.joints[i].name, "effort", &effort_commands_[i]));
     }
     return command_interfaces;
@@ -318,43 +315,52 @@ namespace robotarm_controller
 
   hardware_interface::return_type RobotArmInterface::write([[maybe_unused]] const rclcpp::Time &time, [[maybe_unused]] const rclcpp::Duration &period)
   {
-    if (isArduinoBusy_) {
-        RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "Arduino is still busy, cannot send new command.");
-        return hardware_interface::return_type::OK;
+    if (isArduinoBusy_)
+    {
+      RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "Arduino is still busy, cannot send new command.");
+      return hardware_interface::return_type::OK;
     }
 
     // Clamp position commands to joint limits (in radians)
-    for (size_t i = 0; i < position_commands_.size(); ++i) {
-        double lower = lower_limit[i] * M_PI / 180.0;
-        double upper = upper_limit[i] * M_PI / 180.0;
-        position_commands_[i] = std::clamp(position_commands_[i], lower, upper);
+    for (size_t i = 0; i < position_commands_.size(); ++i)
+    {
+      double lower = lower_limit[i] * M_PI / 180.0;
+      double upper = upper_limit[i] * M_PI / 180.0;
+      position_commands_[i] = std::clamp(position_commands_[i], lower, upper);
     }
 
     // Only send if commands changed
     bool commands_equal = std::equal(
         position_commands_.begin(), position_commands_.end(),
         prev_position_commands_.begin(),
-        [](double a, double b) { return std::abs(a - b) < 1e-6; });
+        [](double a, double b)
+        { return std::abs(a - b) < 1e-6; });
     if (commands_equal)
-        return hardware_interface::return_type::OK;
+      return hardware_interface::return_type::OK;
 
     // Format and send command
     std::stringstream cmd;
     cmd << "g";
-    for (size_t i = 0; i < position_commands_.size(); i++) {
-        double deg = position_commands_[i] * 180.0 / M_PI;
-        if (i > 0) cmd << ',';
-        cmd << std::fixed << std::setprecision(2) << deg;
+    for (size_t i = 0; i < position_commands_.size(); i++)
+    {
+      double deg = position_commands_[i] * 180.0 / M_PI;
+      if (i > 0)
+        cmd << ',';
+      cmd << std::fixed << std::setprecision(2) << deg;
     }
     cmd << '\n';
-    try {
-        boost::asio::write(serial_, boost::asio::buffer(cmd.str()));
-        // to be used in read function.
-        last_command_time_ = rclcpp::Clock().now();
-        prev_position_commands_ = position_commands_;
-    } catch (...) {
-        RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to write to serial port:");
-        return hardware_interface::return_type::ERROR;
+    try
+    {
+      boost::asio::write(serial_, boost::asio::buffer(cmd.str()));
+      // to be used in read function.
+      last_command_time_ = rclcpp::Clock().now();
+      prev_position_commands_ = position_commands_;
+      // isArduinoBusy_ = true; // Set busy state until ACK received
+    }
+    catch (...)
+    {
+      RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to write to serial port:");
+      return hardware_interface::return_type::ERROR;
     }
     return hardware_interface::return_type::OK;
   }
