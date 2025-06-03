@@ -79,7 +79,7 @@ void loop() {
   // Periodically send current positions (10hz). must be consistent with publish_rate in robot_arm_controller.yaml.
   static unsigned long lastSend = 0;
   if (millis() - lastSend >= 200) {  // 5Hz update
-    sendCurrentPositions();
+    // sendCurrentPositions();
     lastSend = millis();
     // digitalWrite(ledPin, digitalRead(Z_MAX_PIN));
   }
