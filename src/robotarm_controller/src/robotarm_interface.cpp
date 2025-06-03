@@ -10,12 +10,8 @@ Include these headers in your `.hpp` file because your class declaration depends
 */
 #include "robotarm_controller/robotarm_interface.hpp"
 
-#include <sstream>
-#include <mutex>
-#include <chrono>
-#include <thread>
+// #include <sstream>
 #include <algorithm>
-#include <hardware_interface/types/hardware_interface_type_values.hpp>
 
 // #include <boost/asio.hpp>
 // for async_read
@@ -41,7 +37,7 @@ namespace robotarm_controller
     num_joints_ = info_.joints.size();
     position_commands_.resize(num_joints_, 0.0);
     // effort_commands_.resize(num_joints_, 0.0);
-    velocity_commands_.resize(num_joints_, 0.0);
+    // velocity_commands_.resize(num_joints_, 0.0);
 
     position_states_.resize(num_joints_, 0.0);
     // effort_states_.resize(num_joints_, 0.0);
@@ -88,9 +84,6 @@ namespace robotarm_controller
       return hw::CallbackReturn::ERROR;
     }
 
-    // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Exporting %zu command interfaces", position_commands_.size());
-    // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Exporting %zu state interfaces", position_states_.size());
-
     // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Connected to Arduino on %s, @ baud rate enum %d", port_.c_str(), static_cast<int>(LibSerial::BaudRate::BAUD_115200));
     return hw::CallbackReturn::SUCCESS;
   }
@@ -129,26 +122,17 @@ namespace robotarm_controller
   {
     // Disconnect from hardware
     RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Deactivating hardware...");
-    std::string cmd = "dis\n";
-    try
-    {
-      boost::asio::write(serial_, boost::asio::buffer(cmd));
-    }
-    catch (...)
-    {
-      RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to write to serial port:");
-      return hw::CallbackReturn::ERROR;
-    }
-
     if (serial_.is_open())
     {
       try
       {
+        std::string cmd = "dis\n";
+        boost::asio::write(serial_, boost::asio::buffer(cmd));
         serial_.close();
       }
-      catch (...)
+      catch (const std::exception &e)
       {
-        RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to close serial port:");
+        RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "Ser err: %s", e.what());
         return hw::CallbackReturn::ERROR;
       }
     }
@@ -161,13 +145,17 @@ namespace robotarm_controller
     std::vector<hardware_interface::StateInterface> state_interfaces;
     for (size_t i = 0; i < num_joints_; ++i)
     {
+      RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"),
+                  "Exporting state interface: joint='%s', type='position' ptr=%p", info_.joints[i].name.c_str(), (void *)&position_states_[i]);
       state_interfaces.emplace_back(
           info_.joints[i].name,
           hardware_interface::HW_IF_POSITION,
           &position_states_[i]);
 
+      RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"),
+                  "Exporting state interface: joint='%s', type='velocity' ptr=%p", info_.joints[i].name.c_str(), (void *)&velocity_states_[i]);
       state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "velocity", &velocity_states_[i]));
-      // state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "effort", &effort_states_[i]));      
+      // state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "effort", &effort_states_[i]));
     }
     return state_interfaces;
   }
@@ -181,7 +169,7 @@ namespace robotarm_controller
           info_.joints[i].name,
           hardware_interface::HW_IF_POSITION,
           &position_commands_[i]);
-      command_interfaces.emplace_back(hardware_interface::CommandInterface(info_.joints[i].name, "velocity", &velocity_commands_[i]));
+      // command_interfaces.emplace_back(hardware_interface::CommandInterface(info_.joints[i].name, "velocity", &velocity_commands_[i]));
       // command_interfaces.emplace_back(hardware_interface::CommandInterface(info_.joints[i].name, "effort", &effort_commands_[i]));
     }
     return command_interfaces;
@@ -189,7 +177,7 @@ namespace robotarm_controller
 
   hardware_interface::return_type RobotArmInterface::read([[maybe_unused]] const rclcpp::Time &time, [[maybe_unused]] const rclcpp::Duration &period)
   {
-
+    /*
     boost::asio::streambuf buf;
     try
     {
@@ -200,12 +188,13 @@ namespace robotarm_controller
       RCLCPP_WARN(
           rclcpp::get_logger("RobotArmInterface"),
           "Serial read failed: %s", e.what());
+      return hw::return_type::ERROR;
     }
     std::istream is(&buf);
     std::string data;
     std::getline(is, data);
     parseFeedback_(data);
-
+   
     // Handle Arduino busy timeout
     if (isArduinoBusy_)
     {
@@ -218,9 +207,24 @@ namespace robotarm_controller
         isArduinoBusy_ = false; // Allow retry
       }
     }
+    */
 
-    // Simulate perfect tracking (optional if you want pure feedback instead)
-    // position_states_ = position_commands_;
+    // Simulate perfect tracking (open-loop: state = command)
+    double dt = period.seconds(); // Duration in seconds
+    double tau = 0.15;            // Motor time constant (tune this for realism)
+    double alpha = dt / (tau + dt);
+
+    for (size_t i = 0; i < position_states_.size(); ++i)
+    {
+      // Smoothly move state toward the command (like a real actuator)
+      double previous_position = position_states_[i];
+
+      // Low-pass filtering for position (realistic joint following)
+      position_states_[i] += alpha * (position_commands_[i] - position_states_[i]);
+
+      // Velocity = (new - old) / dt
+      velocity_states_[i] = (position_states_[i] - previous_position) / dt;
+    }
     return hw::return_type::OK;
   }
 
@@ -230,8 +234,15 @@ namespace robotarm_controller
     if (msg.empty())
       return;
 
-    if (msg[0] == 'f')
+    if (msg == "ack")
     {
+      isArduinoBusy_ = false;
+      RCLCPP_DEBUG(rclcpp::get_logger("RobotArmInterface"), "Arduino ACK received");
+    }
+    else if (msg[0] == 'f')
+    {
+      return;
+
       // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "'f' message received: %s", msg.c_str());
       size_t star_pos = msg.find('*');
       if (star_pos == std::string::npos)
@@ -306,11 +317,6 @@ namespace robotarm_controller
         RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "Incorrect number of joints in feedback: %s", data.c_str());
       }
     }
-    else if (msg == "ack")
-    {
-      isArduinoBusy_ = false;
-      RCLCPP_DEBUG(rclcpp::get_logger("RobotArmInterface"), "Arduino ACK received");
-    }
   }
 
   hardware_interface::return_type RobotArmInterface::write([[maybe_unused]] const rclcpp::Time &time, [[maybe_unused]] const rclcpp::Duration &period)
@@ -357,10 +363,9 @@ namespace robotarm_controller
       prev_position_commands_ = position_commands_;
       // isArduinoBusy_ = true; // Set busy state until ACK received
     }
-    catch (...)
+    catch (const std::exception &e)
     {
-      RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to write to serial port:");
-      return hardware_interface::return_type::ERROR;
+      RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "write cmd failed: %s", e.what());
     }
     return hardware_interface::return_type::OK;
   }

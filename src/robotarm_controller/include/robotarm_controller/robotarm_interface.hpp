@@ -9,7 +9,12 @@
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp_lifecycle/lifecycle_node.hpp>
 #include <rclcpp_lifecycle/state.hpp>
+
+#include "hardware_interface/hardware_info.hpp"
 #include <hardware_interface/system_interface.hpp>
+#include "hardware_interface/types/hardware_interface_return_values.hpp"
+#include <hardware_interface/types/hardware_interface_type_values.hpp>
+
 // #include <pluginlib/class_list_macros.hpp>
 
 #include <vector>
@@ -59,7 +64,7 @@ namespace robotarm_controller
        
         // std::vector<std::string> joint_names_;
         std::vector<double> position_commands_;
-        std::vector<double> velocity_commands_;
+        // std::vector<double> velocity_commands_;
         //std::vector<double> effort_commands_;
 
         std::vector<double> position_states_;
