@@ -1,6 +1,6 @@
 controller_manager:
   ros__parameters:
-    update_rate: 10  # update_rate specifies how often (in Hz) the controllers should be updated.
+    update_rate: 10  # update_rate specifies how often (in Hz) the controllers should be updated (i.e., how often read and write methods are called.).
 
     arm_controller:
       type: joint_trajectory_controller/JointTrajectoryController
@@ -19,12 +19,12 @@ arm_controller:
       - joint6
 
     command_interfaces:
-      - position
-      - velocity
+      - position     
 
     state_interfaces:
       - position
       - velocity
+      
     joint_limits:
       joint1:
         min_position: -1.98
