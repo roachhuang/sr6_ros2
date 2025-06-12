@@ -1,5 +1,7 @@
 devel/
 log/
+logs/
+models/
 build/
 install/
 bin/
@@ -13,7 +15,7 @@ msg/*ActionResult.msg
 msg/*Feedback.msg
 msg/*Goal.msg
 msg/*Result.msg
-msg/_*.py
+msg
 build_isolated/
 devel_isolated/
 
