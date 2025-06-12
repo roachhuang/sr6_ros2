@@ -71,6 +71,8 @@ namespace robotarm_controller
         std::vector<double> velocity_states_;        
         // std::vector<double> effort_states_;
 
+        const double homePositions[6] = { 0.0, -78.51, 73.90, 0.0, -90.0, 0.0 };
+
         const double lower_limit[6] ={-114.0, -81.0, -180.0, -180.0, -139.0, -180.0};
         const double upper_limit[6]= {114.0,  77.0,   70.0,   180.0,  139.0,  180};
         std::vector<double> prev_position_commands_;

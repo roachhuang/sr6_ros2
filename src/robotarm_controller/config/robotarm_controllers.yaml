@@ -44,6 +44,6 @@ arm_controller:
       joint6:
         min_position: -3.14
         max_position: 3.14
-    open_loop_control: true
+    # open_loop_control: true
     allow_integration_in_goal_trajectory: true
 

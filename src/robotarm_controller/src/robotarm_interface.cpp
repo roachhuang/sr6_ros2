@@ -1,5 +1,3 @@
-// #include <boost/asio.hpp>
-// using namespace boost::asio;
 /*
 ### The rule:
 - **Header (`.hpp`)**: Include headers required for types, constants, or functions used in the class declaration (member variables, base classes, function signatures, etc.).
@@ -194,7 +192,7 @@ namespace robotarm_controller
     std::string data;
     std::getline(is, data);
     parseFeedback_(data);
-   
+
     // Handle Arduino busy timeout
     if (isArduinoBusy_)
     {
@@ -210,8 +208,8 @@ namespace robotarm_controller
     */
 
     // Simulate perfect tracking (open-loop: state = command)
-    double dt = period.seconds(); // Duration in seconds
-    double tau = 0.15;            // Motor time constant (tune this for realism)
+    double dt = period.seconds(); // Duration in seconds    
+    double tau = 0.15; // Motor time constant (tune this for realism)
     double alpha = dt / (tau + dt);
 
     for (size_t i = 0; i < position_states_.size(); ++i)
