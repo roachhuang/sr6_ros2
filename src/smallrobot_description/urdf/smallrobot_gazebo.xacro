@@ -29,4 +29,10 @@
     <gazebo reference="link6">
         <material>Gazebo/Orange</material>
     </gazebo>
+    <gazebo reference="gripper_left_link">
+        <material>Gazebo/Grey</material>
+    </gazebo>
+     <gazebo reference="gripper_right_link">
+        <material>Gazebo/Grey</material>
+    </gazebo>
 </robot>
