@@ -5,9 +5,9 @@ moveit_setup_assistant_config:
   srdf:
     relative_path: config/smallrobot.srdf
   package_settings:
-    author_name: roach
+    author_name: mark huang
     author_email: giraftw2002@gmail.com
-    generated_timestamp: 1750228477
+    generated_timestamp: 1750227857
   control_xacro:
     command:
       - position

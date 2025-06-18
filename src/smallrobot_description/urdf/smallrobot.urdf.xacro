@@ -310,31 +310,22 @@
         izz="1.0e-06" />
     </inertial>
   </link>
-  <!-- 
+   
   <joint name="end_effector_joint" type="fixed">
-    <parent link="link6" />
+    <parent link="flange" />
     <child link="end_effector_link" />
-    <origin xyz="0.126 0.0 0.0" rpy="0 0 0" />
+    <origin xyz="0.05 0.0 0.0" rpy="0 0 0" />
   </joint>
 
-  <link name="end_effector_link">
-    <visual>
-      <origin xyz="-0.05 0 0" rpy="0 0 0" />
-      <geometry>
-        <box size="0.01 0.01 0.01" />
-      </geometry>
-      <material name="red">
-        <color rgba="1.0 0.0 0.0 1" />
-      </material>
-    </visual>
-  </link> -->
+  <link name="end_effector_link">   
+  </link> 
 
-  <!-- <link name="ee_link" />
+  <!-- <link name="ee_link" /> 
   <joint name="ee_fixed" type="fixed">
-    <parent link="link6" />
-    <child link="ee_link" />
+    <parent link="flange" />
+    <child link="ee_link" />    
     <origin xyz="0 0 0.1" rpy="0 0 0" />
-  </joint> -->
+  </joint>  -->
 
   <xacro:default_transmission idx='1' joint_name='joint1' reduction_ratio='4.8' />
   <xacro:default_transmission idx='2' joint_name='joint2' reduction_ratio='4.0' />

@@ -9,12 +9,9 @@ controller_manager:
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-    # gripper_controller:
-    #   type: position_controllers/GripperActionController
-    
     gripper_controller:
-      type: forward_command_controller/ForwardCommandController
-
+      type: position_controllers/GripperActionController
+      # type: forward_command_controller/ForwardCommandController
 
 arm_controller:
   ros__parameters:
@@ -25,28 +22,19 @@ arm_controller:
       - joint4
       - joint5
       - joint6
-      # - link6_to_link6flange
 
     command_interfaces:
       - position
 
     state_interfaces:
       - position
-      # - velocity
+      - velocity
       # - effort
 
-    open_loop_control: true
-    allow_integration_in_goal_trajectory: true
+    # open_loop_control: true
+    # allow_integration_in_goal_trajectory: true
 
 gripper_controller:
   ros__parameters:
-    # joint: gripper_left_joint
-    joints:
-      - gripper_left_joint
-      # - gripper_right_joint
-      
-    interface_name: position
-
-    command_interfaces:
-      - position
-    # conversion_factor: 0.0001
+    use_sim_time: True
+    joint: gripper_left_joint

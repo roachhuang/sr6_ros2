@@ -57,10 +57,6 @@ namespace robotarm_controller
       // uint32_t baudrate = std::stoi(info_.hardware_parameters.at("baud_rate"));
       serial_.open(port);
       serial_.set_option(boost::asio::serial_port_base::baud_rate(baud_rate_));
-      serial_.set_option(boost::asio::serial_port_base::character_size(8));
-      serial_.set_option(boost::asio::serial_port_base::parity(boost::asio::serial_port_base::parity::none));
-      serial_.set_option(boost::asio::serial_port_base::stop_bits(boost::asio::serial_port_base::stop_bits::one));
-      serial_.set_option(boost::asio::serial_port_base::flow_control(boost::asio::serial_port_base::flow_control::none));
 
       // 🔥 ADD DELAY AFTER OPEN
       RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Waiting for Arduino reboot (2 seconds)...");
@@ -356,15 +352,17 @@ namespace robotarm_controller
     try
     {
       boost::asio::write(serial_, boost::asio::buffer(cmd.str()));
-      // to be used in read function.
-      last_command_time_ = rclcpp::Clock().now();
-      prev_position_commands_ = position_commands_;
+      
       // isArduinoBusy_ = true; // Set busy state until ACK received
     }
     catch (const std::exception &e)
     {
       RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "write cmd failed: %s", e.what());
     }
+    // to be used in read function.
+    // isArduinoBusy_ = true; // Set busy state until ACK received
+    last_command_time_ = rclcpp::Clock().now();
+    prev_position_commands_ = position_commands_;
     return hardware_interface::return_type::OK;
   }
   /* for future - industries grade.
