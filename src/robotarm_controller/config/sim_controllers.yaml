@@ -1,6 +1,6 @@
 controller_manager:
   ros__parameters:
-    update_rate: 10 # Hz
+    update_rate: 100 # Hz
     use_sim_time: true
 
     arm_controller:
@@ -31,10 +31,28 @@ arm_controller:
       - velocity
       # - effort
 
-    # open_loop_control: true
-    # allow_integration_in_goal_trajectory: true
+    state_publish_rate: 200.0
+    action_monitor_rate: 20.0
+
+    allow_partial_joints_goal: false
+    open_loop_control: true
+    allow_integration_in_goal_trajectories: true
+    constraints:
+      stopped_velocity_tolerance: 0.01
+      goal_time: 0.0 # Defaults to 0.0 (start immediately)
+
 
 gripper_controller:
   ros__parameters:
     use_sim_time: True
     joint: gripper_left_joint
+    state_interfaces:
+      - position
+      - velocity
+    command_interfaces:
+      - position
+    state_publish_rate: 50.0
+    action_monitor_rate: 20.0
+    constraints:
+      stopped_velocity_tolerance: 0.01
+      goal_time: 0.0

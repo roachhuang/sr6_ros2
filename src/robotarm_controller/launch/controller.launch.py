@@ -43,6 +43,8 @@ def generate_launch_description():
         output="screen",
     )
 
+    yaml_filename = "sim_controllers.yaml" if is_sim == "true" else "real_controllers.yaml"
+         
     # Controller Manager Node (ros2_control_node)
     controller_manager_node = Node(
         package="controller_manager",
@@ -52,13 +54,13 @@ def generate_launch_description():
             os.path.join(
                 get_package_share_directory("robotarm_controller"),
                 "config",
-                "robotarm_controllers.yaml",
+                yaml_filename,
             ),
         ],
         remappings=[("/robot_description", "/robot_description")],  # <- FIX: remove ~
         output="screen",
     )
-
+        
     # Delay spawning controllers
     delay_spawners = TimerAction(
         period=5.0,
