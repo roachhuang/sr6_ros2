@@ -39,8 +39,8 @@ namespace robotarm_controller
         // Hardware Interface Methods
         std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
         std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
-        hardware_interface::return_type read(const rclcpp::Time & time, const rclcpp::Duration & period) override;        
-        hardware_interface::return_type write(const rclcpp::Time & time, const rclcpp::Duration & period) override;        
+        hardware_interface::return_type read(const rclcpp::Time &time, const rclcpp::Duration &period) override;
+        hardware_interface::return_type write(const rclcpp::Time &time, const rclcpp::Duration &period) override;
 
     private:
         // void start_async_read();
@@ -61,21 +61,22 @@ namespace robotarm_controller
         rclcpp::Duration command_timeout_{rclcpp::Duration::from_seconds(2.0)};
         std::size_t num_joints_;
         // Joint states (position, velocity, effort)
-       
+
         // std::vector<std::string> joint_names_;
         std::vector<double> position_commands_;
-        // std::vector<double> velocity_commands_;
-        //std::vector<double> effort_commands_;
 
         std::vector<double> position_states_;
-        std::vector<double> velocity_states_;        
-        // std::vector<double> effort_states_;
+        std::vector<double> velocity_states_;
 
-        const double homePositions[6] = { 0.0, -78.51, 73.90, 0.0, -90.0, 0.0 };
+        const double homePositions[6] = {0.0, -78.51, 73.90, 0.0, -90.0, 0.0};
 
-        const double lower_limit[6] ={-114.0, -81.0, -180.0, -180.0, -139.0, -180.0};
-        const double upper_limit[6]= {114.0,  77.0,   70.0,   180.0,  139.0,  180};
+        const double lower_limit[8] = {-114.0, -81.0, -180.0, -180.0, -139.0, -180.0, -0.57, -0.57};
+        const double upper_limit[8] = {114.0, 77.0, 70.0, 180.0, 139.0, 180, 1.09, 1.09};
         std::vector<double> prev_position_commands_;
+
+        // Objects for logging
+        std::shared_ptr<rclcpp::Logger> logger_;
+        rclcpp::Clock::SharedPtr clock_;
     };
 }
 #endif

@@ -1,3 +1,38 @@
+1. **Prerequisites**
+    **USB Port Permissions**
+    To enable communication with the hardware, add your user to the `dialout` group:
+    sudo usermod -aG dialout $USER
+    **A login and logout are required.**
+
+2. **Install Required Packages**
+   ```bash
+   sudo apt-get update && sudo apt-get install -y \
+       libboost-all-dev \
+       ros-jazzy-hardware-interface \
+       ros-jazzy-controller-manager \
+       ros-jazzy-ros2-controllers \
+       ros-jazzy-tf-transformations \
+       ros-jazzy-gz* \
+       ros-jazzy-pal-statistics
+   sudo apt-get install -y ros-jazzy-moveit-* --no-install-recommends
+   ```
+4. **Build the Package**
+   ```bash
+   cd ~/${WORKSPACE}
+   colcon build --symlink-install
+   ```
+
+5. **Source the Workspace**
+   ```bash
+   source ~/${WORKSPACE}/install/setup.bash
+   ```
+
+6. **Create and apply udev rules**
+   ```bash
+   ros2 run open_manipulator_bringup om_create_udev_rules
+   ```
+
+
 echo $ROS_DISTRO
 
 for smallrobot_alex build:

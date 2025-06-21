@@ -1,7 +1,7 @@
 controller_manager:
   ros__parameters:
     update_rate: 10 # Hz
-    use_sim_time: false
+    use_sim_time: true
 
     arm_controller:
       type: joint_trajectory_controller/JointTrajectoryController
@@ -36,10 +36,5 @@ arm_controller:
 
 gripper_controller:
   ros__parameters:
+    use_sim_time: True
     joint: gripper_left_joint
-    state_interfaces:
-      - position
-      - velocity
-    command_interfaces:
-      - position
-    conversion_factor: 0.0001

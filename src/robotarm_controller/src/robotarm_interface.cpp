@@ -34,15 +34,21 @@ namespace robotarm_controller
     isArduinoBusy_ = false;
     num_joints_ = info_.joints.size();
     position_commands_.resize(num_joints_, 0.0);
-    // effort_commands_.resize(num_joints_, 0.0);
-    // velocity_commands_.resize(num_joints_, 0.0);
 
     position_states_.resize(num_joints_, 0.0);
-    // effort_states_.resize(num_joints_, 0.0);
     velocity_states_.resize(num_joints_, 0.0);
 
     prev_position_commands_.resize(num_joints_, 0.0);
     RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Initialized with %zu joints, using position interface", info_.joints.size());
+
+    // Resize vectors based on number of joints
+    // num_arm_joints_ = 6;     // 6-DOF arm
+    // num_gripper_joints_ = 2; // Single gripper joint
+    // Configure interfaces
+    // for (uint i = 0; i < num_joints_; ++i)
+    // {
+    //   joint_names_.push_back(info_.joints[i].name);
+    // }
 
     return hw::CallbackReturn::SUCCESS;
   };
@@ -139,18 +145,15 @@ namespace robotarm_controller
     std::vector<hardware_interface::StateInterface> state_interfaces;
     for (size_t i = 0; i < num_joints_; ++i)
     {
-      RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"),
-                  "Exporting state interface: joint='%s', type='position' ptr=%p", info_.joints[i].name.c_str(), (void *)&position_states_[i]);
       state_interfaces.emplace_back(
           info_.joints[i].name,
           hardware_interface::HW_IF_POSITION,
           &position_states_[i]);
 
-      RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"),
-                  "Exporting state interface: joint='%s', type='velocity' ptr=%p", info_.joints[i].name.c_str(), (void *)&velocity_states_[i]);
       state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "velocity", &velocity_states_[i]));
-      // state_interfaces.emplace_back(hardware_interface::StateInterface(info_.joints[i].name, "effort", &effort_states_[i]));
     }
+
+    RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Exported %zu state interfaces", state_interfaces.size());
     return state_interfaces;
   }
 
@@ -163,8 +166,6 @@ namespace robotarm_controller
           info_.joints[i].name,
           hardware_interface::HW_IF_POSITION,
           &position_commands_[i]);
-      // command_interfaces.emplace_back(hardware_interface::CommandInterface(info_.joints[i].name, "velocity", &velocity_commands_[i]));
-      // command_interfaces.emplace_back(hardware_interface::CommandInterface(info_.joints[i].name, "effort", &effort_commands_[i]));
     }
     return command_interfaces;
   }
@@ -204,10 +205,12 @@ namespace robotarm_controller
     */
 
     // Simulate perfect tracking (open-loop: state = command)
-    double dt = period.seconds(); // Duration in seconds    
-    double tau = 0.15; // Motor time constant (tune this for realism)
+    double dt = period.seconds(); // Duration in seconds
+    double tau = 0.15;            // Motor time constant (tune this for realism)
     double alpha = dt / (tau + dt);
+    // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Reading state with dt = %f, alpha = %f", dt, alpha);
 
+    RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Position state size: %zu", position_states_.size());
     for (size_t i = 0; i < position_states_.size(); ++i)
     {
       // Smoothly move state toward the command (like a real actuator)
@@ -231,7 +234,7 @@ namespace robotarm_controller
     if (msg == "ack")
     {
       isArduinoBusy_ = false;
-      RCLCPP_DEBUG(rclcpp::get_logger("RobotArmInterface"), "Arduino ACK received");
+      RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Arduino ACK received");
     }
     else if (msg[0] == 'f')
     {
@@ -321,6 +324,8 @@ namespace robotarm_controller
       return hardware_interface::return_type::OK;
     }
 
+    RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "cmd size %zu", position_commands_.size());
+
     // Clamp position commands to joint limits (in radians)
     for (size_t i = 0; i < position_commands_.size(); ++i)
     {
@@ -341,23 +346,28 @@ namespace robotarm_controller
     // Format and send command
     std::stringstream cmd;
     cmd << "g";
+    bool first = true;
     for (size_t i = 0; i < position_commands_.size(); i++)
     {
+      RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "joint name %s", info_.joints[i].name.c_str());
+      // Only send non-mimic joints (send gripper_left_joint, skip gripper_right_joint)
+      if (info_.joints[i].name == "gripper_left_joint")
+        continue;
       double deg = position_commands_[i] * 180.0 / M_PI;
-      if (i > 0)
+      if (!first)
         cmd << ',';
       cmd << std::fixed << std::setprecision(2) << deg;
+      first = false;
     }
     cmd << '\n';
     try
     {
       boost::asio::write(serial_, boost::asio::buffer(cmd.str()));
-      
-      // isArduinoBusy_ = true; // Set busy state until ACK received
     }
     catch (const std::exception &e)
     {
-      RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "write cmd failed: %s", e.what());
+      RCLCPP_FATAL(rclcpp::get_logger("RobotArmInterface"), "write cmd failed: %s", e.what());
+      return hardware_interface::return_type::ERROR;
     }
     // to be used in read function.
     // isArduinoBusy_ = true; // Set busy state until ACK received
@@ -365,6 +375,7 @@ namespace robotarm_controller
     prev_position_commands_ = position_commands_;
     return hardware_interface::return_type::OK;
   }
+
   /* for future - industries grade.
   void RobotArmInterface::send_position_to_motor(size_t joint_index, double position)
   {
