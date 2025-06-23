@@ -6,3 +6,6 @@ ros2 run xacro xacro smallrobot.urdf.xacro > smallrobot.urdf
 check_urdf smallrobot.urdf
 cd ~/ros_ws
 ros2 launch moveit_setup_assistant setup_assistant.launch.py
+
+# use this cmd to see which .h or hpp needs to be included for the lib
+dpkg -L ros-humble-moveit-ros-planning-interface | grep .h

@@ -43,7 +43,10 @@
   <exec_depend>smallrobot_description</exec_depend>
   <exec_depend>tf2_ros</exec_depend>
   <exec_depend>warehouse_ros_mongo</exec_depend>
-
+  <build_depend>moveit_ros_planning</build_depend>
+  <exec_depend>moveit_ros_planning</exec_depend> 
+   
+  <depend>moveit_visual_tools</depend>  
 
   <export>
       <build_type>ament_cmake</build_type>
