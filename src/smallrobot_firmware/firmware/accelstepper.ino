@@ -33,8 +33,11 @@ void setup() {
   pinMode(EN_PINS[3], OUTPUT);  // EN6
 
   // Set pin modes for limit switches (INPUT_PULLUP for active-low switches)
+  pinMode(Y_MIN_PIN, INPUT_PULLUP);
+  pinMode(Y_MAX_PIN, INPUT_PULLUP);
   pinMode(Z_MIN_PIN, INPUT_PULLUP);
   pinMode(Z_MAX_PIN, INPUT_PULLUP);
+
   steppers[2].setPinsInverted(true, false, false);  // Invert direction pin for joint3
 
   enableMotors(true);
@@ -47,7 +50,8 @@ void setup() {
   }
   
   
-  homeJoint(Z_MAX_PIN, 1);  // Home joint 2 using limit switch  
+  homeJoint(Z_MAX_PIN, 1);  // Home joint 2 using limit switch
+  homeJoint(Y_MAX_PIN, 2);  // Home joint 3 using limit switch
   delay(1000);
   // Configure steppers
   for (int i = 0; i < 6; i++) {
