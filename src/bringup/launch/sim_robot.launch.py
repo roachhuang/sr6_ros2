@@ -8,21 +8,20 @@ import os
 
 def generate_launch_description():
 
-    gazebo = IncludeLaunchDescription(
-        os.path.join(
-            get_package_share_directory("smallrobot_description"),
-            "launch",
-            "gazebo.launch.py",
-        ),
-        launch_arguments={"is_sim": "true"}.items(),
-    )
-
-
     controller = IncludeLaunchDescription(
         os.path.join(
             get_package_share_directory("robotarm_controller"),
             "launch",
             "controller.launch.py",
+        ),
+        launch_arguments={"is_sim": "true"}.items(),
+    )
+    
+    gazebo = IncludeLaunchDescription(
+        os.path.join(
+            get_package_share_directory("smallrobot_description"),
+            "launch",
+            "gazebo.launch.py",
         ),
         launch_arguments={"is_sim": "true"}.items(),
     )
@@ -46,8 +45,8 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
-        gazebo,
         controller,
+        gazebo,
         moveit,
         remote_interface,       
     ])

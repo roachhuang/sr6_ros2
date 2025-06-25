@@ -1,13 +1,16 @@
 import os
 from ament_index_python import get_package_prefix, get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import (
+    DeclareLaunchArgument,
+    ExecuteProcess,
+    TimerAction,
+    SetEnvironmentVariable,
+)
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
-from launch.actions import SetEnvironmentVariable
 from launch.substitutions import Command, LaunchConfiguration
-from launch.launch_description_sources import PythonLaunchDescriptionSource
-
+from pathlib import Path
 
 def generate_launch_description():
     # Declare the model argument
@@ -16,25 +19,37 @@ def generate_launch_description():
         default_value=os.path.join(
             get_package_share_directory("smallrobot_description"),
             "urdf",
-            "smallrobot.urdf.xacro",  # Corrected file name
+            "smallrobot.urdf.xacro",
         ),
         description="The robot model to load",
     )
 
-    # smallrobot_description_path = get_package_share_directory("smallrobot_description")
-    # meshes_path = os.path.join(smallrobot_description_path, "meshes")
-    # if not os.path.exists(meshes_path):
-    #     raise FileNotFoundError(
-    #         f"The directory '{meshes_path}' does not exist. Please ensure it is correctly set up."
-    #     )
-    # env_var = SetEnvironmentVariable("GAZEBO_MODEL_PATH", meshes_path)
-    env_var = SetEnvironmentVariable(
-        "GAZEBO_MODEL_PATH",
-        os.path.join(get_package_prefix("smallrobot_description"), "share"),
+    world_arg = DeclareLaunchArgument(
+        "world",
+        default_value=os.path.join(
+            get_package_share_directory("bringup"), "worlds", "empty_world.world"
+        ),
+        description="Gazebo Sim world file",
     )
 
-    # print("GAZEBO_MODEL_PATH:", meshes_path)
+    description_path = os.path.join(
+        get_package_share_directory('smallrobot_description')
+    )
 
+    bringup_path = os.path.join(
+        get_package_share_directory('bringup')
+    )
+    
+    # Set gazebo sim resource path
+    gazebo_resource_path = SetEnvironmentVariable(
+        name='GZ_SIM_RESOURCE_PATH',
+        value=[
+            os.path.join(bringup_path, 'worlds'),
+            ':' + str(Path(description_path).parent.resolve()),
+        ],
+    )
+    
+    
     # Generate the robot description from the xacro file
     robot_description = ParameterValue(
         Command(["xacro ", LaunchConfiguration("model")])
@@ -48,42 +63,43 @@ def generate_launch_description():
         # output='both'
     )
 
-    # Start Gazebo Sim (Garden)
-    start_gazebo_server = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(
-                get_package_share_directory("gazebo_ros"),
-                "launch",
-                "gzserver.launch.py",
-            )
-        )
-        # launch_arguments={"verbose": "true", "extra_gazebo_args": "--verbose"}.items(),
+    # Start Gazebo Sim directly (no ruby, no ros_gz_sim launch)
+    start_gazebo = ExecuteProcess(
+        cmd=["gz", "sim", LaunchConfiguration("world"), "-r", "-v", "4"],
+        output="screen",
     )
-    start_gazebo_client = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(
-                get_package_share_directory("gazebo_ros"),
-                "launch",
-                "gzclient.launch.py",
-            )
-        )
-        # launch_arguments={"verbose": "true", "extra_gazebo_args": "--verbose"}.items(),
-    )
-    # Joint State Publisher GUI Node
 
-    spawn_robot = Node(
-        package="gazebo_ros",
-        executable="spawn_entity.py",
-        arguments=["-entity", "smallrobot", "-topic", "robot_description"],
-        # output="screen",
+    # Delay spawn to ensure Gazebo is ready
+    spawn_robot = TimerAction(
+        period=5.0,
+        actions=[
+            Node(
+                package="ros_gz_sim",
+                executable="create",
+                arguments=[
+                    "-entity",
+                    "smallrobot",
+                    "-topic",
+                    "robot_description",
+                    "-x",
+                    "0",
+                    "-y",
+                    "0",
+                    "-z",
+                    "0.1",
+                ],
+                output="screen",
+            )
+        ],
     )
+
     return LaunchDescription(
         [
-            env_var,
+            gazebo_resource_path,
             model_arg,
+            world_arg,
             robot_state_publisher_node,
-            start_gazebo_server,
-            start_gazebo_client,
+            start_gazebo,
             spawn_robot,
         ]
     )

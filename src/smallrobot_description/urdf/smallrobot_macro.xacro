@@ -10,21 +10,7 @@
       iyy="${m*(3*r*r+h*h)/12}" iyz="0"
         izz="${m*r*r/2}" /> -->
     </inertial>
-  </xacro:macro>
-
-  <xacro:macro name="default_transmission" params="idx joint_name reduction_ratio">
-    <transmission name="transmission_${idx}">
-      <type>transmission_interface/SimpleTransmission</type>
-      <actuator name="motor_${idx}">
-        <mechanicalReduction>${reduction_ratio}</mechanicalReduction>
-      </actuator>
-      <joint name="${joint_name}">
-        <hardwareInterface>hardware_interface/position</hardwareInterface>
-        <hardwareInterface>hardware_interface/velocity</hardwareInterface> 
-        <!-- <hardwareInterface>hardware_interface/effort</hardwareInterface> --> -->
-      </joint>
-    </transmission>
-  </xacro:macro>
+  </xacro:macro>  
 
   <xacro:macro name="default_material">
     <material name="orange">
@@ -49,6 +35,7 @@
       </geometry>
     </collision>
   </xacro:macro>
+  
   <xacro:macro name="default_link" params="name mass xyz rpy size filename">
     <link name="${name}">
       <xacro:default_inertial mass="${mass}" />

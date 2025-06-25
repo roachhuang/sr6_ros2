@@ -329,14 +329,6 @@
     <origin xyz="0 0 0.1" rpy="0 0 0" />
   </joint>  -->
 
-  <xacro:default_transmission idx='1' joint_name='joint1' reduction_ratio='4.8' />
-  <xacro:default_transmission idx='2' joint_name='joint2' reduction_ratio='4.0' />
-  <xacro:default_transmission idx='3' joint_name='joint3' reduction_ratio='5.0' />
-  <xacro:default_transmission idx='4' joint_name='joint4' reduction_ratio='2.8' />
-  <xacro:default_transmission idx='5' joint_name='joint5' reduction_ratio='2.1' />
-  <xacro:default_transmission idx='6' joint_name='joint6' reduction_ratio='1.0' />
-
-  <xacro:default_transmission idx='7' joint_name='gripper_left_joint' reduction_ratio='1.0' />
-  <xacro:default_transmission idx='8' joint_name='gripper_right_joint' reduction_ratio='1.0' />
+  
 
 </robot>
