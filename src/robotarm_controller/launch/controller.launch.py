@@ -9,6 +9,7 @@ from launch.actions import TimerAction
 from launch_ros.parameter_descriptions import ParameterValue
 from launch.conditions import UnlessCondition
 
+
 def generate_launch_description():
     # Declare simulation argument
     is_sim_arg = DeclareLaunchArgument(
@@ -65,7 +66,7 @@ def generate_launch_description():
             {"robot_description": robot_description, "use_sim_time": is_sim},
             yaml_path,
         ],
-        remappings=[("/robot_description", "/robot_description")],  # <- FIX: remove ~
+        # remappings=[("/robot_description", "/robot_description")],  # <- FIX: remove ~
         output="screen",
     )
 
@@ -108,8 +109,8 @@ def generate_launch_description():
 
     return LaunchDescription(
         [
-            is_sim_arg,
-            log_yaml,
+            # is_sim_arg,
+            # log_yaml,
             robot_state_publisher_node,
             controller_manager_node,
             delay_spawners,

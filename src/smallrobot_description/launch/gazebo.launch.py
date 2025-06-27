@@ -3,14 +3,18 @@ from ament_index_python import get_package_prefix, get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import (
     DeclareLaunchArgument,
+    IncludeLaunchDescription,
     ExecuteProcess,
     TimerAction,
     SetEnvironmentVariable,
 )
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
-from launch.substitutions import Command, LaunchConfiguration
+from launch.substitutions import Command, LaunchConfiguration, PathJoinSubstitution
+from launch.conditions import IfCondition, UnlessCondition
 from pathlib import Path
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
     # Declare the model argument
@@ -40,7 +44,7 @@ def generate_launch_description():
         get_package_share_directory('bringup')
     )
     
-    # Set gazebo sim resource path
+    # Set gazebo sim resource path, inlcuding subfolder 'worlds' and the description path
     gazebo_resource_path = SetEnvironmentVariable(
         name='GZ_SIM_RESOURCE_PATH',
         value=[
@@ -68,25 +72,61 @@ def generate_launch_description():
         cmd=["gz", "sim", LaunchConfiguration("world"), "-r", "-v", "4"],
         output="screen",
     )
+    
+    # gazebo = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource([os.path.join(
+    #         get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
+    # )
 
+
+    world_path = PathJoinSubstitution([
+        FindPackageShare('bringup'),
+        'worlds',
+    ])
+    gz_sim = IncludeLaunchDescription(
+        PathJoinSubstitution([
+            FindPackageShare('ros_gz_sim'),
+            'launch',
+            'gz_sim.launch.py'
+        ]),
+        launch_arguments={
+            # 'gz_args': ['-r ', world_path]
+            'gz_args': ['-r']
+        }.items()
+    )
+
+    # bridge_params = os.path.join(
+    #     get_package_share_directory('my_robot_description'),
+    #     'params',
+    #     'my_robot_bridge.yaml'
+    # )
+    
+    start_gazebo_ros_bridge_cmd = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=[
+            '--ros-args',
+            '-p',
+            # f'config_file:={bridge_params}',
+        ],
+        output='screen',
+    )
+    
+
+    
     # Delay spawn to ensure Gazebo is ready
-    spawn_robot = TimerAction(
+    gz_spawn_entity = TimerAction(
         period=5.0,
         actions=[
             Node(
                 package="ros_gz_sim",
                 executable="create",
                 arguments=[
-                    "-entity",
-                    "smallrobot",
-                    "-topic",
-                    "robot_description",
-                    "-x",
-                    "0",
-                    "-y",
-                    "0",
-                    "-z",
-                    "0.1",
+                    "-name", "smallrobot",
+                    "-topic", "robot_description",
+                    "-x", "0.0",
+                    "-y", "0.0",
+                    "-z", "0.0",
                 ],
                 output="screen",
             )
@@ -95,11 +135,18 @@ def generate_launch_description():
 
     return LaunchDescription(
         [
+            # bridge,
             gazebo_resource_path,
             model_arg,
-            world_arg,
+            
+            gz_sim,
+           
+            # world_arg,
+            # start_gazebo,
             robot_state_publisher_node,
-            start_gazebo,
-            spawn_robot,
+            
+            gz_spawn_entity,            
+            
+            # start_gazebo_ros_bridge_cmd
         ]
     )

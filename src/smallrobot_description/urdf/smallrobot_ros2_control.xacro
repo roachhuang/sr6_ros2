@@ -2,12 +2,10 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="smallrobot">
   <!-- smallrobot_hw is the hw component name -->
   <ros2_control name="smallrobot_hw" type="system">
-
     <!-- ros2_control gazebo simulator-->
     <xacro:if value="$(arg is_sim)">
        <hardware>
-          <!-- <plugin>gz_ros2_control/GazeboSimSystem</plugin> -->
-          <plugin>mock_components/GenericSystem</plugin>
+          <plugin>gz_ros2_control/GazeboSimSystem</plugin>
         </hardware>    
     </xacro:if>
     <!-- ros2_control real robot hw interface-->

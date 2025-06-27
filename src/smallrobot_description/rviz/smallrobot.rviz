@@ -5,14 +5,12 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /MotionPlanning1
-        - /MotionPlanning1/Scene Robot1
         - /MotionPlanning1/Planning Request1
         - /MotionPlanning1/Planned Path1
-        - /MarkerArray1
-        - /MarkerArray1/Status1
+        - /RobotModel1/Description Topic1
+        - /TF1
       Splitter Ratio: 0.5
-    Tree Height: 364
+    Tree Height: 394
   - Class: rviz_common/Help
     Name: Help
   - Class: rviz_common/Views
@@ -245,15 +243,93 @@ Visualization Manager:
       Enabled: true
       Name: MarkerArray
       Namespaces:
-        Path: true
-        Sphere: true
-        Text: true
+        {}
       Topic:
         Depth: 5
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
         Value: /rviz_visual_tools
+      Value: true
+    - Alpha: 1
+      Class: rviz_default_plugins/RobotModel
+      Collision Enabled: false
+      Description File: ""
+      Description Source: Topic
+      Description Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: ""
+      Enabled: true
+      Links:
+        All Links Enabled: true
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+        Link Tree Style: ""
+      Mass Properties:
+        Inertia: false
+        Mass: false
+      Name: RobotModel
+      TF Prefix: ""
+      Update Interval: 0
+      Value: true
+      Visual Enabled: true
+    - Class: rviz_default_plugins/TF
+      Enabled: true
+      Filter (blacklist): ""
+      Filter (whitelist): ""
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+        base_link:
+          Value: true
+        end_effector_link:
+          Value: true
+        flange:
+          Value: true
+        gripper_left_link:
+          Value: true
+        gripper_right_link:
+          Value: true
+        link1:
+          Value: true
+        link2:
+          Value: true
+        link3:
+          Value: true
+        link4:
+          Value: true
+        link5:
+          Value: true
+        link6:
+          Value: true
+        world:
+          Value: true
+      Marker Scale: 0.30000001192092896
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: false
+      Tree:
+        world:
+          base_link:
+            link1:
+              link2:
+                link3:
+                  link4:
+                    link5:
+                      link6:
+                        flange:
+                          end_effector_link:
+                            {}
+                          gripper_left_link:
+                            {}
+                          gripper_right_link:
+                            {}
+      Update Interval: 0
       Value: true
   Enabled: true
   Global Options:
@@ -376,7 +452,7 @@ Visualization Manager:
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 2176
+  Height: 2011
   Help:
     collapsed: false
   Hide Left Dock: false
@@ -385,11 +461,11 @@ Window Geometry:
     collapsed: false
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000100000000000003a3000007e4fc0200000006fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000002600000026fb000000100044006900730070006c006100790073010000006e000001da0000018200fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e00670100000254000003f4000002b800fffffffb0000000800480065006c0070000000029a0000006e000000d400fffffffb0000000a005600690065007700730100000654000001780000013200fffffffb00000024005200760069007a00560069007300750061006c0054006f006f006c007300470075006901000007d80000007a0000007a00ffffff0000040b000007e400000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd00000001000000000000021200000781fc0200000006fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000004100fffffffb000000100044006900730070006c006100790073010000003d000001c7000000c900fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067010000020a000003ca0000017d00fffffffb0000000800480065006c0070000000029a0000006e0000006e00fffffffb0000000a0056006900650077007301000005da00000169000000a400fffffffb00000024005200760069007a00560069007300750061006c0054006f006f006c00730047007500690100000749000000750000004100ffffff000002680000078100000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   RvizVisualToolsGui:
     collapsed: false
   Views:
     collapsed: false
-  Width: 1978
-  X: 2118
-  Y: 54
+  Width: 1152
+  X: 2048
+  Y: 0

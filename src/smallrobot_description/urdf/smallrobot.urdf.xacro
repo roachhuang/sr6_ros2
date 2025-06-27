@@ -58,7 +58,7 @@
     name="joint1" type="revolute">
     <origin rpy="0 0 0" xyz="0 0 0.043" />
     <axis xyz="0 0 1" />
-    <limit effort="100" lower="-2.0" upper="2.0" velocity="4.8" />
+    <limit acceleration="2.0" effort="10" lower="-2.0" upper="2.0" velocity="4.8" />
     <parent link="base_link" />
     <child link="link1" />
   </joint>
@@ -84,7 +84,7 @@
     name="joint2" type="revolute">
     <origin rpy="0 0 0" xyz="0.047 -0.0485 0.098" />
     <axis xyz="0 1 0" />
-    <limit effort="100" lower="-${PI/2}" upper="${PI}" velocity="4.8" />
+    <limit acceleration="2.0" effort="10" lower="-${PI/2}" upper="${PI}" velocity="4.8" />
     <parent link="link1" />
     <child link="link2" />
   </joint>
@@ -110,7 +110,7 @@
     name="joint3" type="revolute">
     <origin rpy="0 0 0" xyz="0 0.08 0.111" />
     <axis xyz="0 1 0" />
-    <limit effort="100" lower="-${PI}" upper="${PI/2}" velocity="4.8" />
+    <limit acceleration="2.0" effort="10" lower="-${PI}" upper="${PI/2}" velocity="4.8"/>
     <parent link="link2" />
     <child link="link3" />
   </joint>
@@ -135,7 +135,7 @@
     name="joint4" type="revolute">
     <origin rpy="0 ${PI/2} 0" xyz="-0.026 -0.0316 0.0258" />
     <axis xyz="0 0 1" />
-    <limit effort="100" lower="-${PI/2}" upper="${PI/2}" velocity="4.8" />
+    <limit acceleration="2.0" effort="10" lower="-${PI/2}" upper="${PI/2}" velocity="4.8" />
     <parent link="link3" />
     <child link="link4" />
   </joint>
@@ -161,7 +161,7 @@
   <joint name="joint5" type="revolute">
     <origin rpy="0 -${PI/2} 0" xyz="0 0 0.144" />
     <axis xyz="0 1 0" />
-    <limit effort="100" lower="-${PI}" upper="${PI}" velocity="4.8" />
+    <limit acceleration="2.0" effort="10" lower="-${PI}" upper="${PI}" velocity="4.8" />
     <parent link="link4" />
     <child link="link5" />
   </joint>
@@ -185,7 +185,7 @@
   <joint name="joint6" type="revolute">
     <origin rpy="0 0 0" xyz="0.0253 0 0" />
     <axis xyz="1 0 0" />
-    <limit effort="100" lower="-${PI}" upper="${PI}" velocity="4.8" />
+    <limit acceleration="2.0" effort="10" lower="-${PI}" upper="${PI}" velocity="4.8" />
     <parent link="link5" />
     <child link="link6" />
   </joint>
@@ -244,7 +244,7 @@
     <child link="gripper_left_link" />
     <origin xyz="0.0817 0.021 0.0" rpy="0 0 0" />
     <axis xyz="0 1 0" />
-    <limit velocity="4.8" effort="1000" lower="-0.010" upper="0.019" />
+    <limit acceleration="2.0" velocity="04.8" effort="10" lower="-0.010" upper="0.019" />
     <dynamics damping="0.1" />
   </joint>
 
@@ -280,7 +280,7 @@
     <child link="gripper_right_link" />
     <origin xyz="0.0817 -0.021 0" rpy="0 0 0" />
     <axis xyz="0 -1 0" />
-    <limit velocity="4.8" effort="1000" lower="-0.010" upper="0.019" />
+    <limit acceleration="2.0" velocity="04.8" effort="10" lower="-0.010" upper="0.019" />
     <dynamics damping="0.7" />
     <mimic joint="gripper_left_joint" multiplier="1" />
   </joint>
