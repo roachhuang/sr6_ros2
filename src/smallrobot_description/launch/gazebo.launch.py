@@ -135,13 +135,13 @@ def generate_launch_description():
 
     return LaunchDescription(
         [
+            model_arg,
+            world_arg,
             # bridge,
             gazebo_resource_path,
-            model_arg,
             
             gz_sim,
            
-            # world_arg,
             # start_gazebo,
             robot_state_publisher_node,
             

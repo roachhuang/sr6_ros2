@@ -33,14 +33,27 @@
         - position
         - velocity
 
+      # If true, When set to true, the controller will not use any feedback from the system
+      # (e.g., joint positions, velocities, efforts) to compute the control commands.
+      open_loop_control: false
+
       allow_partial_joints_goal: true
+      # When set to true, it allows the controller to integrate the trajectory goals it receives.
+      # This means that if the goal trajectory only specifies positions, the controller will
+      # numerically integrate the positions to compute the velocities and accelerations required
+      # to follow the trajectory.
+      allow_integration_in_goal_trajectories: true
+
+    # Allow non-zero velocity at the end of the trajectory
+    allow_nonzero_velocity_at_trajectory_end: true
 
 
   gripper_controller:
     ros__parameters:
       joint: gripper_left_joint
-      state_interfaces:
-        - position
-        - velocity
-      command_interfaces:
-        - position
+      action_monitor_rate: 20.0
+      goal_tolerance: 0.01
+      max_effort: 100.0
+      allow_stalling: false
+      stall_velocity_threshold: 0.001
+      stall_timeout: 1.0

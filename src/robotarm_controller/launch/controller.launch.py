@@ -109,6 +109,7 @@ def generate_launch_description():
 
     return LaunchDescription(
         [
+            # is_sim,
             # is_sim_arg,
             # log_yaml,
             robot_state_publisher_node,
