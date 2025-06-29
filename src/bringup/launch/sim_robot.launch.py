@@ -7,29 +7,39 @@ import os
 
 
 def generate_launch_description():
-     # Declare launch arguments
-    declared_arguments = [        
+    # Declare launch arguments
+    declared_arguments = [
         DeclareLaunchArgument(
-            'use_sim',
-            default_value='false',
-            description='Start robot in Gazebo simulation.',
+            "is_sim",
+            default_value="true",
+            description="Start robot in Gazebo simulation.",
         ),
         DeclareLaunchArgument(
-            'use_fake_hardware',
-            default_value='false',
-            description='Use fake hardware mirroring command.',
+            "use_fake_hardware",
+            default_value="true",
+            description="Use fake hardware mirroring command.",
         ),
         DeclareLaunchArgument(
-            'fake_sensor_commands',
-            default_value='false',
-            description='Enable fake sensor commands.',
+            "fake_sensor_commands",
+            default_value="true",
+            description="Enable fake sensor commands.",
         ),
         DeclareLaunchArgument(
-            'port_name',
-            default_value='/dev/ttyUSB0',
-            description='Port name for hardware connection.',
-        ),      
+            "port_name",
+            default_value="/dev/ttyUSB0",
+            description="Port name for hardware connection.",
+        ),
     ]
+    
+    # Launch configurations
+    start_rviz = LaunchConfiguration('start_rviz')
+    prefix = LaunchConfiguration('prefix')
+    is_sim = LaunchConfiguration('is_sim')
+    use_fake_hardware = LaunchConfiguration('use_fake_hardware')
+    fake_sensor_commands = LaunchConfiguration('fake_sensor_commands')
+    port_name = LaunchConfiguration('port_name')
+    init_position = LaunchConfiguration('init_position')
+    ros2_control_type = LaunchConfiguration('ros2_control_type')
     
     controller = IncludeLaunchDescription(
         os.path.join(
@@ -39,7 +49,7 @@ def generate_launch_description():
         ),
         launch_arguments={"is_sim": "true"}.items(),
     )
-    
+
     gazebo = IncludeLaunchDescription(
         os.path.join(
             get_package_share_directory("smallrobot_description"),
@@ -64,12 +74,15 @@ def generate_launch_description():
             "launch",
             "alexa.launch.py",
         ),
-        launch_arguments={"is_sim": "True"}.items(),
+        launch_arguments={"is_sim": "true"}.items(),
     )
 
-    return LaunchDescription([
-        controller,
-        gazebo,
-        moveit,
-        remote_interface,       
-    ])
+    return LaunchDescription(
+        declared_arguments
+        + [
+            controller,
+            gazebo,
+            moveit,
+            remote_interface,
+        ]
+    )

@@ -10,7 +10,7 @@ from ament_index_python.packages import get_package_share_directory
 def generate_launch_description():
     is_sim_arg = DeclareLaunchArgument(
         "is_sim",
-        default_value="True",
+        default_value="false",
         description="Set to true to run in simulation mode",
     )
     is_sim = LaunchConfiguration("is_sim")
