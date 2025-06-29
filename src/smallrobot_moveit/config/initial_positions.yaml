@@ -1,5 +1,15 @@
 # Default initial positions for smallrobot's ros2_control fake system
 
+# home position for smallrobot in radians
+# initial_positions:
+#   gripper_left_joint: 0
+#   joint1: 0.0
+#   joint2: -1.37
+#   joint3: 1.2898
+#   joint4: 0.0
+#   joint5: -1.5708
+#   joint6: 0.0
+
 initial_positions:
   gripper_left_joint: 0
   joint1: 0

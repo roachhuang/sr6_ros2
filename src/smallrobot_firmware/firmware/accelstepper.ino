@@ -13,6 +13,7 @@ AccelStepper steppers[6] = {
 
 // Current positions in degrees
 float currentPositions[6] = { 0.0, -78.51, 73.90, 0.0, -90.0, 0.0 };
+// float currentPositions[6] = { 0.0, -1.37, 1.2898, 0.0, -1.5708, 0.0 }; in radians
 
 char inputBuffer[MAX_INPUT_SIZE];
 int inputIndex = 0;
@@ -48,17 +49,18 @@ void setup() {
     steppers[i].setMaxSpeed(1000);     // steps/sec (adjust based on your requirements)
     steppers[i].setAcceleration(500);  // steps/sec²
   }
-  
-  
-  homeJoint(Z_MAX_PIN, 1);  // Home joint 2 using limit switch
+
+  move_j2_up();
   homeJoint(Y_MAX_PIN, 2);  // Home joint 3 using limit switch
+  homeJoint(Z_MAX_PIN, 1);  // Home joint 2 using limit switch
+
   delay(1000);
   // Configure steppers
   for (int i = 0; i < 6; i++) {
     steppers[i].setMaxSpeed(1000);     // steps/sec (adjust based on your requirements)
     steppers[i].setAcceleration(500);  // steps/sec²
   }
-  
+
 
   // Set initial positions
   for (int i = 0; i < 6; i++) {
@@ -130,7 +132,7 @@ void moveToPosition(float targetPositions[6]) {
   for (int i = 0; i < 6; i++) {
     long targetSteps = degreesToSteps(clampedTargets[i], i);
     steppers[i].moveTo(targetSteps);
-  } 
+  }
 }
 
 void serialEvent() {
@@ -235,7 +237,7 @@ void processCommand(const char *cmd) {
     enableMotors(true);
   } else if (strcmp(cmd, "dis") == 0) {
     enableMotors(false);
-  } else if(strcmp(cmd, "home") == 0){
+  } else if (strcmp(cmd, "home") == 0) {
     homeJoint(Z_MAX_PIN, 1);
     Serial.println("ack");
   }
@@ -249,34 +251,60 @@ int getBackoffDirection(uint8_t joint_num) {
   return 1;  // Default
 }
 
+// to make room for j3 to calibrate.
+void move_j2_up() {
+  AccelStepper &stepper = steppers[1];  // Joint 2
+
+  // Configure motion parameters
+  stepper.setAcceleration(500);         // Steps/sec²
+  stepper.setMaxSpeed(800);             // Steps/sec
+
+  // Move a bit upward (+ direction)
+  long step_offset = 400;  // Move 400 steps upward (~tune based on gear ratio)
+  stepper.moveTo(stepper.currentPosition() + step_offset);
+
+  // Run until the move is done
+  while (stepper.distanceToGo() != 0) {
+    stepper.run();  // Automatically handles acceleration/deceleration
+  }
+}
+
+
 void homeJoint(uint8_t limitPin, uint8_t joint_num) {
+  if (joint_num >= 6) return;  // Protect against out-of-bounds access
+
   int dir = getBackoffDirection(joint_num);
   int homeSpeed = 800;
   AccelStepper &stepper = steppers[joint_num];
-  // stepper.setMaxSpeed(1000);
-  // stepper.setAcceleration(400);  // steps/sec²
+  stepper.setAcceleration(500);
+  
+  bool triggered = joint_num == 2? LOW: HIGH;
 
-  // Step 1: If switch already triggered, back off first
-  if (digitalRead(limitPin) == HIGH) {
-    // Serial.println("Limit already triggered. Backing off...");
-    stepper.setSpeed(homeSpeed * dir);  // Move away from switch    
-    // stepper.setAcceleration(600);  // steps/sec²
+  // Step 1: If switch already triggered, back off
+  if (digitalRead(limitPin) == triggered) {
+    Serial.println("Switch triggered!");
+    stepper.setSpeed(homeSpeed * dir);
     unsigned long start = millis();
-    while (millis() - start < 1500) {
+    while (millis() - start < 600) {
       stepper.runSpeed();
     }
     delay(100);
   }
 
-  // Step 2: Now move toward switch
-  stepper.setSpeed(-homeSpeed / 4 * dir);  // Now move toward switch
+  // Step 2: Move slowly toward switch
+  stepper.setSpeed(-homeSpeed / 4 * dir);
   unsigned long start = millis();
-  while (digitalRead(limitPin) == LOW && millis() - start < 20000) {
+  while (digitalRead(limitPin) == !triggered && millis() - start < 10000) {
+    Serial.println("Backed off, moving toward switch...");
     stepper.runSpeed();
   }
 
-  stepper.stop();                        // Decelerate and stop
-  while (stepper.distanceToGo() != 0) {  // Wait for motor to fully stop
+  stepper.stop();
+  while (stepper.distanceToGo() != 0) {
+    Serial.println("stopping motor...");
     stepper.run();
   }
+  Serial.println("end home.");
+  // Calibrate to known joint angle
+  stepper.setCurrentPosition(degreesToSteps(currentPositions[joint_num], joint_num));
 }
