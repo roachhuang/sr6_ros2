@@ -29,21 +29,23 @@ namespace robotarm_controller
     public:
         RobotArmInterface() : io_(), serial_(io_) {}
         // RobotArmInterface();
-        // ~RobotArmInterface();
+        ~RobotArmInterface();
         // ROS 2 Lifecycle Methods
         hw::CallbackReturn on_init(const hardware_interface::HardwareInfo &info) override;
         hw::CallbackReturn on_configure(const rclcpp_lifecycle::State &) override;
         hw::CallbackReturn on_activate(const rclcpp_lifecycle::State &) override;
         hw::CallbackReturn on_deactivate(const rclcpp_lifecycle::State &) override;
-
+        hw::CallbackReturn on_shutdown(const rclcpp_lifecycle::State &) override;
         // Hardware Interface Methods
         std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
         std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
         hardware_interface::return_type read(const rclcpp::Time &time, const rclcpp::Duration &period) override;
         hardware_interface::return_type write(const rclcpp::Time &time, const rclcpp::Duration &period) override;
-
+        
+        hw::CallbackReturn disconnect_hardware();
     private:
         // void start_async_read();
+       
         void parseFeedback_(const std::string &msg);
         // void send_position_to_motor(size_t joint_index, double position);
         // void send_velocity_to_motor(size_t joint_index, double velocity);
@@ -51,8 +53,13 @@ namespace robotarm_controller
 
         // Serial port for communication with the robot arm
         // LibSerial::SerialPort arduino;
+        void safe_write(const std::string& cmd);
+        void safe_read_line(std::string& out_line);
+        
         boost::asio::io_service io_;
         boost::asio::serial_port serial_;
+        boost::asio::streambuf boost_buffer_;
+
         std::string port_;
         int baud_rate_ = 115200;
 
@@ -60,6 +67,8 @@ namespace robotarm_controller
         rclcpp::Time last_command_time_;
         rclcpp::Duration command_timeout_{rclcpp::Duration::from_seconds(2.0)};
         std::size_t num_joints_;
+
+        std::mutex serial_mutex_; // Declare the mutex
         // Joint states (position, velocity, effort)
 
         // std::vector<std::string> joint_names_;

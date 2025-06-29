@@ -21,7 +21,12 @@ You can't just write asio::xxx unless you: using namespace boost::asio;
 // using namespace boost::asio;
 
 namespace robotarm_controller
-{
+{  
+  RobotArmInterface::~RobotArmInterface(){
+    RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "descontructor...");
+    disconnect_hardware();   
+  }
+  
   // Initialize the serial port
   hw::CallbackReturn RobotArmInterface::on_init(const hardware_interface::HardwareInfo &info)
   {
@@ -118,26 +123,18 @@ namespace robotarm_controller
     return hw::CallbackReturn::SUCCESS;
   }
 
-  hw::CallbackReturn RobotArmInterface::on_deactivate(const rclcpp_lifecycle::State &)
+  hw::CallbackReturn RobotArmInterface::on_deactivate(const rclcpp_lifecycle::State &){
+    RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "on deactivate...");
+    return disconnect_hardware();
+    // return hw::CallbackReturn::SUCCESS;
+  }
+
+  hw::CallbackReturn RobotArmInterface::on_shutdown(const rclcpp_lifecycle::State &)
   {
     // Disconnect from hardware
-    RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Deactivating hardware...");
-    if (serial_.is_open())
-    {
-      try
-      {
-        std::string cmd = "dis\n";
-        boost::asio::write(serial_, boost::asio::buffer(cmd));
-        serial_.close();
-      }
-      catch (const std::exception &e)
-      {
-        RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "Ser err: %s", e.what());
-        return hw::CallbackReturn::ERROR;
-      }
-    }
-    // release_interfaces();
-    return hw::CallbackReturn::SUCCESS;
+    RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "on shutdown...");
+    return disconnect_hardware();
+    // return hw::CallbackReturn::SUCCESS;
   }
 
   std::vector<hardware_interface::StateInterface> RobotArmInterface::export_state_interfaces()
@@ -176,7 +173,7 @@ namespace robotarm_controller
     boost::asio::streambuf buf;
     try
     {
-      boost::asio::read_until(serial_, buf, '\n');
+      boost::asio::async_read_until(serial_, buf, '\n');
     }
     catch (const std::exception &e)
     {
@@ -210,7 +207,7 @@ namespace robotarm_controller
     double alpha = dt / (tau + dt);
     // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Reading state with dt = %f, alpha = %f", dt, alpha);
 
-    RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Position state size: %zu", position_states_.size());
+    // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Position state size: %zu", position_states_.size());
     for (size_t i = 0; i < position_states_.size(); ++i)
     {
       // Smoothly move state toward the command (like a real actuator)
@@ -324,7 +321,7 @@ namespace robotarm_controller
       return hardware_interface::return_type::OK;
     }
 
-    RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "cmd size %zu", position_commands_.size());
+    // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "cmd size %zu", position_commands_.size());
 
     // Clamp position commands to joint limits (in radians)
     for (size_t i = 0; i < position_commands_.size(); ++i)
@@ -395,6 +392,37 @@ namespace robotarm_controller
     // Example: send serial command "E1:2.5\n"  (E = Effort in Nm)
   }
   */
+
+  hw::CallbackReturn RobotArmInterface::disconnect_hardware(){
+    if (serial_.is_open())
+    {
+      try
+      {
+        boost::asio::write(serial_, boost::asio::buffer("g0.0, -78.51, 73.90, 0.0, -90.0, 0.0\n"));
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::string cmd = "dis\n";
+        boost::asio::write(serial_, boost::asio::buffer(cmd));
+        serial_.close();
+      }
+      catch (const std::exception &e)
+      {
+        RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "Ser err: %s", e.what());
+        return hw::CallbackReturn::ERROR;
+      }
+    }
+    return hw::CallbackReturn::SUCCESS;
+  }
+
+  void RobotArmInterface::safe_write(const std::string& cmd) {
+    std::lock_guard<std::mutex> lock(serial_mutex_);
+    boost::asio::write(serial_, boost::asio::buffer(cmd));
+  }
+  void RobotArmInterface::safe_read_line(std::string& out_line) {
+    std::lock_guard<std::mutex> lock(serial_mutex_);
+    boost::asio::read_until(serial_, boost_buffer_, '\n');
+    std::istream is(&boost_buffer_);
+    std::getline(is, out_line);
+  }
 
 } // namespace
 // RobotarmInterface as a pluing in the pluing lib (base class of the robotarm interface that we have implemented is the hardware_interface::SystemInterface). in other words, Register the RobotArmInterface as a hardware interface.
