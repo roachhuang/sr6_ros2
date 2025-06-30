@@ -69,7 +69,7 @@ namespace robotarm_controller
       serial_.set_option(boost::asio::serial_port_base::baud_rate(baud_rate_));
 
       // 🔥 ADD DELAY AFTER OPEN
-      RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Waiting for Arduino reboot (2 seconds)...");
+      RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "a 2s dealy for Arduino to get ready...");
       std::this_thread::sleep_for(std::chrono::seconds(2));
 
       RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Dummy wakeup sent.");
@@ -349,7 +349,7 @@ namespace robotarm_controller
     bool first = true;
     for (size_t i = 0; i < position_commands_.size(); i++)
     {
-      RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "joint name %s", info_.joints[i].name.c_str());
+      // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "joint name %s", info_.joints[i].name.c_str());
       // Only send non-mimic joints (send gripper_left_joint, skip gripper_right_joint)
       if (info_.joints[i].name == "gripper_left_joint")
         continue;

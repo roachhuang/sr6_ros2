@@ -51,22 +51,13 @@ void setup() {
     steppers[i].setAcceleration(500);  // steps/sec²
   }
 
-  move_j2_up();
-  homeJoint(Y_MAX_PIN, 2);  // Home joint 3 using limit switch
-  homeJoint(Z_MAX_PIN, 1);  // Home joint 2 using limit switch
-
-  delay(1000);
-  // Configure steppers
-  for (int i = 0; i < 6; i++) {
-    steppers[i].setMaxSpeed(MAX_SPEED);     // steps/sec (adjust based on your requirements)
-    steppers[i].setAcceleration(500);  // steps/sec²
-  }
-
   // Set initial positions
   for (int i = 0; i < 6; i++) {
     steppers[i].setCurrentPosition(degreesToSteps(homePositions[i], i));
   }
-  // disableMotors();
+  move_j2_up();
+  homeJoint(Y_MAX_PIN, 2);  // Home joint 3 using limit switch
+  homeJoint(Z_MAX_PIN, 1);  // Home joint 2 using limit switch
 }
 
 void loop() {
@@ -286,6 +277,7 @@ void homeJoint(uint8_t limitPin, uint8_t joint_num) {
 }
 
 // non-blocking and simultaneous movement
+/*
 void moveToPosition(float targetPositions[6]) {
   // Clamp each target to joint limits
   float clampedTargets[6];
@@ -310,6 +302,7 @@ void moveToPosition(float targetPositions[6]) {
     steppers[i].moveTo(targetSteps);
   }
 }
+*/
 
 void moveToPositionSync(float targetDegrees[6]) {
   long targetSteps[6], deltaSteps[6];

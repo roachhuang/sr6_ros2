@@ -3,7 +3,7 @@
 
 const uint8_t END_EFFECTOR_PIN = 16;
 const uint8_t ledPin = 13;  // the LED is connected to digital pin 13
-#define PI 3.14159 //26535897932384626433832795
+#define PI 3.14159          //26535897932384626433832795
 // Pin definitions
 const uint8_t PUL_PINS[6] = { 39, 43, 47, 46, A6, A0 };
 const uint8_t DIR_PINS[6] = { 37, 41, 45, 48, A7, A1 };
@@ -31,8 +31,7 @@ const int MAX_INPUT_SIZE = 100;
 #define Z_MIN_PIN 18
 #define Z_MAX_PIN 19  // J2 limit switch
 
-const int lower_limit[6] ={-114, -81, -180, -180, -139, -180};
-const int upper_limit[6]= {114,  77,   70,   180,  139,  180};
-
+const int lower_limit[6] = { -114, -81, -180, -180, -139, -180 };
+const int upper_limit[6] = { 114, 77, 70, 180, 139, 180 };
+const float MAX_SPEED = 1000.0;
 #endif  // DEFINE_H_
-
