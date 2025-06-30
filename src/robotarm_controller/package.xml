@@ -26,7 +26,8 @@
   <depend>ros2_controllers</depend>
   <depend>trajectory_msgs</depend>
 
-  <exec_depend>ros2launch</exec_depend>
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>xacro</exec_depend>
   <!-- <depend>gripper_controllers</depend> -->

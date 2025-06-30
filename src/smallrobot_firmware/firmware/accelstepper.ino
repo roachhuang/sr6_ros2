@@ -13,6 +13,7 @@ AccelStepper steppers[6] = {
 
 // Current positions in degrees
 float currentPositions[6] = { 0.0, -78.51, 73.90, 0.0, -90.0, 0.0 };
+const float homePositions[6] = { 0.0, -78.51, 73.90, 0.0, -90.0, 0.0 };
 // float currentPositions[6] = { 0.0, -1.37, 1.2898, 0.0, -1.5708, 0.0 }; in radians
 
 char inputBuffer[MAX_INPUT_SIZE];
@@ -46,7 +47,7 @@ void setup() {
 
   // Configure steppers
   for (int i = 0; i < 6; i++) {
-    steppers[i].setMaxSpeed(1000);     // steps/sec (adjust based on your requirements)
+    steppers[i].setMaxSpeed(MAX_SPEED);     // steps/sec (adjust based on your requirements)
     steppers[i].setAcceleration(500);  // steps/sec²
   }
 
@@ -57,14 +58,13 @@ void setup() {
   delay(1000);
   // Configure steppers
   for (int i = 0; i < 6; i++) {
-    steppers[i].setMaxSpeed(1000);     // steps/sec (adjust based on your requirements)
+    steppers[i].setMaxSpeed(MAX_SPEED);     // steps/sec (adjust based on your requirements)
     steppers[i].setAcceleration(500);  // steps/sec²
   }
 
-
   // Set initial positions
   for (int i = 0; i < 6; i++) {
-    steppers[i].setCurrentPosition(degreesToSteps(currentPositions[i], i));
+    steppers[i].setCurrentPosition(degreesToSteps(homePositions[i], i));
   }
   // disableMotors();
 }
@@ -107,32 +107,6 @@ void enableMotors(bool enable) {
   digitalWrite(EN_PINS[1], val);  // EN4
   digitalWrite(EN_PINS[2], val);  // EN5
   digitalWrite(EN_PINS[3], val);  // EN6
-}
-
-// non-blocking and simultaneous movement
-void moveToPosition(float targetPositions[6]) {
-  // Clamp each target to joint limits
-  float clampedTargets[6];
-  for (int i = 0; i < 6; i++) {
-    if (targetPositions[i] < lower_limit[i])
-      clampedTargets[i] = lower_limit[i];
-    else if (targetPositions[i] > upper_limit[i])
-      clampedTargets[i] = upper_limit[i];
-    else
-      clampedTargets[i] = targetPositions[i];
-  }
-
-  // Check compound joint constraint (joint 2 + joint 3)
-  float sum23 = clampedTargets[1] + clampedTargets[2];
-  if (sum23 > 262.0) {
-    // Reduce joint 3 to fit the constraint
-    clampedTargets[2] -= (sum23 - 262.0);
-  }
-
-  for (int i = 0; i < 6; i++) {
-    long targetSteps = degreesToSteps(clampedTargets[i], i);
-    steppers[i].moveTo(targetSteps);
-  }
 }
 
 void serialEvent() {
@@ -226,7 +200,9 @@ void processCommand(const char *cmd) {
     parseFloats(cmd + 1, targets, 6);
     Serial.println("ack");
     // targets are in degrees
-    moveToPosition(targets);
+    // moveToPosition(targets);
+    moveToPositionSync(targets);  // NEW
+
   }
 
   else if (strcmp(cmd, "eOn") == 0) {
@@ -306,5 +282,52 @@ void homeJoint(uint8_t limitPin, uint8_t joint_num) {
   }
   Serial.println("end home.");
   // Calibrate to known joint angle
-  stepper.setCurrentPosition(degreesToSteps(currentPositions[joint_num], joint_num));
+  // stepper.setCurrentPosition(degreesToSteps(HomePositions[joint_num], joint_num));
+}
+
+// non-blocking and simultaneous movement
+void moveToPosition(float targetPositions[6]) {
+  // Clamp each target to joint limits
+  float clampedTargets[6];
+  for (int i = 0; i < 6; i++) {
+    if (targetPositions[i] < lower_limit[i])
+      clampedTargets[i] = lower_limit[i];
+    else if (targetPositions[i] > upper_limit[i])
+      clampedTargets[i] = upper_limit[i];
+    else
+      clampedTargets[i] = targetPositions[i];
+  }
+
+  // Check compound joint constraint (joint 2 + joint 3)
+  float sum23 = clampedTargets[1] + clampedTargets[2];
+  if (sum23 > 262.0) {
+    // Reduce joint 3 to fit the constraint
+    clampedTargets[2] -= (sum23 - 262.0);
+  }
+
+  for (int i = 0; i < 6; i++) {
+    long targetSteps = degreesToSteps(clampedTargets[i], i);
+    steppers[i].moveTo(targetSteps);
+  }
+}
+
+void moveToPositionSync(float targetDegrees[6]) {
+  long targetSteps[6], deltaSteps[6];
+  long maxDelta = 0;
+
+  // Compute deltas
+  for (int i = 0; i < 6; i++) {
+    targetSteps[i] = degreesToSteps(targetDegrees[i], i);
+    deltaSteps[i] = abs(targetSteps[i] - steppers[i].currentPosition());
+    if (deltaSteps[i] > maxDelta) maxDelta = deltaSteps[i];
+  }
+
+  // Scale each joint's speed based on longest distance
+  for (int i = 0; i < 6; i++) {
+    float speedRatio = maxDelta == 0 ? 0 : (float)deltaSteps[i] / maxDelta;
+    float scaledSpeed = MAX_SPEED * speedRatio;  // Use your existing MAX_SPEED here
+    steppers[i].setMaxSpeed(scaledSpeed);
+    steppers[i].setAcceleration(500.0*speedRatio);  // Adjust to your needs or scale it too
+    steppers[i].moveTo(targetSteps[i]);
+  }
 }

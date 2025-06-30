@@ -9,10 +9,16 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   
-  <depend>ros2launch</depend>
+  <!-- <depend>ros2launch</depend> -->
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
+
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>robotarm_controller</exec_depend>
+  <exec_depend>smallrobot_moveit</exec_depend>
+  <exec_depend>remote_interface</exec_depend>  
 
   <export>
     <build_type>ament_cmake</build_type>

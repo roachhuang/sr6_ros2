@@ -36,7 +36,6 @@ namespace robotarm_controller
     }
 
     // Initialize joint states and commands
-    isArduinoBusy_ = false;
     num_joints_ = info_.joints.size();
     position_commands_.resize(num_joints_, 0.0);
 
@@ -96,7 +95,7 @@ namespace robotarm_controller
   hw::CallbackReturn RobotArmInterface::on_activate(const rclcpp_lifecycle::State &)
   {
     RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Activating hardware...");
-    isArduinoBusy_ = false;
+    // isArduinoBusy_ = false;
     last_command_time_ = rclcpp::Clock().now();
     if (!serial_.is_open())
     {
@@ -185,6 +184,8 @@ namespace robotarm_controller
     std::istream is(&buf);
     std::string data;
     std::getline(is, data);
+    
+    // safe_read_line - safety way? 
     parseFeedback_(data);
 
     // Handle Arduino busy timeout
@@ -315,11 +316,13 @@ namespace robotarm_controller
 
   hardware_interface::return_type RobotArmInterface::write([[maybe_unused]] const rclcpp::Time &time, [[maybe_unused]] const rclcpp::Duration &period)
   {
-    if (isArduinoBusy_)
-    {
-      RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "Arduino is still busy, cannot send new command.");
-      return hardware_interface::return_type::OK;
-    }
+    // fire-and-forget command sending is recommended for real-time control. no ack checking..
+
+    // if (isArduinoBusy_)
+    // {
+    //   RCLCPP_WARN(rclcpp::get_logger("RobotArmInterface"), "Arduino is still busy, cannot send new command.");
+    //   return hardware_interface::return_type::OK;
+    // }
 
     // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "cmd size %zu", position_commands_.size());
 
@@ -359,7 +362,8 @@ namespace robotarm_controller
     cmd << '\n';
     try
     {
-      boost::asio::write(serial_, boost::asio::buffer(cmd.str()));
+      // boost::asio::write(serial_, boost::asio::buffer(cmd.str()));
+      safe_write(cmd.str());
     }
     catch (const std::exception &e)
     {
@@ -367,7 +371,8 @@ namespace robotarm_controller
       return hardware_interface::return_type::ERROR;
     }
     // to be used in read function.
-    // isArduinoBusy_ = true; // Set busy state until ACK received
+    // isArduinoBusy_ = true; // Set busy state until ACK received    
+
     last_command_time_ = rclcpp::Clock().now();
     prev_position_commands_ = position_commands_;
     return hardware_interface::return_type::OK;
