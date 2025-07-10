@@ -12,8 +12,7 @@
   <!-- smallrobot_hw is the hw component name -->
   <ros2_control name="smallrobot_hw" type="system">
     <hardware>
-      <!-- <plugin>gz_ros2_control/GazeboSimSystem</plugin> -->
-      <plugin>mock_components/GenericSystem</plugin>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
     </hardware>
     <joint name="joint1">
       <command_interface name="position">

@@ -107,7 +107,7 @@ enable h/w interface for ros2 and aruduino and hybrid ack
 source ~/ws_moveit2/install/setup.bash
 source ~/ros2_ws/install/setup.bash
 cd ~/ros2_ws
-colcon build 
+colcon build --symlink-install
 source ~/ros2_ws/install/setup.bash
 
 sh -x src/bringup/scripts/realbot.sh
