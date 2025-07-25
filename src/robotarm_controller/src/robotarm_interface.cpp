@@ -92,7 +92,7 @@ namespace robotarm_controller
     return hw::CallbackReturn::SUCCESS;
   }
 
-  hw::CallbackReturn RobotArmInterface::on_activate(const rclcpp_lifecycle::State &)
+  hw::CallbackReturn RobotArmInterface::on_activate(const rclcpp_lifecycle::State &previous_state)
   {
     RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Activating hardware...");
     // isArduinoBusy_ = false;
@@ -110,9 +110,9 @@ namespace robotarm_controller
       std::this_thread::sleep_for(std::chrono::seconds(1));
 
       // calibrate the robot arm to a known position
-      cmd="g28\n"; // G28 is the homing command
-      boost::asio::write(serial_, boost::asio::buffer(cmd));
-      std::this_thread::sleep_for(std::chrono::seconds(1));
+      // cmd="g28\n"; // G28 is the homing command
+      // boost::asio::write(serial_, boost::asio::buffer(cmd));
+      // std::this_thread::sleep_for(std::chrono::seconds(1));
 
       cmd = "g0.0,0.0,0.0,0.0,0.0,0.0\n";
       boost::asio::write(serial_, boost::asio::buffer(cmd));
@@ -168,29 +168,30 @@ namespace robotarm_controller
           info_.joints[i].name,
           hardware_interface::HW_IF_POSITION,
           &position_commands_[i]);
+      // command_interfaces.emplace_back(info_.joints[i].name, hardware_interface::HW_IF_VELOCITY, &velocity_cmds_[i]));
     }
     return command_interfaces;
   }
 
-  hardware_interface::return_type RobotArmInterface::update([[maybe_unused]] const rclcpp::Time &time, [[maybe_unused]] const rclcpp::Duration &period)
-  {
-    // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "update called");
-    // Read current state from hardware
-    if (read(time, period) != hardware_interface::return_type::OK)
-    {
-      RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to read state from hardware");
-      return hardware_interface::return_type::ERROR;
-    }
+  // hardware_interface::return_type RobotArmInterface::update([[maybe_unused]] const rclcpp::Time &time, [[maybe_unused]] const rclcpp::Duration &period)
+  // {
+  //   // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "update called");
+  //   // Read current state from hardware
+  //   if (read(time, period) != hardware_interface::return_type::OK)
+  //   {
+  //     RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to read state from hardware");
+  //     return hardware_interface::return_type::ERROR;
+  //   }
 
-    // Write commands to hardware
-    if (write(time, period) != hardware_interface::return_type::OK)
-    {
-      RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to write commands to hardware");
-      return hardware_interface::return_type::ERROR;
-    }
+  //   // Write commands to hardware
+  //   if (write(time, period) != hardware_interface::return_type::OK)
+  //   {
+  //     RCLCPP_ERROR(rclcpp::get_logger("RobotArmInterface"), "Failed to write commands to hardware");
+  //     return hardware_interface::return_type::ERROR;
+  //   }
 
-    return hardware_interface::return_type::OK;
-  }
+  //   return hardware_interface::return_type::OK;
+  // }
 
   hardware_interface::return_type RobotArmInterface::read([[maybe_unused]] const rclcpp::Time &time, [[maybe_unused]] const rclcpp::Duration &period)
   {
