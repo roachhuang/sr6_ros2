@@ -66,13 +66,11 @@
         </hardware>
     </ros2_control> -->
 
-    <gazebo>   
+    <gazebo>
         <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+            <robot_param>robot_description</robot_param>
+            <robot_param_node>robot_state_publisher</robot_param_node>
             <parameters>$(find robotarm_controller)/config/sim_controllers.yaml</parameters>
-            <ros>
-                <remapping>/controller_manager/robot_description:=/robot_description</remapping>
-            </ros>
-            <!-- <controller_manager_prefix_node_name>controller_manager</controller_manager_prefix_node_name> -->
         </plugin>
     </gazebo>
 

@@ -37,7 +37,7 @@
   </joint>
 
   <link name="base_link">
-    <xacro:default_inertial mass="1.0" />
+    <xacro:base_inertial mass="2.5" />
     <visual>
       <origin rpy="0 0 ${PI}" xyz="0.047 0.0121 0.25" />
       <geometry>
@@ -64,7 +64,7 @@
   </joint>
 
   <link name="link1">
-    <xacro:default_inertial mass="0.5" />
+    <xacro:link1_inertial mass="1.2" />
     <visual>
       <origin rpy="0 0 ${PI}" xyz="0.047 0.012 0.208" />
       <geometry>
@@ -90,7 +90,7 @@
   </joint>
 
   <link name="link2">
-    <xacro:default_inertial mass="0.3" />
+    <xacro:link2_inertial mass="0.8" />
     <visual>
       <origin rpy="${PI/2} 0 ${PI}" xyz="0 0 0" />
       <geometry>
@@ -116,7 +116,7 @@
   </joint>
 
   <link name="link3">
-    <xacro:default_inertial mass="0.1" />
+    <xacro:link3_inertial mass="0.3" />
     <visual>
       <origin rpy="0 0 ${PI}" xyz="0.08 -0.0286 0.01" />
       <geometry>
@@ -141,7 +141,7 @@
   </joint>
 
   <link name="link4">
-    <xacro:default_inertial mass="0.1" />
+    <xacro:link4_inertial mass="0.25" />
     <visual>
       <origin rpy="0 ${PI/2} ${PI/2}" xyz="0.016 0.003 0.106" />
       <geometry>
@@ -167,7 +167,7 @@
   </joint>
 
   <link name="link5">
-    <xacro:default_inertial mass="0.02" />
+    <xacro:link5_inertial mass="0.15" />
     <visual>
       <origin rpy="${PI} 0 -${PI/2}" xyz="0.018 0 0" />
       <geometry>
@@ -191,7 +191,7 @@
   </joint>
 
   <link name="link6">
-    <xacro:default_inertial mass="0.01" />
+    <xacro:link6_inertial mass="0.1" />
     <visual>
       <origin rpy="0 0 ${PI}" xyz="-0.0555 0.003 -0.016" />
       <geometry>
@@ -282,7 +282,6 @@
     <axis xyz="0 -1 0" />
     <limit acceleration="2.0" velocity="04.8" effort="10" lower="-0.010" upper="0.019" />
     <dynamics damping="0.7" />
-    <mimic joint="gripper_left_joint" multiplier="1" />
   </joint>
 
   <link
@@ -329,6 +328,7 @@
     <origin xyz="0 0 0.1" rpy="0 0 0" />
   </joint>  -->
 
-  
+  <!-- Activate Gazebo plugin -->
+  <xacro:smallrobot_gazebo />
 
 </robot>

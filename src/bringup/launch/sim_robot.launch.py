@@ -83,6 +83,6 @@ def generate_launch_description():
             controller,
             gazebo,
             moveit,
-            remote_interface,
+            # remote_interface,
         ]
     )

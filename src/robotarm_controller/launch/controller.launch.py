@@ -84,37 +84,51 @@ def generate_launch_description():
         output="both",
     )
 
-    # Delay spawning controllers. avoid urdf not fully load yet, h/w interface not init, race conditions
-    delay_spawners = TimerAction(
-        period=5.0,
+    # Spawn joint state broadcaster first
+    spawn_joint_state_broadcaster = TimerAction(
+        period=8.0,
         actions=[
             Node(
                 package="controller_manager",
                 executable="spawner",
                 arguments=[
                     "joint_state_broadcaster",
-                    "--controller-manager",
-                    "/controller_manager",
+                    "--controller-manager-timeout",
+                    "60",
                 ],
                 output="screen",
             ),
+        ],
+    )
+    
+    # Spawn arm controller after joint state broadcaster
+    spawn_arm_controller = TimerAction(
+        period=12.0,
+        actions=[
             Node(
                 package="controller_manager",
                 executable="spawner",
                 arguments=[
                     "arm_controller",
-                    "--controller-manager",
-                    "/controller_manager",
+                    "--controller-manager-timeout",
+                    "60",
                 ],
                 output="screen",
             ),
+        ],
+    )
+    
+    # Spawn gripper controller last
+    spawn_gripper_controller = TimerAction(
+        period=16.0,
+        actions=[
             Node(
                 package="controller_manager",
                 executable="spawner",
                 arguments=[
                     "gripper_controller",
-                    "--controller-manager",
-                    "/controller_manager",
+                    "--controller-manager-timeout",
+                    "60",
                 ],
                 output="screen",
             ),
@@ -126,6 +140,8 @@ def generate_launch_description():
             is_sim_arg,
             robot_state_publisher_node,
             controller_manager_node,
-            delay_spawners,
+            spawn_joint_state_broadcaster,
+            spawn_arm_controller,
+            spawn_gripper_controller,
         ]
     )
