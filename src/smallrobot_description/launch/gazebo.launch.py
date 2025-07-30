@@ -63,8 +63,16 @@ def generate_launch_description():
     robot_state_publisher_node = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
-        parameters=[{"robot_description": robot_description}],
-        # output='both'
+        parameters=[{"robot_description": robot_description, "use_sim_time": True}],
+        output="screen",
+    )
+    
+    # Clock bridge
+    clock_bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=['/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'],
+        output='screen'
     )
 
     # Start Gazebo Sim directly (no ruby, no ros_gz_sim launch)
@@ -137,16 +145,10 @@ def generate_launch_description():
         [
             model_arg,
             world_arg,
-            # bridge,
             gazebo_resource_path,
-            
             gz_sim,
-           
-            # start_gazebo,
             robot_state_publisher_node,
-            
-            gz_spawn_entity,            
-            
-            # start_gazebo_ros_bridge_cmd
+            clock_bridge,
+            gz_spawn_entity,
         ]
     )

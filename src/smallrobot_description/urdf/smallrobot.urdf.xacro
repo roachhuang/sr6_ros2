@@ -41,7 +41,7 @@
     <visual>
       <origin rpy="0 0 ${PI}" xyz="0.047 0.0121 0.25" />
       <geometry>
-        <mesh filename="package://smallrobot_description/meshes/link1.STL" />
+        <mesh filename="${meshes_file_direction}/link1.STL" />
         <!-- <box size="0.5 0.5 0.5"/> -->
       </geometry>
       <xacro:default_material />
@@ -49,7 +49,7 @@
     <collision>
       <origin rpy="0 0 ${PI}" xyz="0.047 0.0121 0.25" />
       <geometry>
-        <mesh filename="package://smallrobot_description/meshes/link1.STL" />
+        <mesh filename="${meshes_file_direction}/link1.STL" />
       </geometry>
     </collision>
   </link>
@@ -68,14 +68,14 @@
     <visual>
       <origin rpy="0 0 ${PI}" xyz="0.047 0.012 0.208" />
       <geometry>
-        <mesh filename="package://smallrobot_description/meshes/link2.STL" />
+        <mesh filename="${meshes_file_direction}/link2.STL" />
       </geometry>
       <xacro:default_material />
     </visual>
     <collision>
       <origin rpy="0 0 ${PI}" xyz="0.047 0.012 0.208" />
       <geometry>
-        <mesh filename="package://smallrobot_description/meshes/link2.STL" />
+        <mesh filename="${meshes_file_direction}/link2.STL" />
       </geometry>
     </collision>
   </link>
@@ -94,14 +94,14 @@
     <visual>
       <origin rpy="${PI/2} 0 ${PI}" xyz="0 0 0" />
       <geometry>
-        <mesh filename="package://smallrobot_description/meshes/link3.STL" />
+        <mesh filename="${meshes_file_direction}/link3.STL" />
       </geometry>
       <xacro:default_material />
     </visual>
     <collision>
       <origin rpy="${PI/2} 0 ${PI}" xyz="0 0 0" />
       <geometry>
-        <mesh filename="package://smallrobot_description/meshes/link3.STL" />
+        <mesh filename="${meshes_file_direction}/link3.STL" />
       </geometry>
     </collision>
   </link>
@@ -120,14 +120,14 @@
     <visual>
       <origin rpy="0 0 ${PI}" xyz="0.08 -0.0286 0.01" />
       <geometry>
-        <mesh filename="package://smallrobot_description/meshes/link4.STL" />
+        <mesh filename="${meshes_file_direction}/link4.STL" />
       </geometry>
       <xacro:default_material />
     </visual>
     <collision>
       <origin rpy="0 0 ${PI}" xyz="0.08 -0.0286 0.01" />
       <geometry>
-        <mesh filename="package://smallrobot_description/meshes/link4.STL" />
+        <mesh filename="${meshes_file_direction}/link4.STL" />
       </geometry>
     </collision>
   </link>
@@ -145,15 +145,14 @@
     <visual>
       <origin rpy="0 ${PI/2} ${PI/2}" xyz="0.016 0.003 0.106" />
       <geometry>
-        <mesh filename="package://smallrobot_description/meshes/link5.STL">
-        </mesh>
+        <mesh filename="${meshes_file_direction}/link5.STL" />
       </geometry>
       <xacro:default_material />
     </visual>
     <collision>
       <origin rpy="0 ${PI/2} ${PI/2}" xyz="0.016 0.003 0.106" />
       <geometry>
-        <mesh filename="package://smallrobot_description/meshes/link5.STL" />
+        <mesh filename="${meshes_file_direction}/link5.STL" />
       </geometry>
     </collision>
   </link>
@@ -171,14 +170,14 @@
     <visual>
       <origin rpy="${PI} 0 -${PI/2}" xyz="0.018 0 0" />
       <geometry>
-        <mesh filename="package://smallrobot_description/meshes/link6.STL" />
+        <mesh filename="${meshes_file_direction}/link6.STL" />
       </geometry>
       <xacro:default_material />
     </visual>
     <collision>
       <origin rpy="${PI} 0 -${PI/2}" xyz="0.018 0 0" />
       <geometry>
-        <mesh filename="package://smallrobot_description/meshes/link6.STL" />
+        <mesh filename="${meshes_file_direction}/link6.STL" />
       </geometry>
     </collision>
   </link>
@@ -195,14 +194,14 @@
     <visual>
       <origin rpy="0 0 ${PI}" xyz="-0.0555 0.003 -0.016" />
       <geometry>
-        <mesh filename="package://smallrobot_description/meshes/link7.STL" />
+        <mesh filename="${meshes_file_direction}/link7.STL" />
       </geometry>
       <xacro:default_material />
     </visual>
     <collision>
       <origin rpy="0 0 ${PI}" xyz="-0.0555 0.003 -0.016" />
       <geometry>
-        <mesh filename="package://smallrobot_description/meshes/link7.STL" />
+        <mesh filename="${meshes_file_direction}/link7.STL" />
       </geometry>
     </collision>
   </link>
@@ -282,6 +281,9 @@
     <axis xyz="0 -1 0" />
     <limit acceleration="2.0" velocity="04.8" effort="10" lower="-0.010" upper="0.019" />
     <dynamics damping="0.7" />
+    <xacro:unless value="$(arg is_sim)">
+      <mimic joint="gripper_left_joint" multiplier="1" />
+    </xacro:unless>
   </joint>
 
   <link

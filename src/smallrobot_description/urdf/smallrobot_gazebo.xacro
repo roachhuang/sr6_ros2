@@ -21,24 +21,45 @@
 
     <gazebo reference="base_link">
         <material>Gazebo/White</material>
+        <mu1>0.2</mu1>
+        <mu2>0.2</mu2>
+        <self_collide>0</self_collide>
     </gazebo>
     <gazebo reference="link1">
         <material>Gazebo/Orange</material>
+        <mu1>0.2</mu1>
+        <mu2>0.2</mu2>
+        <self_collide>0</self_collide>
     </gazebo>
      <gazebo reference="link2">
         <material>Gazebo/Orange</material>
+        <mu1>0.2</mu1>
+        <mu2>0.2</mu2>
+        <self_collide>0</self_collide>
     </gazebo>
      <gazebo reference="link3">
         <material>Gazebo/Orange</material>
+        <mu1>0.2</mu1>
+        <mu2>0.2</mu2>
+        <self_collide>0</self_collide>
     </gazebo>
      <gazebo reference="link4">
         <material>Gazebo/Orange</material>
+        <mu1>0.2</mu1>
+        <mu2>0.2</mu2>
+        <self_collide>0</self_collide>
     </gazebo>
     <gazebo reference="link5">
-        <material>Gazebo/Orange</material>
+        <material>Gazebo/White</material>
+        <mu1>0.2</mu1>
+        <mu2>0.2</mu2>
+        <self_collide>0</self_collide>
     </gazebo>
     <gazebo reference="link6">
         <material>Gazebo/Orange</material>
+        <mu1>0.2</mu1>
+        <mu2>0.2</mu2>
+        <self_collide>0</self_collide>
     </gazebo>
     <gazebo reference="gripper_left_link">
         <material>Gazebo/Grey</material>
@@ -68,8 +89,6 @@
 
     <gazebo>
         <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
-            <robot_param>robot_description</robot_param>
-            <robot_param_node>robot_state_publisher</robot_param_node>
             <parameters>$(find robotarm_controller)/config/sim_controllers.yaml</parameters>
         </plugin>
     </gazebo>

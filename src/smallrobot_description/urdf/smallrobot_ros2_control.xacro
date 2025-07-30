@@ -72,7 +72,9 @@
       <state_interface name="position" />
       <state_interface name="velocity"/>
     </joint>
-    <!-- <joint name="gripper_right_joint">     
-    </joint> -->
+    <joint name="gripper_right_joint">
+      <state_interface name="position" />
+      <state_interface name="velocity"/>
+    </joint>
   </ros2_control>
 </robot>

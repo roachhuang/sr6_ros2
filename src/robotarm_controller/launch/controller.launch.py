@@ -67,12 +67,13 @@ def generate_launch_description():
     robot_state_publisher_node = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
-        parameters=[{"robot_description": robot_description, 'use_sim_time': is_sim}],
-        # condition=UnlessCondition(is_sim),  # Only start when not simulating
+        parameters=[
+            {"robot_description": robot_description, 'use_sim_time': is_sim, "publish_frequency": 30.0}
+        ],
         output="screen",
     )
 
-    # Controller Manager Node (ros2_control_node). must have!!!
+    # Controller Manager Node - handled by Gazebo plugin in simulation
     controller_manager_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
@@ -80,7 +81,7 @@ def generate_launch_description():
             {"robot_description": robot_description, "use_sim_time": is_sim},
             yaml_path,
         ],
-        # remappings=[("/robot_description", "/robot_description")],  # <- FIX: remove ~
+        condition=UnlessCondition(is_sim),
         output="both",
     )
 
@@ -96,6 +97,7 @@ def generate_launch_description():
                     "--controller-manager-timeout",
                     "60",
                 ],
+                parameters=[{"use_sim_time": is_sim}],
                 output="screen",
             ),
         ],
@@ -113,6 +115,7 @@ def generate_launch_description():
                     "--controller-manager-timeout",
                     "60",
                 ],
+                parameters=[{"use_sim_time": is_sim}],
                 output="screen",
             ),
         ],
@@ -130,6 +133,7 @@ def generate_launch_description():
                     "--controller-manager-timeout",
                     "60",
                 ],
+                parameters=[{"use_sim_time": is_sim}],
                 output="screen",
             ),
         ],
