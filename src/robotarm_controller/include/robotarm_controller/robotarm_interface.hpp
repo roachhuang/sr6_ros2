@@ -24,25 +24,29 @@ namespace robotarm_controller
 {
     // using hw::CallbackReturn = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::hw::CallbackReturn;
 
-    class RobotArmInterface : public hardware_interface::SystemInterface
+    class RobotArmInterface : public hw::SystemInterface
     {
     public:
         RobotArmInterface() : io_(), serial_(io_) {}
         // RobotArmInterface();
         ~RobotArmInterface();
-        // ROS 2 Lifecycle Methods
-        hw::CallbackReturn on_init(const hardware_interface::HardwareInfo &info) override;
-        hw::CallbackReturn on_configure(const rclcpp_lifecycle::State &) override;
-        hw::CallbackReturn on_activate(const rclcpp_lifecycle::State &) override;
-        hw::CallbackReturn on_deactivate(const rclcpp_lifecycle::State &) override;
-        hw::CallbackReturn on_shutdown(const rclcpp_lifecycle::State &) override;
-        // Hardware Interface Methods
-        std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
-        std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
-        hardware_interface::return_type read(const rclcpp::Time &time, const rclcpp::Duration &period) override;
-        hardware_interface::return_type write(const rclcpp::Time &time, const rclcpp::Duration &period) override;
+
+        // SystemInterface overrides
+        hw::CallbackReturn on_init(const hw::HardwareInfo &info) override;
+        hw::return_type read(const rclcpp::Time &time, const rclcpp::Duration &period) override;
+        hw::return_type write(const rclcpp::Time &time, const rclcpp::Duration &period) override;
+
+        // Lifecycle node overrides
+        hw::CallbackReturn on_configure(const rclcpp_lifecycle::State & previous_state) override;
+        hw::CallbackReturn on_activate(const rclcpp_lifecycle::State & previous_state) override;
+        hw::CallbackReturn on_deactivate(const rclcpp_lifecycle::State & previous_state) override;
+        hw::CallbackReturn on_shutdown(const rclcpp_lifecycle::State & previous_state) override;
+
+        std::vector<hw::StateInterface> export_state_interfaces() override;
+        std::vector<hw::CommandInterface> export_command_interfaces() override;       
         
         hw::CallbackReturn disconnect_hardware();
+
     private:
         // void start_async_read();
        

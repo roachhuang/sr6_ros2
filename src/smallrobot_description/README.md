@@ -29,3 +29,4 @@ Motor mounting angle - Joint 2's motor/encoder is mounted 90° rotated from wher
 Kinematic consistency - Without this offset, your forward kinematics would be wrong by 90°
 
 Zero position alignment - When motor reads 0°, the actual geometric angle (per DH) is -90°
+

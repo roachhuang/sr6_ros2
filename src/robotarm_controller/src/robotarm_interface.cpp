@@ -10,6 +10,7 @@ Include these headers in your `.hpp` file because your class declaration depends
 
 // #include <sstream>
 #include <algorithm>
+#include <thread>
 
 // #include <boost/asio.hpp>
 // for async_read
@@ -28,7 +29,7 @@ namespace robotarm_controller
   }
   
   // Initialize the serial port
-  hw::CallbackReturn RobotArmInterface::on_init(const hardware_interface::HardwareInfo &info)
+  hw::CallbackReturn RobotArmInterface::on_init(const hw::HardwareInfo &info)
   {
     if (hardware_interface::SystemInterface::on_init(info) != hw::CallbackReturn::SUCCESS)
     {
@@ -57,8 +58,9 @@ namespace robotarm_controller
     return hw::CallbackReturn::SUCCESS;
   };
 
-  hw::CallbackReturn RobotArmInterface::on_configure(const rclcpp_lifecycle::State &)
+  hw::CallbackReturn RobotArmInterface::on_configure(const rclcpp_lifecycle::State & previous_state)
   {
+    (void)previous_state;
     try
     {
       // Open Arduino serial port
@@ -92,8 +94,10 @@ namespace robotarm_controller
     return hw::CallbackReturn::SUCCESS;
   }
 
-  hw::CallbackReturn RobotArmInterface::on_activate(const rclcpp_lifecycle::State &previous_state)
+  hw::CallbackReturn RobotArmInterface::on_activate(const rclcpp_lifecycle::State & previous_state)
   {
+    (void)previous_state;
+
     RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Activating hardware...");
     // isArduinoBusy_ = false;
     last_command_time_ = rclcpp::Clock().now();
@@ -128,14 +132,16 @@ namespace robotarm_controller
     return hw::CallbackReturn::SUCCESS;
   }
 
-  hw::CallbackReturn RobotArmInterface::on_deactivate(const rclcpp_lifecycle::State &){
+  hw::CallbackReturn RobotArmInterface::on_deactivate(const rclcpp_lifecycle::State & previous_state){
+    (void)previous_state;
     RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "on deactivate...");
     return disconnect_hardware();
     // return hw::CallbackReturn::SUCCESS;
   }
 
-  hw::CallbackReturn RobotArmInterface::on_shutdown(const rclcpp_lifecycle::State &)
+  hw::CallbackReturn RobotArmInterface::on_shutdown(const rclcpp_lifecycle::State & previous_state)
   {
+    (void)previous_state;
     // Disconnect from hardware
     RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "on shutdown...");
     return disconnect_hardware();
@@ -353,6 +359,8 @@ namespace robotarm_controller
 
     // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "cmd size %zu", position_commands_.size());
 
+    // get_command("joint1", position_commands_[0]);
+
     // Clamp position commands to joint limits (in radians)
     for (size_t i = 0; i < position_commands_.size(); ++i)
     {
@@ -459,4 +467,4 @@ namespace robotarm_controller
 } // namespace
 // RobotarmInterface as a pluing in the pluing lib (base class of the robotarm interface that we have implemented is the hardware_interface::SystemInterface). in other words, Register the RobotArmInterface as a hardware interface.
 #include "pluginlib/class_list_macros.hpp"
-PLUGINLIB_EXPORT_CLASS(robotarm_controller::RobotArmInterface, hardware_interface::SystemInterface)
+PLUGINLIB_EXPORT_CLASS(robotarm_controller::RobotArmInterface, hw::SystemInterface)

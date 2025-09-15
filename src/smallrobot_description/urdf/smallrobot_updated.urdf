@@ -112,7 +112,7 @@
   </joint>
   <link name="link1">
     <inertial>
-      <origin rpy="0 0 0" xyz="0.047 0.012 0.104"/>
+      <origin rpy="0 0 0" xyz="0.047 0.012 0.208"/>
       <mass value="1.2"/>
       <inertia ixx="0.054" ixy="0.001" ixz="0.001" iyy="0.054" iyz="0.001" izz="0.018"/>
     </inertial>
@@ -135,6 +135,7 @@
   <joint name="joint2" type="revolute">
     <origin rpy="0 0 0" xyz="0.047 -0.0485 0.098"/>
     <axis xyz="0 1 0"/>
+    <limit lower="-1.5707963" upper="3.1415926" effort="100" velocity="0.4" />
     <limit acceleration="2.0" effort="10" lower="-1.570795" upper="3.14159" velocity="4.8"/>
     <parent link="link1"/>
     <child link="link2"/>
@@ -252,6 +253,7 @@
   <joint name="joint6" type="revolute">
     <origin rpy="0 0 0" xyz="0.0253 0 0"/>
     <axis xyz="1 0 0"/>
+    <limit lower="-3.1415926" upper="3.1415926" effort="100" velocity="0.4" />
     <limit acceleration="2.0" effort="10" lower="-3.14159" upper="3.14159" velocity="4.8"/>
     <parent link="link5"/>
     <child link="link6"/>

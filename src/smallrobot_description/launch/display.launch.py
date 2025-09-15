@@ -40,6 +40,7 @@ def generate_launch_description():
         default_value=os.path.join(
             get_package_share_directory('smallrobot_description'),
             'urdf',
+            # 's.urdf'  # Corrected file name
             'smallrobot.urdf.xacro'  # Corrected file name
         ),
         description='The robot model to load'
