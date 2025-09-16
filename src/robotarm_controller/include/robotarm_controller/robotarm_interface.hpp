@@ -4,7 +4,8 @@
 #include <cmath>
 #include <string>
 #include <memory>
-#include <boost/asio.hpp>
+
+#include "robotarm_controller/robotarm_driver.hpp"
 
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp_lifecycle/lifecycle_node.hpp>
@@ -27,8 +28,7 @@ namespace robotarm_controller
     class RobotArmInterface : public hw::SystemInterface
     {
     public:
-        RobotArmInterface() : io_(), serial_(io_) {}
-        // RobotArmInterface();
+        RobotArmInterface();
         ~RobotArmInterface();
 
         // SystemInterface overrides
@@ -44,45 +44,21 @@ namespace robotarm_controller
 
         std::vector<hw::StateInterface> export_state_interfaces() override;
         std::vector<hw::CommandInterface> export_command_interfaces() override;       
-        
+
         hw::CallbackReturn disconnect_hardware();
 
     private:
-        // void start_async_read();
-       
-        void parseFeedback_(const std::string &msg);
-        // void send_position_to_motor(size_t joint_index, double position);
-        // void send_velocity_to_motor(size_t joint_index, double velocity);
-        // void send_effort_to_motor(size_t joint_index, double effort);
-
-        // Serial port for communication with the robot arm
-        // LibSerial::SerialPort arduino;
-        void safe_write(const std::string& cmd);
-        void safe_read_line(std::string& out_line);
-        
-        boost::asio::io_service io_;
-        boost::asio::serial_port serial_;
-        boost::asio::streambuf boost_buffer_;
-
-        std::string port_;
+        std::unique_ptr<RobotArmDriver> driver_;
         int baud_rate_ = 115200;
-
-        bool isArduinoBusy_;
         rclcpp::Time last_command_time_;
-        rclcpp::Duration command_timeout_{rclcpp::Duration::from_seconds(2.0)};
         std::size_t num_joints_;
 
-        std::mutex serial_mutex_; // Declare the mutex
         // Joint states (position, velocity, effort)
-
-        // std::vector<std::string> joint_names_;
         std::vector<double> position_commands_;
-
         std::vector<double> position_states_;
         std::vector<double> velocity_states_;
 
         const double homePositions[6] = {0.0, -78.51, 73.90, 0.0, -90.0, 0.0};
-
         const double lower_limit[8] = {-114.0, -81.0, -180.0, -180.0, -139.0, -180.0, -0.57, -0.57};
         const double upper_limit[8] = {114.0, 77.0, 70.0, 180.0, 139.0, 180, 1.09, 1.09};
         std::vector<double> prev_position_commands_;

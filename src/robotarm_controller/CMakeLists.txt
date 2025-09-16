@@ -18,6 +18,7 @@ find_package(PkgConfig REQUIRED)
 
 add_library(${PROJECT_NAME} SHARED
   src/robotarm_interface.cpp
+  src/robotarm_driver.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
