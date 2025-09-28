@@ -61,6 +61,20 @@ namespace robotarm_controller
       return hw::CallbackReturn::ERROR;
     }
 
+    // reset values always when configuring the hardware
+    // for (const auto & [name, descr] : joint_state_interfaces_)
+    // {
+    //   set_state(name, 0.0);
+    // }
+    //  for (const auto & [name, descr] : joint_command_interfaces_)
+    // {
+    //   set_command(name, 0.0);
+    // }
+    // for (const auto & [name, descr] : sensor_state_interfaces_)
+    // {
+    //   set_state(name, 0.0);
+    // }
+
     // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Connected to Arduino on %s, @ baud rate enum %d", port_.c_str(), static_cast<int>(LibSerial::BaudRate::BAUD_115200));
     return hw::CallbackReturn::SUCCESS;
   }
@@ -171,7 +185,7 @@ namespace robotarm_controller
     // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Reading state with dt = %f, alpha = %f", dt, alpha);
 
     // RCLCPP_INFO(rclcpp::get_logger("RobotArmInterface"), "Position state size: %zu", position_states_.size());
-    for (size_t i = 0; i < position_states_.size(); ++i)
+    for (std::size_t i = 0; i < info_.joints.size(); ++i)
     {
       // Smoothly move state toward the command (like a real actuator)
       double previous_position = position_states_[i];

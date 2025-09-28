@@ -17,8 +17,6 @@
         </transmission>
     </xacro:macro>
 
-    
-
     <gazebo reference="base_link">
         <material>Gazebo/White</material>
         <mu1>0.2</mu1>
