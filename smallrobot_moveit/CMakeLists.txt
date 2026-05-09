@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.22)
 project(smallrobot_moveit)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(moveit_ros_planning_interface REQUIRED)
@@ -14,7 +17,9 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/launch")
 endif()
 
 install(DIRECTORY config DESTINATION share/${PROJECT_NAME})
-install(FILES .setup_assistant DESTINATION share/${PROJECT_NAME})
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.setup_assistant")
+  install(FILES .setup_assistant DESTINATION share/${PROJECT_NAME})
+endif()
 
 install(
   DIRECTORY include/
@@ -33,7 +38,6 @@ ament_target_dependencies(move_program
   rclcpp
   moveit_ros_planning_interface
   moveit_visual_tools
-  rclcpp # Ensure rclcpp is included for ROS 2 C++ API
 )
 
 install(TARGETS move_program DESTINATION lib/${PROJECT_NAME})

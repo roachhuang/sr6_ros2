@@ -1,7 +1,7 @@
 import os
 from ament_index_python import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument,  SetEnvironmentVariable
+from launch.actions import DeclareLaunchArgument, SetEnvironmentVariable
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
 from launch.substitutions import Command, LaunchConfiguration
@@ -25,13 +25,6 @@ def generate_launch_description():
             ':' + str(Path(description_path).parent.resolve()),
         ],
     )
-    
-    
-    # Generate the robot description from the xacro file
-    robot_description = ParameterValue(
-        Command(["xacro ", LaunchConfiguration("model")])
-    )
-
     
     
     # Declare the model argument
@@ -75,7 +68,7 @@ def generate_launch_description():
         arguments=['-d', os.path.join(
             get_package_share_directory('smallrobot_description'),
             'rviz',
-            # 'smallrobot.rviz'
+            'smallrobot.rviz'
         )]
     )
 

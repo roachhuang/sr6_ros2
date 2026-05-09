@@ -3,9 +3,9 @@
 <package format="3">
   <name>robotarm_controller</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>ros2_control hardware interface and controller launch files for the SR6 arm.</description>
   <maintainer email="roach@todo.todo">roach</maintainer>
-  <license>TODO: License declaration</license>
+  <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend> 
 
@@ -13,14 +13,12 @@
   <depend>gripper_controllers</depend>
   <depend>gz_msgs_vendor</depend>
   <depend>gz_ros2_control</depend>
-  <depend>hardware_interface</depend> 
+  <depend>hardware_interface</depend>
+  <depend>pluginlib</depend>
   <depend>rclcpp</depend>
   <depend>rclcpp_lifecycle</depend>
-  <depend>pluginlib</depend>
-  <depend>libserial-dev</depend>
   <depend>ros_gz</depend>
   <depend>ros_gz_bridge</depend>
-  <depend>ros_gz_image</depend>
   <depend>ros_gz_sim</depend>
   <depend>ros2_control</depend>
   <depend>ros2_controllers</depend>

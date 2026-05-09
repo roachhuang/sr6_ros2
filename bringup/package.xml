@@ -3,9 +3,9 @@
 <package format="3">
   <name>bringup</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Top-level launch package for the SR6 robot bringup flows.</description>
   <maintainer email="giraftw2002@gmail.com">roach</maintainer>
-  <license>TODO: License declaration</license>
+  <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   
@@ -17,8 +17,9 @@
   <exec_depend>launch</exec_depend>
   <exec_depend>launch_ros</exec_depend>
   <exec_depend>robotarm_controller</exec_depend>
+  <exec_depend>smallrobot_description</exec_depend>
   <exec_depend>smallrobot_moveit</exec_depend>
-  <exec_depend>remote_interface</exec_depend>  
+  <exec_depend>smallrobot_remote</exec_depend>
 
   <export>
     <build_type>ament_cmake</build_type>

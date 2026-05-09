@@ -1,8 +1,6 @@
 #!/bin/bash
-# Single script to launch the myCobot with Gazebo and ROS 2 Controllers
+set -eo pipefail
 
-# https://github.com/automaticaddison/mycobot_ros2/tree/main
-# launch 3 files: gz.launch.py, display.launch.py, and load_ros2_controllers.launch.py 
 cleanup() {
     echo "Cleaning up..."
     sleep 5.0
@@ -12,18 +10,24 @@ cleanup() {
 # Set up cleanup trap
 trap 'cleanup' SIGINT SIGTERM
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+WORKSPACE_DIR="$(cd "${SCRIPT_DIR}/../../../.." && pwd)"
+
+source /opt/ros/jazzy/setup.bash
+if [[ -f "${WORKSPACE_DIR}/install/setup.bash" ]]; then
+    source "${WORKSPACE_DIR}/install/setup.bash"
+fi
+set -u
+
+if ! ros2 pkg prefix bringup >/dev/null 2>&1; then
+    echo "Package 'bringup' is not available yet. Building the SR6 workspace..."
+    (
+        cd "${WORKSPACE_DIR}"
+        colcon build --base-paths "${WORKSPACE_DIR}/src/sr6_ros2" --packages-up-to bringup
+    )
+    source "${WORKSPACE_DIR}/install/setup.bash"
+fi
+
 echo "Launching Gazebo simulation..."
-# ros2 launch robotarm_controller gz.launch.py \
 ros2 launch bringup sim_robot.launch.py \
-    use_sim_time:=true \
-    # load_controllers:=true \
-    # world_file:=empty_world.world \
-    # use_camera:=true \
-    # use_rviz:=true \
-    # use_robot_state_pub:=true \    
-    # x:=0.0 \
-    # y:=0.0 \
-    # z:=0.03 \
-    # roll:=0.0 \
-    # pitch:=0.0 \
-    # yaw:=0.0
+    is_sim:=true

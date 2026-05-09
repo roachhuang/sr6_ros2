@@ -1,3 +1,17 @@
 {
-    "cmake.sourceDirectory": "/home/roach/ros2_ws/src/smallrobot_description"
+    "cmake.sourceDirectory": "/home/roach/ros2_ws/src/smallrobot_description",
+    "python.autoComplete.extraPaths": [
+        "/home/roach/ros2_ws/install/my_arm_rl/lib/python3.12/site-packages",
+        "/home/roach/ros2_ws/install/arctos_remote/lib/python3.12/site-packages",
+        "/home/roach/ros2_ws/install/arctos_interfaces/lib/python3.12/site-packages",
+        "/home/roach/ros2_ws/install/arctos_fndm_interface/lib/python3.12/site-packages",
+        "/opt/ros/jazzy/lib/python3.12/site-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/roach/ros2_ws/install/my_arm_rl/lib/python3.12/site-packages",
+        "/home/roach/ros2_ws/install/arctos_remote/lib/python3.12/site-packages",
+        "/home/roach/ros2_ws/install/arctos_interfaces/lib/python3.12/site-packages",
+        "/home/roach/ros2_ws/install/arctos_fndm_interface/lib/python3.12/site-packages",
+        "/opt/ros/jazzy/lib/python3.12/site-packages"
+    ]
 }
