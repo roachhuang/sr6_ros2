@@ -1,5 +1,5 @@
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, LogInfo
+from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from moveit_configs_utils import MoveItConfigsBuilder
@@ -21,7 +21,9 @@ def generate_launch_description():
                 get_package_share_directory("smallrobot_description"),
                 "urdf",
                 "smallrobot.urdf.xacro",
-            )
+            ),
+            # Keep MoveIt on the same hardware/sim branch as the controller launch.
+            mappings={"is_sim": is_sim},
         )
         .robot_description_semantic(file_path="config/smallrobot.srdf")
         .trajectory_execution(file_path="config/moveit_controllers.yaml")
@@ -34,6 +36,10 @@ def generate_launch_description():
         output="screen",
         parameters=[
             moveit_config.to_dict(),
+            # Avoid loading Pilz from the external MoveIt overlay until its
+            # missing tf2_eigen_kdl dependency is installed or rebuilt.
+            {"planning_pipelines": ["ompl"]},
+            {"default_planning_pipeline": "ompl"},
             {"use_sim_time": is_sim},
             {"publish_robot_description_semantic": True},
         ],
@@ -49,7 +55,6 @@ def generate_launch_description():
     rviz_node = Node(
         package="rviz2",
         executable="rviz2",
-        # name="rviz2", comment up to avoid duplicate rvis2 instances!
         output="screen",
         arguments=["-d", rviz_config],
         parameters=[
@@ -63,7 +68,6 @@ def generate_launch_description():
         [
             is_sim_arg,
             move_group_node,
-            rviz_node            
+            rviz_node,
         ]
     )
-

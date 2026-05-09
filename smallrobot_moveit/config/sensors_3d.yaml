@@ -1,3 +1,4 @@
+octomap_resolution: 0.05
 sensors:
   - kinect_pointcloud
   - kinect_depthimage
