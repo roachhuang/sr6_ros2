@@ -102,20 +102,20 @@ ros2 topic echo /joint_states
 ### Build Single Package
 ```bash
 cd ~/ros2_ws
-colcon build --packages-select smallrobot_alex --symlink-install
+colcon build --packages-select robotarm_controller --symlink-install
 source install/setup.bash
 ```
 
 ### URDF Validation
 ```bash
-cd urdf/
+cd ~/ros2_ws/src/sr6_ros2/smallrobot_description/urdf
 ros2 run xacro xacro smallrobot.urdf.xacro > smallrobot.urdf
 check_urdf smallrobot.urdf
 ```
 
 ### Visualization
 ```bash
-ros2 launch urdf_tutorial display.launch.py model:=/home/roach/ros2_ws/src/smallrobot/urdf/smallrobot.urdf
+ros2 launch urdf_tutorial display.launch.py model:=/home/roach/ros2_ws/src/sr6_ros2/smallrobot_description/urdf/smallrobot.urdf
 ```
 
 ## Troubleshooting
@@ -124,9 +124,6 @@ ros2 launch urdf_tutorial display.launch.py model:=/home/roach/ros2_ws/src/small
 ```bash
 # Check USB devices
 ls /dev/ttyUSB*
-
-# Test serial communication
-sudo cat /dev/ttyUSB0
 
 # Add user to dialout group (if not done)
 sudo usermod -a -G dialout $USER
@@ -163,5 +160,4 @@ ros2 launch bringup real_robot.launch.py | grep 'RobotArmInterface'
 
 - Arduino processing time must be faster than hardware interface send interval
 - Hardware interface must not flood Arduino with commands
-- Run `sudo cat /dev/ttyUSB0` before launching for robot movement
 - Always source workspace after building: `source install/setup.bash`
