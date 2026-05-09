@@ -107,7 +107,8 @@ cd ~/ros2_ws
 source ~/ws_moveit2/install/setup.bash
 source ~/ros2_ws/install/setup.bash
 cd ~/ros2_ws
-colcon build --symlink-install
+colcon build --base-paths ~/ros2_ws/src/sr6_ros2
+// colcon build --symlink-install
 source ~/ros2_ws/install/setup.bash
 
 sh -x src/sr6_ros2/bringup/scripts/realbot.sh
